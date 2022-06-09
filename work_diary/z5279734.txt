@@ -1,6 +1,6 @@
 Week 1
 
-The team formed with the team name Newbie Squad, I created a new Jira project to invite all the team members and the lecturer
+My team formed with the team name Newbie Squad, I created a new Jira project to invite all the team members and the lecturer
 to join the project. After the discussion with our team, we decided to develop a Car Space Renting System as our project.
 We also discussed the technical background of each member and the requirements of the project to find out which web framework
 is suitable for us to deploy the development. We had a preliminary background review of the related existing systems to come up
