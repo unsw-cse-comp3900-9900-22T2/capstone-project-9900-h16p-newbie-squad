@@ -1,0 +1,12 @@
+Week 1
+
+The team formed with the team name Newbie Squad, I created a new Jira project to invite all the team members and the lecturer
+to join the project. After the discussion with our team, we decided to develop a Car Space Renting System as our project.
+We also discussed the technical background of each member and the requirements of the project to find out which web framework
+is suitable for us to deploy the development. We had a preliminary background review of the related existing systems to come up
+with some ideas of what functionalities we want to implement.
+
+Week 2
+
+We wrote a draft list of all the main functionalities that I update it to the Jira meeting note. 2 team members will do the
+backend development using Flask framework and the rest 3(including myself) will do the frontend using React framework. 
