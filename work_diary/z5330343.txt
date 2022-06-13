@@ -1,3 +1,15 @@
-week 1: Todo
+week 1: 
+In the first week, we had a samll discussion about the preferences of projects, and after reading specifications 
+of each project, we decided to choose project 5.
+After that, I spent some time studying requirements of this project and understanding details regarding project
+management such as how to write good user stories and how the number of sprints can effectively influence project management.
 
-week 2: Todo
+Also, I joined the Jira group and github group that were created for effectively managing our project
+
+week 2: 
+In this week, we had a meeting before the lab, and we managed to come up with 11 potential functionalities.
+we also roughly discussed the assignment of resposibility on each team member. After the lab, we had another meeting
+based on the feedbacks recieved from lab memtor. In this meeting, we subdivided phase 1 work to each member, and I took 
+the initiative to do the user-stories part with another team member. Also, I proactively took the responsibilty of frontend
+development with another 2 team members. Before the end of the meeting, we chose 8 functionalities from previously defined 11
+functionalities, based on which we can deliver a proposal draft of phase 1 before the next week's lab.
