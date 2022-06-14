@@ -9,5 +9,8 @@ with some ideas of what functionalities we want to implement.
 Week 2
 
 We wrote a draft list of all the main functionalities that I update it to the Jira meeting note. 2 team members will do the
-backend development using Flask framework and the rest 3(including myself) will do the frontend using React framework.
-To be continue...
+backend development using Flask framework and the rest 3(including myself) will do the frontend using React framework. We had 
+a meeting to allocate different tasks for the project proposal to each member, one student will do the background part, two will do
+the user stories and Sprints and the rest of two will do the technical depth and scale part.
+
+Week 3
