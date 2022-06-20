@@ -13,3 +13,8 @@ based on the feedbacks recieved from lab memtor. In this meeting, we subdivided 
 the initiative to do the user-stories part with another team member. Also, I proactively took the responsibilty of frontend
 development with another 2 team members. Before the end of the meeting, we chose 8 functionalities from previously defined 11
 functionalities, based on which we can deliver a proposal draft of phase 1 before the next week's lab.
+
+week 3:
+In this week, I worked together with Yindi Ruan to come up with all user stories. Then in the following meeting, we confirmed all the 
+user stories and picked 12 user stories to be completed in sprint 1. Based on that, I finished the part 2 of the proposal together with 
+Yindi Ruan.
