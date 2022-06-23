@@ -1,5 +1,3 @@
-week1:
-week2:
 ## week1
 
 Before the lecture, I formed a project team with 4 other students in the same tutorial - Newbie Squad. And Getting familiar with course and course’s background from the lecture. Besides, leaned some useful strategies about software development, including User Stories and Acceptance Criteria. After a few days of brainstorming, our team unified our opinions and chose a suitable project.
@@ -7,3 +5,6 @@ Before the lecture, I formed a project team with 4 other students in the same tu
 ## week2
 
 Our team made an initial division of work for the project based on the each teammate’s skills, such as front and back-end development. And we analyzed the requirements of the project in depth according to the strategies in week1. At the end of week2, our team finished the division of work of the proposal and expected to finish the first draft of the proposal before next week's lab.
+
+## week3
+Discussed all the details of the proposal with team members, and started to complete the user flow and System Architecture after making sure that the user stroy in the proposal was OK. In Thursday's lab, accepted tutor's suggestions, made changes to user flow and system architecture, and assisted the team members in revising the proposal.
