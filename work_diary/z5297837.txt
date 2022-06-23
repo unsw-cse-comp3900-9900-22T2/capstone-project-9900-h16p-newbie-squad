@@ -1,0 +1,14 @@
+week 1:
+• Selected proejct 5
+• Checked the project description, learnt project requirements
+• Formed Jira and Github group
+
+week 2:
+• Came up with 11 potential functionalities, selected 8 of them to focus on
+• Decided responsibility of each member, my duty is frontend developer
+• Divided jobs to each member to complete the proposal, my job is drawing interface diagrams
+
+week 3:
+• Drawed all interface diagrams based on user stories
+• Chose 12 user stories that must completed during sprint 1
+• Integrated the proposal
