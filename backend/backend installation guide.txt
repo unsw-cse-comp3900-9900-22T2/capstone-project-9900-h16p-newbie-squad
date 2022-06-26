@@ -1,0 +1,20 @@
+后端library安装：
+pip install -r requirements.txt
+
+执行以下命令
+
+1.cd capstone-project-9900-h16p-newbie-squad/backend
+
+2.
+//Windows
+venv\Scripts\activate
+$env:FLASK_APP = "project.py"
+
+//Linux, MacOS
+source venv/bin/activate
+export FLASK_APP="project.py"
+
+3.
+flask run
+此后后端服务器运行在5000端口，前端测试请fetch到URL：http://127.0.0.1:5000
+
