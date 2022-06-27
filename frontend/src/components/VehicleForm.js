@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 
-export default function VehicleForm({ setAddVehicleSelected }) {
+export default function VehicleForm({ setAddVehicleSelected, setVehicleInformation }) {
   const [regNumber, setRegNumber] = useState('')
-  const [vehicleType, setVehicleType] = useState('')
+  const [vehicleType, setVehicleType] = useState('motor')
+
   const updateRegInput = (e) => {
     setRegNumber(e.target.value)
     // console.log(e.target.value);
@@ -11,8 +12,20 @@ export default function VehicleForm({ setAddVehicleSelected }) {
     setVehicleType(e.target.value)
     // console.log(e.target.value);
   }
+
+  const onSubmit = () => {
+    //todo: fetch the backend
+
+    // if successful update the vehicle information
+    setVehicleInformation(current => [...current, {
+      reg: regNumber,
+      type: vehicleType
+    }])
+    // setAddVehicleSelected(false)
+  }
+  
   return (
-    <div>
+    <div className='vehicleForm'> 
         <br></br>
         <input type="text" placeholder='Enter Reg No' value={regNumber} onChange={updateRegInput}/>
         <select onChange={updateVehicleType}>
@@ -23,7 +36,7 @@ export default function VehicleForm({ setAddVehicleSelected }) {
         </select>
         <br></br>
         <button onClick={()=>setAddVehicleSelected(false)}>close</button>
-        <button>submit</button>
+        <button onClick={onSubmit}>submit</button>
     </div>
   )
 }
