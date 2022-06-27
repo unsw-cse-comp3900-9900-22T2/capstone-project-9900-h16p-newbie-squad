@@ -48,6 +48,7 @@
   position: absolute;
   right: 10px;
   color: aliceblue;
+  top: 13px;
 }
 
 .my-account:hover {
@@ -88,6 +89,7 @@
 .right-nav {
   flex-grow: 3;
   /* background-color: #282c34; */
+  overflow-y: scroll;
 }
 
 .pernal-item {
@@ -107,4 +109,6 @@
 .go-back-home {
   position: absolute;
   left: 10px;
+  top: 13px;
 }
+

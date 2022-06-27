@@ -5,11 +5,11 @@ export default function Header() {
   return (
     <div className='header'>
       <div className='go-back-home'>
-        <Link to="/"> home-page</Link>
+        <Link to="/"> <button>home-page</button></Link>
       </div>
       <div className='my-account'>
-        <Link to="/personal-info"> My account</Link>
-        {/* <Outlet /> */}
+        <Link to="/personal-info"> <button>My account</button></Link>
+        <Outlet />
       </div>
     </div>
   )
