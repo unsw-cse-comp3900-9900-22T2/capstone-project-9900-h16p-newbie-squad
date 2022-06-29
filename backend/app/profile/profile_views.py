@@ -5,20 +5,14 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask import Blueprint, request,render_template, redirect, session,url_for,jsonify,current_app
 
 from .. import db
-from ..models import Role, User, Vehicle, Parking_space
+from ..models import Role, User, Vehicle, Parking_space,Parking_time_range
 
 import copy
 
 @profile_bp.route('/profile',methods=["GET", "POST"])
 def profile():
-    print('Postman request: ')
-    print(request)
     request_headers_json=request.headers
-    print(type(request_headers_json))
-    print(request_headers_json)
-
     request_token=request_headers_json.get('token')
-    print(request_token)
 
     try:
         user_id=User.verify_auth_token(request_token)
@@ -32,9 +26,6 @@ def profile():
 
     curr_user_role=Role.query.filter_by(id=curr_user.role_id).first().role_name
 
-    #print(curr_user)
-    #print(curr_user_role)
-
     curr_user_dict={
         'username':curr_user.username,
         'email':curr_user.email,
@@ -44,8 +35,6 @@ def profile():
         'bio':curr_user.bio,
         'role':curr_user_role
     }
-
-    print(curr_user_dict)
 
     #从现在开始，token已经验证完成，这个用户是一个有效的用户
 
@@ -104,16 +93,13 @@ def mycar():
         }
         mycars.append(copy.deepcopy(car_info))
     
-    print(mycars)
-
     return {'mycars':mycars},200
+
 
     
 @profile_bp.route('/mycar/new', methods=["POST"])
 def createNewCar():
-    #do token verification
     request_token=request.headers.get('token')
-    print(request_token)
 
     try:
         user_id=User.verify_auth_token(request_token)
@@ -126,7 +112,6 @@ def createNewCar():
         return {'error':'no such user'},400
 
     new_car_info=request.get_json()
-    print(new_car_info)
 
     try:
         new_car=Vehicle(
@@ -134,8 +119,6 @@ def createNewCar():
             plate_number=new_car_info.get('plate_number'),brand=new_car_info.get('brand'),\
             width=new_car_info.get('width'),length=new_car_info.get('length')
         )
-        print('new car is:')
-        print(new_car)
 
         db.session.add(new_car)
         db.session.commit()
@@ -143,16 +126,14 @@ def createNewCar():
         return {'error':'internal error'},400
 
     new_car_id=Vehicle.query.filter_by(plate_number=new_car_info.get('plate_number')).first().id
-    print(new_car_id)
 
     return {'new_car_id':new_car_id},200
 
 
+
 @profile_bp.route('/mycar/<string:plate>', methods=["DELETE"])
 def deleteCar(plate):
-    #do token verification
     request_token=request.headers.get('token')
-    print(request_token)
 
     try:
         user_id=User.verify_auth_token(request_token)
@@ -182,7 +163,6 @@ def deleteCar(plate):
 @profile_bp.route('/mycarspacelisting',methods=['GET'])
 def mycarspacelisting():
     request_token=request.headers.get('token')
-    print(request_token)
 
     try:
         user_id=User.verify_auth_token(request_token)
@@ -194,7 +174,40 @@ def mycarspacelisting():
     if curr_user==None:
         return {'error':'no such user'},400
 
-    return {},200
+    all_listings=[]
+
+    for each_car_space in Parking_space.query.filter_by(user=curr_user).all():
+        for each_listing in Parking_time_range.query.filter_by(parking_space=each_car_space):
+            all_listings.append(
+                {
+                    "owner":curr_user.username,
+                    "address":each_car_space.address,
+                    "width":each_car_space.width,
+                    "length":each_car_space.length,
+                    "price":each_car_space.price,
+                    "start_date":each_listing.start_date,
+                    "end_date":each_listing.end_date
+                }
+            )
+    
+    for each_car_space in Parking_space.query.filter_by(user=curr_user).all():
+        if Parking_time_range.query.filter_by(parking_space=each_car_space).first()==None:
+            all_listings.append(
+                {
+                    "owner":curr_user.username,
+                    "address":each_car_space.address,
+                    "width":each_car_space.width,
+                    "length":each_car_space.length,
+                    "price":each_car_space.price,
+                    "start_date":"Not published",
+                    "end_date":"Not published"
+                }
+            )
+
+    print(all_listings)
+
+    return {"all_listings":all_listings},200
+
 
 
 @profile_bp.route('/mycarspacelisting/new',methods=['POST'])
@@ -210,7 +223,6 @@ def mycarspacelistingNew():
         return {'error':'no such user'},400
 
     request_data=request.get_json()
-    print(request_data)
 
     #由于已经验证过token，因此我们能确保现在的HTTP请求是从可信用户处发送的，因此格式符合要求
     #不再验证格式
@@ -225,10 +237,14 @@ def mycarspacelistingNew():
     except:
         return {'error':'internal error'},400
 
-    return {},200
+    new_carspace_id=Parking_space.query.all()[-1].id
+
+    return {'new_carspace_id':new_carspace_id},200
 
 
-@profile_bp.route('/mycarspacelisting/publish/{string:carspace_id}',methods=['POST'])
+
+
+@profile_bp.route('/mycarspacelisting/publish/<int:carspace_id>',methods=['PUT'])
 def publishCarSpace(carspace_id):
     try:
         user_id=User.verify_auth_token(request.headers.get('token'))
@@ -237,16 +253,51 @@ def publishCarSpace(carspace_id):
     
     curr_user=User.query.filter_by(id=user_id).first()
     
-    if curr_user==None:
-        return {'error':'no such user'},400
+    if curr_user==None: return {'error':'no such user'},400
 
     request_data=request.get_json()
-    print(request_data)
+    curr_carspace=Parking_space.query.filter_by(id=carspace_id).first()
 
-    #curr_carspace=Parking_space.query.
+    if curr_carspace==None:
+        return {'error':'carspace not found'},400
+
+    try:
+        new_listing=Parking_time_range(start_date=request_data.get('start_date'),\
+            end_date=request_data.get('end_date'),parking_space=curr_carspace)
+        
+        db.session.add(new_listing)
+        db.session.commit()
+    except:
+        return {'error':'internal error'},400
+
+    new_listing_id=Parking_time_range.query.all()[-1].id
+
+    return {'new_listing_id':new_listing_id},200
+
+
+
+@profile_bp.route('/mycarspacelisting/unpublish/<int:carspace_id>',methods=['PUT'])
+def unpublishCarSpace(carspace_id):
+    try:
+        user_id=User.verify_auth_token(request.headers.get('token'))
+    except:
+        return {'error':'invalid token'},400
     
+    curr_user=User.query.filter_by(id=user_id).first()
     
-    pass
+    if curr_user==None: return {'error':'no such user'},400
+
+    all_listings=Parking_time_range.query.filter_by(parking_space_id=carspace_id).all()
+
+    try:
+        for each_listing in all_listings:
+            db.session.delete(each_listing)
+    except:
+        return {'error':'internal error'},400
+
+    db.session.commit()
+    
+    return {},200
 
 
 

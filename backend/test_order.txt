@@ -55,16 +55,8 @@ Vehicle.query.all()
 
 
 
-
-
-
-
-
-第三部分，car space：
-Mock data (建立几个不同的停车位类型)
-in_type = Parking_space_type(parking_space_typename = 'indoor')
-out_type = Parking_space_type(parking_space_typename = 'outdoor')
-db.session.add_all([in_type,out_type])
-db.session.commit()
-
-Parking_space_type.query.all()
+第三部分，car space creation and listing：
+from app import db
+from app.models import Vehicle,Role,User,Parking_space,Parking_time_range
+Parking_space.query.all()
+Parking_time_range.query.all()

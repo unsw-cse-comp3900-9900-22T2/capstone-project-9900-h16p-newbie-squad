@@ -133,7 +133,7 @@ class Parking_space(db.Model):
     id = db.Column(db.Integer, primary_key=True)
 
     #一对多，多的那一侧
-    owner_id = db.Column(db.String(36), db.ForeignKey('users.id'))
+    owner_id = db.Column(db.String(32), db.ForeignKey('users.id'))
     #parking_space_type_id = db.Column(db.String(36), db.ForeignKey('Parking_space_types.id'))
     address = db.Column(db.String(128), nullable=False)
     width = db.Column(db.Float, nullable=True)
@@ -151,7 +151,7 @@ class Parking_space(db.Model):
     #parking_space_end_date = db.Column(db.DateTime, nullable=True)
 
     def __repr__(self):
-        return '<Parking_space %r>' % self.parking_space_address
+        return '<Parking_space %r>' % self.id
 
 
 class Parking_time_range(db.Model):
@@ -160,8 +160,9 @@ class Parking_time_range(db.Model):
 
     #一对多，多的那一侧
     parking_space_id=db.Column(db.Integer, db.ForeignKey('parking_spaces.id'))
-    begin_date = db.Column(db.DateTime)
-    end_date = db.Column(db.DateTime)
+    #TODO:后面应该改成DateTime类型
+    start_date = db.Column(db.String(32))
+    end_date = db.Column(db.String(32))
 
     def __repr__(self):
-        return '<Parking_space %r>' % self.id
+        return '<Parking_time_ranges %r>' % self.id
