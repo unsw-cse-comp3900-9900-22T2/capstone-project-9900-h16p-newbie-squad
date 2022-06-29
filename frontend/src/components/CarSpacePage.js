@@ -48,7 +48,7 @@ export default function CarSpacePage() {
     getAllListings()
   }, [])
   
-  const unpublish = () => {
+  const unpublish = (space_id) => {
     const requestOption = {
         method: "PUT",
         headers: {
@@ -56,9 +56,10 @@ export default function CarSpacePage() {
             'token': token
         },
     }
-    fetch(`http://127.0.0.1:5000/mycarspacelisting/unpublish/${carSpaceId}`, requestOption)
+    fetch(`http://127.0.0.1:5000/mycarspacelisting/unpublish/${space_id}`, requestOption)
     .then(res => {
         if (res.status === 200) {
+            getAllListings()
             return res.json()
         } else {
             throw(res)
@@ -68,8 +69,6 @@ export default function CarSpacePage() {
         console.log(data)
     })
     .catch(error => console.log(error))
-
-    getAllListings()
   }
 
 
@@ -107,7 +106,7 @@ export default function CarSpacePage() {
           </button>}
 
           {space.start_date !== "Not published" && 
-            <button onClick={unpublish}>unpublish</button>
+            <button onClick={() => unpublish(space.id)}>unpublish</button>
           }
 
           <button onClick={() => {
