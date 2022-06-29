@@ -55,7 +55,7 @@ export default function CarManagementPage() {
       }
     })
     .catch(error => console.log(error))
-    getAllCars()
+    // getAllCars()
   }
 
   return (
@@ -71,7 +71,7 @@ export default function CarManagementPage() {
       {vehicleInformation.map((vehicle, index) => (
         <div key={index}>
           Brand: {vehicle.brand}, Plate number: {vehicle.plate_number} 
-          <button onClick={deleteCar(vehicle.plate_number)}>delete</button>
+          <button>delete</button>
         </div>
       ))}
     </div>

@@ -47,7 +47,7 @@ export default function VehicleForm({ setAddVehicleSelected, setVehicleInformati
       plate_number: regNumber,
       brand: vehicleType
     }])
-    // setAddVehicleSelected(false)
+    setAddVehicleSelected(false)
   }
   
   return (
