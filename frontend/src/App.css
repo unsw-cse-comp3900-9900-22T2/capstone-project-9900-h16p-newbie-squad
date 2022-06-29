@@ -56,6 +56,25 @@
   cursor: pointer;
 }
 
+.logout {
+  position: absolute;
+  right: 100px;
+  color: aliceblue;
+  top: 13px;
+}
+
+.logout:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.welcome {
+  position: absolute;
+  right: 200px;
+  color: aliceblue;
+  top: 13px;
+}
+
 .information-box {
   width: 100vw;
   height: 100vh;
@@ -73,7 +92,16 @@
   display: flex;
   flex-direction: row;
 }
-
+.container-noborder {
+  position: fixed;
+  height: 80%;
+  width: 95%;
+  top: 70px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: row;
+}
 .flex-item {
   width: 100px;
   height: 100%;

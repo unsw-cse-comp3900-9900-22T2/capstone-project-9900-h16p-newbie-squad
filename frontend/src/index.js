@@ -3,8 +3,10 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 // import reportWebVitals from './reportWebVitals';
-import { BrowserRouter, Routes, Route, } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useSearchParams} from "react-router-dom";
 import PersonalInfo from './components/PersonalInfo';
+import LoginPage from './components/LoginPage';
+import SignUpPage from './components/SignUpPage';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -13,6 +15,8 @@ root.render(
     <Routes>
       <Route path="/" element={<App />}/>
       <Route path="personal-info" element={<PersonalInfo />} />
+      <Route path="login-page" element={<LoginPage />} />
+      <Route path="SignUp-page" element={<SignUpPage />} />
       {/* </Route> */}
     </Routes>
     
