@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import CarSpaceForm from './CarSpaceForm'
 import PublishForm from './PublishForm'
+import CarSpaceEditForm from './CarSpaceEditForm'
 
 
 const token = "4.UJsETXTotkCToYT7_SdxwOMYBMo"
@@ -9,10 +10,15 @@ export default function CarSpacePage() {
   const [carSpaceSelected, setCarSpaceSelected] = useState(false)
   const [carSpaceInformation, setCarSpaceInformation] = useState([])
   const [publishFormSelected, setPublishFormSelected] = useState(false)
+  const [editFormSelected, setEditFormSelected] = useState(false)
   const [carSpaceId, setCarSpaceId] = useState(0)
 
   const leaseCarSpace = () => {
     setCarSpaceSelected(true)
+  }
+
+  const openEditForm = () => {
+    setEditFormSelected(true)
   }
   const getAllListings = () => {
     const requestOption = {
@@ -82,6 +88,14 @@ export default function CarSpacePage() {
         getAllListings={getAllListings}
       />}
 
+      {editFormSelected && 
+        <CarSpaceEditForm 
+          carSpaceInformation={carSpaceInformation}
+          carSpaceId={carSpaceId}
+          setEditFormSelected={setEditFormSelected}
+        />
+      }
+
       {carSpaceInformation.map((space, index) => (
         <div key={index}>
           address at: {space.address},   Price: {space.price}, start: {space.start_date}, end: {space.end_date}
@@ -94,7 +108,12 @@ export default function CarSpacePage() {
 
           {space.start_date !== "Not published" && 
             <button onClick={unpublish}>unpublish</button>
-          }          
+          }
+
+          <button onClick={() => {
+            openEditForm()
+            setCarSpaceId(space.id)
+          }}>Edit</button>          
 
         </div>
       ))}

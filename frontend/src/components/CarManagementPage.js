@@ -45,7 +45,7 @@ export default function CarManagementPage() {
       method: "DELETE",
       headers: {
         'Content-Type': 'application/json',
-        'token': token
+        'token': token,
       },
     }
     fetch(`http://127.0.0.1:5000/mycar${plateNumber}`, requestOption)
@@ -71,7 +71,7 @@ export default function CarManagementPage() {
       {vehicleInformation.map((vehicle, index) => (
         <div key={index}>
           Brand: {vehicle.brand}, Plate number: {vehicle.plate_number} 
-          <button>delete</button>
+          <button onClick={() => deleteCar(vehicle.plate_number)}>delete</button>
         </div>
       ))}
     </div>
