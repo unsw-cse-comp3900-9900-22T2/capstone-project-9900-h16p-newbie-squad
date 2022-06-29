@@ -1,10 +1,11 @@
+from turtle import width
 from . import profile_bp
 
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import Blueprint, request,render_template, redirect, session,url_for,jsonify,current_app
 
 from .. import db
-from ..models import Role, User, Vehicle
+from ..models import Role, User, Vehicle, Parking_space
 
 import copy
 
@@ -95,6 +96,7 @@ def mycar():
     mycars=[]
     for each_car in Vehicle.query.filter_by(owner_id=curr_user.id).all():
         car_info={
+            "id":each_car.id,
             "plate_number":each_car.plate_number,
             "brand":each_car.brand,
             "width":each_car.width,
@@ -105,7 +107,6 @@ def mycar():
     print(mycars)
 
     return {'mycars':mycars},200
-
 
     
 @profile_bp.route('/mycar/new', methods=["POST"])
@@ -141,8 +142,10 @@ def createNewCar():
     except:
         return {'error':'internal error'},400
 
-    return {},200
+    new_car_id=Vehicle.query.filter_by(plate_number=new_car_info.get('plate_number')).first().id
+    print(new_car_id)
 
+    return {'new_car_id':new_car_id},200
 
 
 @profile_bp.route('/mycar/<string:plate>', methods=["DELETE"])
@@ -173,6 +176,80 @@ def deleteCar(plate):
         return {'error':'internal error'},400
 
     return {},200
+
+
+
+@profile_bp.route('/mycarspacelisting',methods=['GET'])
+def mycarspacelisting():
+    request_token=request.headers.get('token')
+    print(request_token)
+
+    try:
+        user_id=User.verify_auth_token(request_token)
+    except:
+        return {'error':'invalid token'},400
+    
+    curr_user=User.query.filter_by(id=user_id).first()
+    
+    if curr_user==None:
+        return {'error':'no such user'},400
+
+    return {},200
+
+
+@profile_bp.route('/mycarspacelisting/new',methods=['POST'])
+def mycarspacelistingNew():
+    try:
+        user_id=User.verify_auth_token(request.headers.get('token'))
+    except:
+        return {'error':'invalid token'},400
+    
+    curr_user=User.query.filter_by(id=user_id).first()
+    
+    if curr_user==None:
+        return {'error':'no such user'},400
+
+    request_data=request.get_json()
+    print(request_data)
+
+    #由于已经验证过token，因此我们能确保现在的HTTP请求是从可信用户处发送的，因此格式符合要求
+    #不再验证格式
+
+    try:
+        new_parking_space=Parking_space(
+            user=curr_user,address=request_data.get('address'),width=request_data.get('width'),\
+                length=request_data.get('length'),price=request_data.get('price')
+        )
+        db.session.add(new_parking_space)
+        db.session.commit()
+    except:
+        return {'error':'internal error'},400
+
+    return {},200
+
+
+@profile_bp.route('/mycarspacelisting/publish/{string:carspace_id}',methods=['POST'])
+def publishCarSpace(carspace_id):
+    try:
+        user_id=User.verify_auth_token(request.headers.get('token'))
+    except:
+        return {'error':'invalid token'},400
+    
+    curr_user=User.query.filter_by(id=user_id).first()
+    
+    if curr_user==None:
+        return {'error':'no such user'},400
+
+    request_data=request.get_json()
+    print(request_data)
+
+    #curr_carspace=Parking_space.query.
+    
+    
+    pass
+
+
+
 
 
 

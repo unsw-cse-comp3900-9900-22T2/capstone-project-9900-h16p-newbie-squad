@@ -6,7 +6,6 @@ $env:FLASK_APP = "project.py"
 flask shell命令：
 数据库初始化，重置：
 from app import db
-from app.models import Role,User
 db.drop_all()
 db.create_all()
 

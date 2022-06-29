@@ -27,8 +27,10 @@ def register():
         return {"error": "email has been registered"},400
 
     #bio，头像等后面再提供
+    customer=Role.query.filter_by(role_name='customer').first()
+
     new_user=User(username=new_user_info['username'],email=new_user_info['email'],\
-        password=new_user_info['password'])
+        password=new_user_info['password'],role=customer)
 
     db.session.add(new_user)
     db.session.commit()

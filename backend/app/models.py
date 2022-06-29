@@ -3,7 +3,6 @@ import uuid
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
 from itsdangerous.serializer import Serializer
-#from itsdangerous import JSONWebSignatureSerializer
 from flask import current_app
 
 import base64
@@ -41,10 +40,10 @@ class User(db.Model):
     #外键链接到Role表
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
 
-    # 从 user到vehicle表（一对多）
+    #从user到vehicle表（一对多）
     vehicles = db.relationship('Vehicle', backref='user', lazy='dynamic')
-    # 从user到parking_space表（一对多）
-    #parking_spaces = db.relationship('Parking_space', backref='user', lazy='dynamic')
+    #从user到parking_space表（一对多）
+    parking_spaces = db.relationship('Parking_space', backref='user', lazy='dynamic')
 
     @property
     def password(self):
@@ -64,10 +63,10 @@ class User(db.Model):
 
     @staticmethod
     def verify_auth_token(token):
-        print(token)
-        print(type(token))
-        token=str(token)
-        print('SECRET_KEY',current_app.config['SECRET_KEY'])
+        #print(token)
+        #print(type(token))
+        #token=str(token)
+        #print('SECRET_KEY',current_app.config['SECRET_KEY'])
         s = Serializer(current_app.config['SECRET_KEY'])
 
         try:
@@ -112,6 +111,7 @@ class Vehicle(db.Model):
         return '<Vehicle %r>' % self.plate_number
 
 
+'''
 class Parking_space_type(db.Model):
     __tablename__ = 'Parking_space_types'
     # id = db.Column('id', db.String(36), default=lambda: str(uuid.uuid4()), primary_key=True)
@@ -122,24 +122,46 @@ class Parking_space_type(db.Model):
 
     def __repr__(self):
         return '<Parking_space_type %r>' % self.parking_space_typename
+'''
+
+
 
 class Parking_space(db.Model):
     __tablename__ = 'parking_spaces'
     # id, parking_space_owner_id, parking_space_type_id,  parking_space_width, parking_space_length, parking_space_height, parking_space_address, parking_space_price, parking_space_is_available, parking_space_is_booked, parking_space_available_date
     # id = db.Column('id', db.String(36), default=lambda: str(uuid.uuid4()), primary_key=True)
     id = db.Column(db.Integer, primary_key=True)
-    parking_space_owner_id = db.Column(db.String(36), db.ForeignKey('users.id'))
-    parking_space_type_id = db.Column(db.String(36), db.ForeignKey('Parking_space_types.id'))
-    parking_space_address = db.Column(db.String(128), nullable=False)
-    parking_space_width = db.Column(db.Float, nullable=True)
-    parking_space_length = db.Column(db.Float, nullable=True)
-    parking_space_height = db.Column(db.Float, nullable=True)
-    parking_space_price = db.Column(db.Float, nullable=True)
-    # parking_space_is_available = db.Column(db.Boolean, nullable=True)
-    parking_space_is_booked = db.Column(db.Boolean, nullable=True)
-    parking_space_start_date = db.Column(db.DateTime, nullable=True)
-    parking_space_end_date = db.Column(db.DateTime, nullable=True)
+
+    #一对多，多的那一侧
+    owner_id = db.Column(db.String(36), db.ForeignKey('users.id'))
+    #parking_space_type_id = db.Column(db.String(36), db.ForeignKey('Parking_space_types.id'))
+    address = db.Column(db.String(128), nullable=False)
+    width = db.Column(db.Float, nullable=True)
+    length = db.Column(db.Float, nullable=True)
+    #parking_space_height = db.Column(db.Float, nullable=True)
+    price = db.Column(db.Float, nullable=True)
+    #parking_space_is_available = db.Column(db.Boolean, nullable=True)
+
+    #TODO
+    #parking_space_is_booked = db.Column(db.Boolean, nullable=True)
+
+    #一对多，一的那一侧
+    parking_time_ranges = db.relationship('Parking_time_range', backref='parking_space', lazy='dynamic')
+    #parking_space_start_date = db.Column(db.DateTime, nullable=True)
+    #parking_space_end_date = db.Column(db.DateTime, nullable=True)
 
     def __repr__(self):
         return '<Parking_space %r>' % self.parking_space_address
 
+
+class Parking_time_range(db.Model):
+    __tablename__='parking_time_ranges'
+    id = db.Column(db.Integer, primary_key=True)
+
+    #一对多，多的那一侧
+    parking_space_id=db.Column(db.Integer, db.ForeignKey('parking_spaces.id'))
+    begin_date = db.Column(db.DateTime)
+    end_date = db.Column(db.DateTime)
+
+    def __repr__(self):
+        return '<Parking_space %r>' % self.id
