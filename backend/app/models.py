@@ -1,7 +1,9 @@
+from re import S
 import uuid
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
 from itsdangerous.serializer import Serializer
+#from itsdangerous import JSONWebSignatureSerializer
 from flask import current_app
 
 import base64
@@ -26,11 +28,11 @@ class User(db.Model):
     # id = db.Column('id', db.String(36), default=lambda: str(uuid.uuid4()), primary_key=True)
     id = db.Column(db.Integer, primary_key=True)
     #index attribute: If set to True, create an index for this column, so that queries are more efficient.
-    username = db.Column(db.String(36), unique=True, index=True)
+    username = db.Column(db.String(32), unique=True, index=True)
     email = db.Column(db.String(64), unique=True, index=True)
     password_hash = db.Column(db.String(128))
-    phone_num = db.Column(db.String(36), unique=True, index=True)
-    bank_account = db.Column(db.String(36), unique=True, index=True)
+    phone_num = db.Column(db.String(32), unique=True, index=True)
+    bank_account = db.Column(db.String(32), unique=True, index=True)
 
     #前端将图片进行base64编码之后直接发送给后端，后端数据库存储该base64字节串
     avatar=db.Column(db.LargeBinary,nullable=True)
@@ -42,7 +44,7 @@ class User(db.Model):
     # 从 user到vehicle表（一对多）
     vehicles = db.relationship('Vehicle', backref='user', lazy='dynamic')
     # 从user到parking_space表（一对多）
-    parking_spaces = db.relationship('Parking_space', backref='user', lazy='dynamic')
+    #parking_spaces = db.relationship('Parking_space', backref='user', lazy='dynamic')
 
     @property
     def password(self):
@@ -56,23 +58,28 @@ class User(db.Model):
         return check_password_hash(self.password_hash, password)
 
     def generate_auth_token(self):
-        print(current_app.config['SECRET_KEY'])
+        print('SECRET_KEY',current_app.config['SECRET_KEY'])
         s = Serializer(current_app.config['SECRET_KEY'])
-        return s.dumps({'id':self.id})
+        return s.dumps(self.id)
 
     @staticmethod
     def verify_auth_token(token):
+        print(token)
+        print(type(token))
+        token=str(token)
+        print('SECRET_KEY',current_app.config['SECRET_KEY'])
         s = Serializer(current_app.config['SECRET_KEY'])
+
         try:
             data = s.loads(token)
         except:
             return None
-        return User.query.get(data['id'])
+        return data
 
     def __repr__(self):
         return '<User %r>' % self.username
 
-class Vehicle_type(db.Model):
+'''class Vehicle_type(db.Model):
     __tablename__ = 'vehicle_types'
 
     # id = db.Column('id', db.String(36), default=lambda: str(uuid.uuid4()), primary_key=True)
@@ -83,7 +90,8 @@ class Vehicle_type(db.Model):
     vehicles = db.relationship('Vehicle', backref='vehicle_type', lazy='dynamic')
 
     def __repr__(self):
-        return '<Vehicle_type %r>' % self.vehicle_typename
+        return '<Vehicle_type %r>' % self.vehicle_typename'''
+#车辆类型暂时从需求中移除，没必要
 
 
 class Vehicle(db.Model):
@@ -92,15 +100,16 @@ class Vehicle(db.Model):
     # id, vehicle_owner_id, vehicle_type_id, vehicle_license_plate,vehicle_width,vehicle_length,vehicle_height,vehicle_weight
     # id = db.Column('id', db.String(36), default=lambda: str(uuid.uuid4()), primary_key=True)
     id = db.Column(db.Integer, primary_key=True)
-    vehicle_owner_id = db.Column(db.String(36), db.ForeignKey('users.id'))
-    vehicle_type_id = db.Column(db.String(36), db.ForeignKey('vehicle_types.id'))
-    vehicle_license_plate = db.Column(db.String(36), unique=True, index=True)
-    vehicle_width = db.Column(db.Float, nullable=True)
-    vehicle_length = db.Column(db.Float, nullable=True)
-    vehicle_height = db.Column(db.Float, nullable=True)
+    owner_id = db.Column(db.String(32), db.ForeignKey('users.id'))
+    #vehicle_type_id = db.Column(db.String(36), db.ForeignKey('vehicle_types.id'))
+    plate_number = db.Column(db.String(32), unique=True,index=True)
+    brand=db.Column(db.String(32))
+    width = db.Column(db.Float, nullable=True)
+    length = db.Column(db.Float, nullable=True)
+    #height = db.Column(db.Float, nullable=True)
 
     def __repr__(self):
-        return '<Vehicle %r>' % self.vehicle_license_plate
+        return '<Vehicle %r>' % self.plate_number
 
 
 class Parking_space_type(db.Model):

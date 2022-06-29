@@ -1,95 +1,183 @@
 from . import profile_bp
 
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask import Blueprint, request,render_template, redirect, session,url_for,jsonify
+from flask import Blueprint, request,render_template, redirect, session,url_for,jsonify,current_app
 
 from .. import db
-from ..models import Role, User, Vehicle, Vehicle_type, Parking_space, Parking_space_type
+from ..models import Role, User, Vehicle
 
-@profile_bp.route('/profile/<int:usr_id>',methods=["GET", "POST"])
-def profile(user_id):
-    # print('Postman request: ',end='')
-    # print(request)
-    # new_user_info=request.get_json()
-    # print(new_user_info)
-    if request.method == 'GET':
-        user = User.query.filter_by(id=user_id).first()
-        if not user:
-            return {"error": "user not found"}, 404
-        return jsonify(user.to_json()), 200
-    elif request.method == 'POST':
-        # 是否加判断是否是admin
-        new_user_info = request.get_json()
-        # update user table by new_usr_info: username, email, phone_num, bank_account, avatar, bio, role_id
-        user = User.query.filter_by(id=user_id).first()
-        if Role.query.filter_by(id=user.role_id).first().role_name != 'admin':
-            if new_user_info['username']:
-                # update username
-                user.username = new_user_info['username']
-            if new_user_info['email']:
-                # update email
-                user.email = new_user_info['email']
-            if new_user_info['phone_num']:
-                # update phone_num
-                user.phone_num = new_user_info['phone_num']
-            if new_user_info['bank_account']:
-                # update bank_account
-                user.bank_account = new_user_info['bank_account']
-            if new_user_info['avatar']:
-                # update avatar
-                user.avatar = new_user_info['avatar']
-            if new_user_info['bio']:
-                # update bio
-                user.bio = new_user_info['bio']
-            if new_user_info['role_id']:
-                # update role_id
-                user.role_id = new_user_info['role_id']
+import copy
 
-            db.session.commit()
-            return {}, 200
+@profile_bp.route('/profile',methods=["GET", "POST"])
+def profile():
+    print('Postman request: ')
+    print(request)
+    request_headers_json=request.headers
+    print(type(request_headers_json))
+    print(request_headers_json)
 
-@profile_bp.route('/my_vehicle/<int:usr_id>', methods=["GET", "POST"])
-def my_vehicle(user_id):
+    request_token=request_headers_json.get('token')
+    print(request_token)
+
+    try:
+        user_id=User.verify_auth_token(request_token)
+    except:
+        return {'error':'invalid token'},400
+    
+    curr_user=User.query.filter_by(id=user_id).first()
+    
+    if(curr_user==None):
+        return {'error':'no such user'},400
+
+    curr_user_role=Role.query.filter_by(id=curr_user.role_id).first().role_name
+
+    #print(curr_user)
+    #print(curr_user_role)
+
+    curr_user_dict={
+        'username':curr_user.username,
+        'email':curr_user.email,
+        'phone_num':curr_user.phone_num,
+        'bank_account':curr_user.bank_account,
+        'avatar':curr_user.avatar,
+        'bio':curr_user.bio,
+        'role':curr_user_role
+    }
+
+    print(curr_user_dict)
+
+    #从现在开始，token已经验证完成，这个用户是一个有效的用户
 
     if request.method == 'GET':
-        if not User.query.filter_by(id=user_id).first():
-            return {"error": "user not found"}, 404
-        if not Vehicle.query.filter_by(vehicle_owner_id=user_id).first():
-            # return message user has no vehicle
-            return jsonify({}), 200
-        vehicles = {}
-        for item in Vehicle.query.filter_by(vehicle_owner_id=user_id).all():
-            vehicles[item.id] = item.to_json()
-        return jsonify(vehicles), 200
-    elif request.method == 'POST':
-        vehicle_info = request.get_json()
-        # {vehicle_license_plate:{vehicle_type_id:_, vehicle_height:_, vehicle_width:_, vehicle_length:_}, ...}
-        # update vehicle table by vehicle_info: vehicle_license_plate, vehicle_type_id, vehicle_height, vehicle_width, vehicle_length
-        user_role = Role.query.filter_by(id=User.query.filter_by(id=user_id).first().role_id).first().role_name
-        if user_role != 'admin':
-            if vehicle_info:
-                for item in vehicle_info.keys():
-                    # if item not in vehicle table, add it
-                    if not Vehicle.query.filter_by(vehicle_license_plate=item).first():
-                        new_vehicle = Vehicle(vehicle_license_plate=item, vehicle_type_id=vehicle_info[item]['vehicle_type_id'],
-                                              vehicle_height=vehicle_info[item]['vehicle_height'],
-                                              vehicle_width=vehicle_info[item]['vehicle_width'],
-                                              vehicle_length=vehicle_info[item]['vehicle_length'],
-                                              vehicle_owner_id=user_id)
-                        db.session.add(new_vehicle)
-                        db.session.commit()
-                    # if item in vehicle table, update it
-                    else:
-                        vehicle = Vehicle.query.filter_by(vehicle_license_plate=item).first()
-                        vehicle.vehicle_type_id = vehicle_info[item]['vehicle_type_id']
-                        vehicle.vehicle_height = vehicle_info[item]['vehicle_height']
-                        vehicle.vehicle_width = vehicle_info[item]['vehicle_width']
-                        vehicle.vehicle_length = vehicle_info[item]['vehicle_length']
-                        db.session.commit()
-                return jsonify({}), 200
-            else:
-                return {"error": "no vehicle info"}, 404
+        return curr_user_dict, 200
 
+    elif request.method == 'POST':
+        #暂时不用判断是否是admin
+        #role暂时不可修改
+        #username是否可以修改待定，目前先做成可以修改
+
+        info_to_update = request.get_json()
+
+        if info_to_update.get('username'):
+            curr_user.username = info_to_update['username']
+        if info_to_update.get('email'):
+            curr_user.email = info_to_update['email']
+        if info_to_update.get('phone_num'):
+            curr_user.phone_num = info_to_update['phone_num']
+        if info_to_update.get('bank_account'):
+            curr_user.bank_account = info_to_update['bank_account']
+        if info_to_update.get('avatar'):
+            curr_user.avatar = info_to_update['avatar']
+        if info_to_update.get('bio'):
+            curr_user.bio = info_to_update['bio']
+
+        db.session.add(curr_user)
+        db.session.commit()
+        return {}, 200
+
+
+@profile_bp.route('/mycar', methods=["GET"])
+def mycar():
+    request_token=request.headers.get('token')
+    print(request_token)
+
+    try:
+        user_id=User.verify_auth_token(request_token)
+    except:
+        return {'error':'invalid token'},400
+    
+    curr_user=User.query.filter_by(id=user_id).first()
+    
+    if(curr_user==None):
+        return {'error':'no such user'},400
+    
+
+    mycars=[]
+    for each_car in Vehicle.query.filter_by(owner_id=curr_user.id).all():
+        car_info={
+            "plate_number":each_car.plate_number,
+            "brand":each_car.brand,
+            "width":each_car.width,
+            "length":each_car.length
+        }
+        mycars.append(copy.deepcopy(car_info))
+    
+    print(mycars)
+
+    return {'mycars':mycars},200
+
+
+    
+@profile_bp.route('/mycar/new', methods=["POST"])
+def createNewCar():
+    #do token verification
+    request_token=request.headers.get('token')
+    print(request_token)
+
+    try:
+        user_id=User.verify_auth_token(request_token)
+    except:
+        return {'error':'invalid token'},400
+    
+    curr_user=User.query.filter_by(id=user_id).first()
+    
+    if(curr_user==None):
+        return {'error':'no such user'},400
+
+    new_car_info=request.get_json()
+    print(new_car_info)
+
+    try:
+        new_car=Vehicle(
+            user=curr_user,
+            plate_number=new_car_info.get('plate_number'),brand=new_car_info.get('brand'),\
+            width=new_car_info.get('width'),length=new_car_info.get('length')
+        )
+        print('new car is:')
+        print(new_car)
+
+        db.session.add(new_car)
+        db.session.commit()
+    except:
+        return {'error':'internal error'},400
+
+    return {},200
+
+
+
+@profile_bp.route('/mycar/<string:plate>', methods=["DELETE"])
+def deleteCar(plate):
+    #do token verification
+    request_token=request.headers.get('token')
+    print(request_token)
+
+    try:
+        user_id=User.verify_auth_token(request_token)
+    except:
+        return {'error':'invalid token'},400
+    
+    curr_user=User.query.filter_by(id=user_id).first()
+    
+    if(curr_user==None):
+        return {'error':'no such user'},400
+
+    car_to_delete=Vehicle.query.filter_by(plate_number=plate).first()
+    
+    if car_to_delete==None:
+        return {'error':'no such car'},400
+    
+    try:
+        db.session.delete(car_to_delete)
+        db.session.commit()
+    except:
+        return {'error':'internal error'},400
+
+    return {},200
+
+
+
+
+'''
 @profile_bp.route('/my_space/<int:usr_id>', methods=["GET", "POST"])
 def my_space(user_id):
     if request.method == 'GET':
@@ -143,7 +231,7 @@ def my_space(user_id):
             else:
                 return {"error": "no space info"}, 404
 
-
+'''
 
 
 

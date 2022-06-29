@@ -19,5 +19,8 @@ def create_app(name):
     from .auth import auth_bp
     app.register_blueprint(auth_bp)
 
+    from .profile import profile_bp
+    app.register_blueprint(profile_bp)
+
     return app
 
