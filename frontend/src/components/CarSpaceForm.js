@@ -2,14 +2,12 @@ import React, { useState } from 'react'
 
 const token = "4.UJsETXTotkCToYT7_SdxwOMYBMo"
 
-export default function CarSpaceForm({ setCarSpaceSelected, setCarSpaceInformation }) {
+export default function CarSpaceForm({ setCarSpaceSelected, setCarSpaceInformation, getAllListings }) {
     const [address, setAddress] = useState('')
     const [spaceType, setSpaceType] = useState('indoor')
     const [clearance, setClearance] = useState('')
     const [length, setLength] = useState(0)
     const [width, setWidth] = useState(0)
-    const [startDate, setStartDate] = useState('')
-    const [endDate, setEndDate] = useState('')
     const [price, setPrice] = useState(0)
 
     const updatePrice = (e) => {
@@ -39,16 +37,6 @@ export default function CarSpaceForm({ setCarSpaceSelected, setCarSpaceInformati
         // console.log(parseFloat(e.target.value));
     }
 
-    const updateStartDate = (e) => {
-        setStartDate(e.target.value)
-        // console.log(e.target.value);
-    }
-
-    const updateEndtDate = (e) => {
-        setEndDate(e.target.value)
-        console.log(e.target.value);
-    }
-
     const onSubmit = () => {
         // todo: I should fetch the backend to update my new car space
         const data = {
@@ -56,8 +44,8 @@ export default function CarSpaceForm({ setCarSpaceSelected, setCarSpaceInformati
             "length": length,
             "width": width,
             "price": price,
-            "start_date": startDate,
-            "end_date": endDate
+            // "start_date": startDate,
+            // "end_date": endDate
         }
         const requestOption = {
             method: "POST",
@@ -81,10 +69,11 @@ export default function CarSpaceForm({ setCarSpaceSelected, setCarSpaceInformati
         .catch(error => console.log(error))
 
         // if successful, I shoud update my current car space information
-        setCarSpaceInformation(current => [...current, {
-            address: address,
-            price: price
-        }])
+        // setCarSpaceInformation(current => [...current, {
+        //     address: address,
+        //     price: price
+        // }])
+        getAllListings()
         setCarSpaceSelected(false)
     }
 
@@ -111,10 +100,6 @@ export default function CarSpaceForm({ setCarSpaceSelected, setCarSpaceInformati
         Length  <input type="number" placeholder='please enter Length' onChange={updateLength}/>
         <br></br>
         Width  <input type="number" placeholder='please enter Width' onChange={updateWidth}/>
-        <div>what is the availability your car space?</div>
-        Start  <input type="date" onChange={updateStartDate}/>
-        <br></br>
-        End  <input type="date" onChange={updateEndtDate}/>
         <br></br>
         <input type="number" placeholder='Please enter price' onChange={updatePrice}/>
         <br></br>

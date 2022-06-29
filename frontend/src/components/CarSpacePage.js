@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import CarSpaceForm from './CarSpaceForm'
+import PublishForm from './PublishForm'
+
 
 const token = "4.UJsETXTotkCToYT7_SdxwOMYBMo"
 
 export default function CarSpacePage() {
   const [carSpaceSelected, setCarSpaceSelected] = useState(false)
   const [carSpaceInformation, setCarSpaceInformation] = useState([])
+  const [publishFormSelected, setPublishFormSelected] = useState(false)
+  const [carSpaceId, setCarSpaceId] = useState(0)
+
   const leaseCarSpace = () => {
     setCarSpaceSelected(true)
   }
@@ -43,10 +48,20 @@ export default function CarSpacePage() {
       {carSpaceSelected && <CarSpaceForm 
         setCarSpaceSelected={setCarSpaceSelected}
         setCarSpaceInformation={setCarSpaceInformation}
+        getAllListings={getAllListings}
       />}
 
+      {publishFormSelected && <PublishForm setPublishFormSelected={setPublishFormSelected}/>}
+
       {carSpaceInformation.map((space, index) => (
-        <div key={index}>address at: {space.address},   Price: {space.price}</div>
+        <div key={index}>
+          address at: {space.address},   Price: {space.price}
+          <button onClick={() => {
+            setPublishFormSelected(true)
+          }}>
+            publish
+          </button>
+        </div>
       ))}
     </div>
   )
