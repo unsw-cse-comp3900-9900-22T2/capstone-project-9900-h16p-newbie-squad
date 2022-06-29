@@ -180,6 +180,7 @@ def mycarspacelisting():
         for each_listing in Parking_time_range.query.filter_by(parking_space=each_car_space):
             all_listings.append(
                 {
+                    "id":each_car_space.id,
                     "owner":curr_user.username,
                     "address":each_car_space.address,
                     "width":each_car_space.width,
@@ -194,6 +195,7 @@ def mycarspacelisting():
         if Parking_time_range.query.filter_by(parking_space=each_car_space).first()==None:
             all_listings.append(
                 {
+                    "id":each_car_space.id,
                     "owner":curr_user.username,
                     "address":each_car_space.address,
                     "width":each_car_space.width,

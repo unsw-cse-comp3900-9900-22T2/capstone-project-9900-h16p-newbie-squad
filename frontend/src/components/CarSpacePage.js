@@ -42,6 +42,31 @@ export default function CarSpacePage() {
     getAllListings()
   }, [])
   
+  const unpublish = () => {
+    const requestOption = {
+        method: "PUT",
+        headers: {
+            'Content-Type': 'application/json',
+            'token': token
+        },
+    }
+    fetch(`http://127.0.0.1:5000/mycarspacelisting/unpublish/${carSpaceId}`, requestOption)
+    .then(res => {
+        if (res.status === 200) {
+            return res.json()
+        } else {
+            throw(res)
+        }
+    })
+    .then(data => {
+        console.log(data)
+    })
+    .catch(error => console.log(error))
+
+    getAllListings()
+  }
+
+
   return (
     <div>
       <button onClick={leaseCarSpace}>Lease my car space</button>
@@ -51,16 +76,26 @@ export default function CarSpacePage() {
         getAllListings={getAllListings}
       />}
 
-      {publishFormSelected && <PublishForm setPublishFormSelected={setPublishFormSelected}/>}
+      {publishFormSelected && <PublishForm 
+        setPublishFormSelected={setPublishFormSelected}
+        carSpaceId={carSpaceId}
+        getAllListings={getAllListings}
+      />}
 
       {carSpaceInformation.map((space, index) => (
         <div key={index}>
-          address at: {space.address},   Price: {space.price}
-          <button onClick={() => {
+          address at: {space.address},   Price: {space.price}, start: {space.start_date}, end: {space.end_date}
+          {space.start_date === "Not published" && <button onClick={() => {
             setPublishFormSelected(true)
+            setCarSpaceId(space.id)
           }}>
             publish
-          </button>
+          </button>}
+
+          {space.start_date !== "Not published" && 
+            <button onClick={unpublish}>unpublish</button>
+          }          
+
         </div>
       ))}
     </div>

@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 
-export default function PublishForm({ setPublishFormSelected }) {
+const token = "4.UJsETXTotkCToYT7_SdxwOMYBMo"
+
+export default function PublishForm({ setPublishFormSelected, carSpaceId, getAllListings }) {
     const [startDate, setStartDate] = useState('')
     const [endDate, setEndDate] = useState('')
     const updateStartDate = (e) => {
@@ -14,30 +16,33 @@ export default function PublishForm({ setPublishFormSelected }) {
     }
 
     const publish = () => {
-        // const data = {
-        //     "start_date": startDate,
-        //     "end_date": endDate
-        // }
-        // const requestOption = {
-        //     method: "PUT",
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //         'token': token
-        //     },
-        //     body: JSON.stringify(data)
-        // }
-        // fetch(`http://127.0.0.1:5000/mycarspacelisting/publish/${}`, requestOption)
-        // .then(res => {
-        //     if (res.status === 200) {
-        //         return res.json()
-        //     } else {
-        //         throw(res)
-        //     }
-        // })
-        // .then(data => {
-        //     console.log(data)
-        // })
-        // .catch(error => console.log(error))
+        const data = {
+            "start_date": startDate,
+            "end_date": endDate
+        }
+        const requestOption = {
+            method: "PUT",
+            headers: {
+                'Content-Type': 'application/json',
+                'token': token
+            },
+            body: JSON.stringify(data)
+        }
+        fetch(`http://127.0.0.1:5000/mycarspacelisting/publish/${carSpaceId}`, requestOption)
+        .then(res => {
+            if (res.status === 200) {
+                return res.json()
+            } else {
+                throw(res)
+            }
+        })
+        .then(data => {
+            console.log(data)
+        })
+        .catch(error => console.log(error))
+
+        getAllListings()
+        setPublishFormSelected(false)
     }
     return (
         <div>
@@ -48,7 +53,7 @@ export default function PublishForm({ setPublishFormSelected }) {
             End  <input type="date" onChange={updateEndtDate}/>
             <br></br>
             <button onClick={() => setPublishFormSelected(false)}>close</button>
-            <button>confirm</button>
+            <button onClick={publish}>confirm</button>
             <br></br>
             <br></br>
         </div>
