@@ -1,6 +1,10 @@
 import React, { useState } from 'react'
 
-export default function VehicleForm({ setAddVehicleSelected, setVehicleInformation }) {
+// const token = "4.UJsETXTotkCToYT7_SdxwOMYBMo"
+
+export default function VehicleForm({ setAddVehicleSelected, setVehicleInformation, getAllCars }) {
+  const token = localStorage.getItem("token")
+  // console.log(token);
   const [regNumber, setRegNumber] = useState('')
   const [vehicleType, setVehicleType] = useState('motor')
 
@@ -15,25 +19,51 @@ export default function VehicleForm({ setAddVehicleSelected, setVehicleInformati
 
   const onSubmit = () => {
     //todo: fetch the backend
+    const data = {
+      "plate_number": regNumber,
+      "brand": vehicleType,
+    }
+    const requestOption = {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+        'token': token
+      },
+      body: JSON.stringify(data)
+    }
+    fetch("http://127.0.0.1:5000/mycar/new", requestOption)
+    .then(res => {
+      if (res.status === 200) {
+        return res.json()
+      } else {
+        throw(res)
+      }
+    })
+    .then(data => {
+      getAllCars()
+      console.log(data)
+    })
+    .catch(error => alert("The plate number existed"))
 
     // if successful update the vehicle information
-    setVehicleInformation(current => [...current, {
-      reg: regNumber,
-      type: vehicleType
-    }])
-    // setAddVehicleSelected(false)
+    // setVehicleInformation(current => [...current, {
+    //   plate_number: regNumber,
+    //   brand: vehicleType
+    // }])
+    setAddVehicleSelected(false)
   }
   
   return (
     <div className='vehicleForm'> 
         <br></br>
-        <input type="text" placeholder='Enter Reg No' value={regNumber} onChange={updateRegInput}/>
-        <select onChange={updateVehicleType}>
+        <input type="text" placeholder='Enter Plate No' value={regNumber} onChange={updateRegInput}/>
+        <input type="text" placeholder='Enter Brand' onChange={updateVehicleType}/>
+        {/* <select onChange={updateVehicleType}>
             <option value="motor">motor</option>
             <option value="sedan">sedan</option>
             <option value="suv">suv</option>
             <option value="commercial">commercial</option>
-        </select>
+        </select> */}
         <br></br>
         <button onClick={()=>setAddVehicleSelected(false)}>close</button>
         <button onClick={onSubmit}>submit</button>

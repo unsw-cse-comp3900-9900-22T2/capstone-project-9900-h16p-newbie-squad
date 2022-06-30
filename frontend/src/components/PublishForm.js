@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 
-const token = "4.UJsETXTotkCToYT7_SdxwOMYBMo"
+// const token = "4.UJsETXTotkCToYT7_SdxwOMYBMo"
 
 export default function PublishForm({ setPublishFormSelected, carSpaceId, getAllListings }) {
+    const token = localStorage.getItem("token")
     const [startDate, setStartDate] = useState('')
     const [endDate, setEndDate] = useState('')
     const updateStartDate = (e) => {
@@ -38,10 +39,10 @@ export default function PublishForm({ setPublishFormSelected, carSpaceId, getAll
         })
         .then(data => {
             console.log(data)
+            getAllListings()
         })
         .catch(error => console.log(error))
 
-        getAllListings()
         setPublishFormSelected(false)
     }
     return (

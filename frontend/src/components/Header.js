@@ -10,13 +10,17 @@ export default function Header() {
     {
         token = location.state.token
         username = location.state.username
+        localStorage.setItem("token", token)
+        localStorage.setItem("username", username)
     }
     console.log(token,username)
     const Logout = () =>{
-    const data = {
+      localStorage.setItem("token", '')
+      localStorage.setItem("username", '')
+      const data = {
         token: '',
-    }
-    const headers = new Headers({
+      }
+      const headers = new Headers({
         'Content-Type': 'application/json',
         });
         fetch('http://localhost:5000/logout',
@@ -42,7 +46,7 @@ export default function Header() {
             })
     } 
 
-    if(token=='')
+    if(localStorage.getItem("token")==='')
     {
     return(
       <div className='header'>
@@ -64,7 +68,7 @@ export default function Header() {
         <button onClick={() => Logout()}>Logout</button>
       </div>
       <div className='welcome'>
-        {'welcome,' + username}
+        {'welcome,' + localStorage.getItem("username")}
       </div>
       <div className='my-account'>
         <Link to="/personal-info"> <button>My account</button></Link>

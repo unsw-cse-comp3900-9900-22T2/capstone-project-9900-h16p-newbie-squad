@@ -92,6 +92,7 @@
   display: flex;
   flex-direction: row;
 }
+
 .container-noborder {
   position: fixed;
   height: 80%;
@@ -102,6 +103,7 @@
   display: flex;
   flex-direction: row;
 }
+
 .flex-item {
   width: 100px;
   height: 100%;
@@ -146,4 +148,46 @@
 
 .vehicleForm {
   text-align: center;
+}
+
+.profileMain {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.profileContent {
+  width: 500px;
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.profileH5 {
+  font-size: 12px;
+  height: 15px;
+  margin: 0;
+  margin-bottom: 5px;
+  color: #d3dae6;
+}
+.profileitems {
+  display: flex;
+  flex-direction: column;
+}
+.profileitems input {
+  border: 1px solid #000;
+}
+
+.profileChange {
+  color: #0baf79;
+  font-size: 10px !important;
+  text-align: right;
+  cursor: pointer;
+}
+
+.profileButton {
+  margin: 0 5px;
+  margin-top: 10px;
+  
 }

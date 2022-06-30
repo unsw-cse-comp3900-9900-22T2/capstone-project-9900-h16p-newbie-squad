@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 // import reportWebVitals from './reportWebVitals';
-import { BrowserRouter, Routes, Route, useSearchParams} from "react-router-dom";
+import { BrowserRouter, Routes, Route, } from "react-router-dom";
 import PersonalInfo from './components/PersonalInfo';
 import LoginPage from './components/LoginPage';
 import SignUpPage from './components/SignUpPage';
