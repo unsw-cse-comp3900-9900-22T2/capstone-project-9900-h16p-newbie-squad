@@ -6,6 +6,7 @@ export default function ProfilePage() {
   const [digemail, setDigemail] = useState('')
   const [digpassword, setDigpassword] = useState('')
   const [username, setUsername] = useState('')
+  const [bio, setBio] = useState('')
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
   const [newemail, setNewemail] = useState('')
@@ -30,6 +31,9 @@ export default function ProfilePage() {
   }
   const updateUsername = (e) => {
     setUsername(e.target.value)
+  }
+  const updateBio = (e) => {
+    setBio(e.target.value)
   }
   const updateEmail = (e) => {
     setEmail(e.target.value)
@@ -248,7 +252,7 @@ export default function ProfilePage() {
          <h2>User</h2>
          <div className='profileitems'>
            <h5 className='profileH5'>Username</h5>
-           <input value={username} onChange={updateUsername}/>
+           <input value={username} onChange={updateUsername} disabled/>
          </div>
          <div className='profileitems'>
            <h5 className='profileH5'>Email</h5>
