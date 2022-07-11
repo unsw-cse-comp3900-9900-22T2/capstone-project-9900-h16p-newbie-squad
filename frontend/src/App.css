@@ -56,6 +56,25 @@
   cursor: pointer;
 }
 
+.logout {
+  position: absolute;
+  right: 100px;
+  color: aliceblue;
+  top: 13px;
+}
+
+.logout:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.welcome {
+  position: absolute;
+  right: 200px;
+  color: aliceblue;
+  top: 13px;
+}
+
 .information-box {
   width: 100vw;
   height: 100vh;
@@ -65,6 +84,17 @@
 .container {
   position: fixed;
   border: #282c34 solid 1px;
+  height: 80%;
+  width: 95%;
+  top: 70px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: row;
+}
+
+.container-noborder {
+  position: fixed;
   height: 80%;
   width: 95%;
   top: 70px;
@@ -118,4 +148,46 @@
 
 .vehicleForm {
   text-align: center;
+}
+
+.profileMain {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.profileContent {
+  width: 500px;
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.profileH5 {
+  font-size: 12px;
+  height: 15px;
+  margin: 0;
+  margin-bottom: 5px;
+  color: #d3dae6;
+}
+.profileitems {
+  display: flex;
+  flex-direction: column;
+}
+.profileitems input {
+  border: 1px solid #000;
+}
+
+.profileChange {
+  color: #0baf79;
+  font-size: 10px !important;
+  text-align: right;
+  cursor: pointer;
+}
+
+.profileButton {
+  margin: 0 5px;
+  margin-top: 10px;
+  
 }

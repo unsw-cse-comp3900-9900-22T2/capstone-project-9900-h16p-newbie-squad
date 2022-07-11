@@ -69,9 +69,8 @@ def profile():
         if info_to_update.get('bio'):
             curr_user.bio = info_to_update['bio']
         if info_to_update.get('password'):
-            curr_user.bio = info_to_update['password']
+            curr_user.password = info_to_update['password']
 
         db.session.add(curr_user)
         db.session.commit()
         return {}, 200
-

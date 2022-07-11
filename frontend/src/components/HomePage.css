@@ -1,0 +1,16 @@
+.home_page{
+    width:100%;
+    display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.search_input{
+    float:left;
+    width: 60%;
+    height: 40px;
+}
+
+.button_40px{
+    height: 40px;
+}
