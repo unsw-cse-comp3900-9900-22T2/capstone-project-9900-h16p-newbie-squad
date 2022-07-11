@@ -50,12 +50,11 @@ car_b=Vehicle(user=jiaxin, plate_number='DEF456', brand='Honda',width='4300',len
 db.session.add(car_a)
 db.session.add(car_b)
 db.session.commit()
-
 Vehicle.query.all()
 
 
 
-第三部分，car space creation and listing：
+第三部分，parking space creation and listing：
 from app import db
 from app.models import Vehicle,Role,User,Parking_space,Parking_time_range
 Parking_space.query.all()

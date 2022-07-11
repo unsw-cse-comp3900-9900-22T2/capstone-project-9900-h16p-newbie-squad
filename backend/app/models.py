@@ -37,12 +37,12 @@ class User(db.Model):
     avatar=db.Column(db.LargeBinary,nullable=True)
 
     bio=db.Column(db.String(128),nullable=True)
-    #外键链接到Role表
+    #外键链接到Role表，一对多，多的那一侧
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
 
-    #从user到vehicle表（一对多）
+    #从user到vehicle表（一对多，一的那一侧）
     vehicles = db.relationship('Vehicle', backref='user', lazy='dynamic')
-    #从user到parking_space表（一对多）
+    #从user到parking_space表（一对多，一的那一侧）
     parking_spaces = db.relationship('Parking_space', backref='user', lazy='dynamic')
 
     @property
@@ -135,20 +135,23 @@ class Parking_space(db.Model):
     #一对多，多的那一侧
     owner_id = db.Column(db.String(32), db.ForeignKey('users.id'))
     #parking_space_type_id = db.Column(db.String(36), db.ForeignKey('Parking_space_types.id'))
-    address = db.Column(db.String(128), nullable=False)
+
+    street = db.Column(db.String(32), nullable=False)
+    suburb=db.Column(db.String(32), nullable=False)
+    state=db.Column(db.String(32), nullable=False)
+    postcode=db.Column(db.Integer, nullable=False)
+
+
     width = db.Column(db.Float, nullable=True)
     length = db.Column(db.Float, nullable=True)
     #parking_space_height = db.Column(db.Float, nullable=True)
     price = db.Column(db.Float, nullable=True)
-    #parking_space_is_available = db.Column(db.Boolean, nullable=True)
 
     #TODO
     #parking_space_is_booked = db.Column(db.Boolean, nullable=True)
 
     #一对多，一的那一侧
     parking_time_ranges = db.relationship('Parking_time_range', backref='parking_space', lazy='dynamic')
-    #parking_space_start_date = db.Column(db.DateTime, nullable=True)
-    #parking_space_end_date = db.Column(db.DateTime, nullable=True)
 
     def __repr__(self):
         return '<Parking_space %r>' % self.id
@@ -160,9 +163,10 @@ class Parking_time_range(db.Model):
 
     #一对多，多的那一侧
     parking_space_id=db.Column(db.Integer, db.ForeignKey('parking_spaces.id'))
-    #TODO:后面应该改成DateTime类型
-    start_date = db.Column(db.String(32))
-    end_date = db.Column(db.String(32))
+    #start_date = db.Column(db.String(32))
+    #end_date = db.Column(db.String(32))
+    start_time = db.Column(db.DateTime)
+    end_time = db.Column(db.DateTime)
 
     def __repr__(self):
         return '<Parking_time_ranges %r>' % self.id

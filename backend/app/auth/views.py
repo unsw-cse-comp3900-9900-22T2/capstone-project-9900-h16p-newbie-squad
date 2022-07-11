@@ -1,6 +1,5 @@
 from . import auth_bp
 
-from werkzeug.security import generate_password_hash, check_password_hash
 from flask import Blueprint, request,render_template, redirect, session,url_for,jsonify
 
 from .. import db

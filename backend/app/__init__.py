@@ -16,11 +16,22 @@ def create_app(name):
     def index():
         return "hello,world!"
 
+    from .commons import before_request_check_token
+    @app.before_request
+    def before_request():
+        before_request_check_token()
+
     from .auth import auth_bp
     app.register_blueprint(auth_bp)
 
     from .profile import profile_bp
     app.register_blueprint(profile_bp)
+
+    from .car import car_bp
+    app.register_blueprint(car_bp)
+
+    from .parkingspace import parkingspace_bp
+    app.register_blueprint(parkingspace_bp)
 
     return app
 
