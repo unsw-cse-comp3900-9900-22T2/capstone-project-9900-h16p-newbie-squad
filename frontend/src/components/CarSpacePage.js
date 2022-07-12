@@ -29,7 +29,7 @@ export default function CarSpacePage() {
         'token': token
       },
     }
-    fetch("http://127.0.0.1:5000/mycarspacelisting", requestOption)
+    fetch("http://127.0.0.1:5000/myparkingspace", requestOption)
     .then(res => {
       if (res.status === 200) {
         return res.json()
@@ -39,7 +39,7 @@ export default function CarSpacePage() {
     })
     .then(data => {
       console.log(data)
-      setCarSpaceInformation([...data.all_listings])
+      setCarSpaceInformation([...data.all_parkingspaces])
     })
     .catch(error => console.log(error))
   }
@@ -57,7 +57,7 @@ export default function CarSpacePage() {
             'token': token
         },
     }
-    fetch(`http://127.0.0.1:5000/mycarspacelisting/unpublish/${space_id}`, requestOption)
+    fetch(`http://127.0.0.1:5000/myparkingspace/unpublish/${space_id}`, requestOption)
     .then(res => {
         if (res.status === 200) {
             getAllListings()
@@ -98,7 +98,7 @@ export default function CarSpacePage() {
 
       {carSpaceInformation.map((space, index) => (
         <div key={index}>
-          address at: {space.address},   Price: {space.price}, start: {space.start_date}, end: {space.end_date}
+          Street at: {space.street},   Price: {space.price}, start: {space.start_date}, end: {space.end_date}
           {space.start_date === "Not published" && <button onClick={() => {
             setPublishFormSelected(true)
             setCarSpaceId(space.id)
