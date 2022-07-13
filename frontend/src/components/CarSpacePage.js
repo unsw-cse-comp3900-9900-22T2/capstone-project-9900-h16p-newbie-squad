@@ -99,14 +99,14 @@ export default function CarSpacePage() {
       {carSpaceInformation.map((space, index) => (
         <div key={index}>
           Street at: {space.street},   Price: {space.price}, start: {space.start_date}, end: {space.end_date}
-          {space.start_date === "Not published" && <button onClick={() => {
+          {space.current_listings === null && <button onClick={() => {
             setPublishFormSelected(true)
             setCarSpaceId(space.id)
           }}>
             publish
           </button>}
 
-          {space.start_date !== "Not published" && 
+          {space.current_listings !== null && 
             <button onClick={() => unpublish(space.id)}>unpublish</button>
           }
 
