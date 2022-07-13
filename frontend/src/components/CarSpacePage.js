@@ -93,27 +93,37 @@ export default function CarSpacePage() {
           carSpaceInformation={carSpaceInformation}
           carSpaceId={carSpaceId}
           setEditFormSelected={setEditFormSelected}
+          getAllListings={getAllListings}
         />
       }
 
       {carSpaceInformation.map((space, index) => (
         <div key={index}>
-          Street at: {space.street},   Price: {space.price}, start: {space.start_date}, end: {space.end_date}
-          {space.current_listings === null && <button onClick={() => {
+          Address at: {space.street},  {space.suburb}, {space.state}, {space.postcode}
+          <br></br>
+          Price: {space.price}, 
+          start: {space.current_listings.length !== 0 ? space.current_listings[0].start_date : "Not published yet"},
+          end: {space.current_listings.length !== 0 ? space.current_listings[0].end_date : "Not published yet"}
+          <br></br>
+          Length: {space.length}
+          <br></br>
+          Width: {space.width}
+          <br></br>
+          {space.current_listings.length === 0 && <button onClick={() => {
             setPublishFormSelected(true)
             setCarSpaceId(space.id)
           }}>
             publish
           </button>}
 
-          {space.current_listings !== null && 
+          {space.current_listings.length !== 0 && 
             <button onClick={() => unpublish(space.id)}>unpublish</button>
           }
 
-          {/* <button onClick={() => {
+          <button onClick={() => {
             openEditForm()
             setCarSpaceId(space.id)
-          }}>Edit</button>           */}
+          }}>Edit</button>          
 
         </div>
       ))}

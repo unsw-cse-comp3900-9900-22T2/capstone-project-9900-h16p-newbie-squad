@@ -29,7 +29,7 @@ def myparkingspacelisting():
             duration=(each_listing.end_date-each_listing.start_date).total_seconds()/86400
             date_range.append({
                 "listing_id":each_listing.id,
-                "start_date:":each_listing.start_date.strftime('%Y-%m-%d'),
+                "start_date":each_listing.start_date.strftime('%Y-%m-%d'),
                 "end_date":each_listing.end_date.strftime('%Y-%m-%d'),
                 "duration":duration,
                 "total_price":each_parking_space.price*duration
