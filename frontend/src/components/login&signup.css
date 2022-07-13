@@ -4,8 +4,16 @@
     margin-left: 40%;
     text-align: center;
 }
-
+.all_center{
+    width:100%;
+    display: flex;
+	justify-content: center;
+	align-items: center;
+}
 .inputBlock {   
     width: 248px;
     height: 28px;
+}
+.inputCheck {
+    color: #f00;
 }
