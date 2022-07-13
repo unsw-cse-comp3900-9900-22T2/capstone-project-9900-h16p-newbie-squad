@@ -165,8 +165,8 @@ class Parking_time_range(db.Model):
     parking_space_id=db.Column(db.Integer, db.ForeignKey('parking_spaces.id'))
     #start_date = db.Column(db.String(32))
     #end_date = db.Column(db.String(32))
-    start_time = db.Column(db.DateTime)
-    end_time = db.Column(db.DateTime)
+    start_date = db.Column(db.Date)
+    end_date = db.Column(db.Date)
 
     def __repr__(self):
         return '<Parking_time_ranges %r>' % self.id
