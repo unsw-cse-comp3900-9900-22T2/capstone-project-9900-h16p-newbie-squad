@@ -46,7 +46,7 @@ export default function Header() {
             })
     } 
 
-    if(localStorage.getItem("token")==='')
+    if(token==='')
     {
     return(
       <div className='header'>
@@ -55,6 +55,9 @@ export default function Header() {
         </div>
         <div className='my-account'>
           <Link to="/login-page"> <button>Login</button></Link>
+        </div>
+        <div className='logout'>
+          <Link to="/SignUp-page"> <button>Sign up</button></Link>
         </div>
       </div>
     )
