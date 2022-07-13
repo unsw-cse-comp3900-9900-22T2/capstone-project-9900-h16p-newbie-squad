@@ -29,7 +29,7 @@ export default function PublishForm({ setPublishFormSelected, carSpaceId, getAll
             },
             body: JSON.stringify(data)
         }
-        fetch(`http://127.0.0.1:5000/mycarspacelisting/publish/${carSpaceId}`, requestOption)
+        fetch(`http://127.0.0.1:5000/myparkingspace/publish/${carSpaceId}`, requestOption)
         .then(res => {
             if (res.status === 200) {
                 return res.json()

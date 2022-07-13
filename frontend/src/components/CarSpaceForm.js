@@ -4,21 +4,36 @@ import React, { useState } from 'react'
 
 export default function CarSpaceForm({ setCarSpaceSelected, setCarSpaceInformation, getAllListings }) {
     const token = localStorage.getItem("token")
-    const [address, setAddress] = useState('')
     const [spaceType, setSpaceType] = useState('indoor')
     const [clearance, setClearance] = useState('')
     const [length, setLength] = useState(0)
     const [width, setWidth] = useState(0)
     const [price, setPrice] = useState(0)
+    const [street, setStreet] = useState('')
+    const [suburb, setSuburb] = useState("")
+    const [state, setState] = useState('')
+    const [postcode, setPostcode] = useState('')
+
+    const updateStreet = (e) => {
+        setStreet(e.target.value)
+    }
+
+    const updateSuburb = (e) => {
+        setSuburb(e.target.value)
+    }
+
+    const updateState = (e) => {
+        setState(e.target.value)
+    }
+
+    const updatePostcode = (e) => {
+        setPostcode(e.target.value)
+    }
 
     const updatePrice = (e) => {
         setPrice((e.target.value))
     }
 
-    const updateAddress = (e) => {
-        setAddress(e.target.value)
-        // console.log(e.target.value);
-    }
     const updateSpaceType = (e) => {
         setSpaceType(e.target.value)
         console.log(e.target.value);
@@ -41,12 +56,13 @@ export default function CarSpaceForm({ setCarSpaceSelected, setCarSpaceInformati
     const onSubmit = () => {
         // todo: I should fetch the backend to update my new car space
         const data = {
-            "address": address,
+            "street": street,
+            "suburb": suburb,
+            "state": state,
+            "postcode": postcode,
             "length": length,
             "width": width,
             "price": price,
-            // "start_date": startDate,
-            // "end_date": endDate
         }
         const requestOption = {
             method: "POST",
@@ -56,7 +72,7 @@ export default function CarSpaceForm({ setCarSpaceSelected, setCarSpaceInformati
             },
             body: JSON.stringify(data)
         }
-        fetch("http://127.0.0.1:5000/mycarspacelisting/new", requestOption)
+        fetch("http://127.0.0.1:5000/myparkingspace/new", requestOption)
         .then(res => {
             if (res.status === 200) {
                 return res.json()
@@ -81,7 +97,7 @@ export default function CarSpaceForm({ setCarSpaceSelected, setCarSpaceInformati
   return (
     <div className='carSpaceForm'>
         <br></br>
-        <input type="text" placeholder='please enter address' onChange={updateAddress}/>
+        {/* <input type="text" placeholder='please enter address' onChange={updateAddress}/> */}
         {/* <div>what type of space are you listing?</div>
         <select onChange={updateSpaceType}>
             <option>indoor</option>
@@ -97,6 +113,14 @@ export default function CarSpaceForm({ setCarSpaceSelected, setCarSpaceInformati
             <option>3.5</option>
             <option>4</option>
         </select> */}
+        Street <input type="text" onChange={updateStreet}/>
+        <br></br>
+        Suburb <input type="text" onChange={updateSuburb}/>
+        <br></br>
+        State <input type="text" onChange={updateState}/>
+        <br></br>
+        Postcode <input type="text" onChange={updatePostcode}/>
+        <br></br>
         <div>what is the size of your car space?</div>
         Length  <input type="number" placeholder='please enter Length' onChange={updateLength}/> meter
         <br></br>
