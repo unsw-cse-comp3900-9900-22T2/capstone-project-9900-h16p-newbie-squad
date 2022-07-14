@@ -12,11 +12,19 @@ var InvalidEmailAddress=true
 var InvalidPassword1=true
 var InvalidPassword2=true
 export default function LoginPage() {
+    password1=''
+    password2=''
+    password_visible1 = false
+    password_visible2 = false
+    InvalidUsername=true
+    InvalidEmailAddress=true
+    InvalidPassword1=true
+    InvalidPassword2=true
     const navigate = useNavigate()
     const SignUp = () => {
         const username = document.getElementById('user_name').value
         const emailaddr = document.getElementById('email_addr').value
-        console.log(emailaddr.substr(emailaddr.length-4))
+        
         if(InvalidUsername)
         {
             alert('Invalid Username')
@@ -76,12 +84,12 @@ export default function LoginPage() {
                         </div>
                     <div>
                         <div id='password_check1' className='inputCheck'>Password</div>
-                        <input onChange={()=>CheckPassword1()} className="inputBlock" type="text" id="password1"/>
+                        <input onChange={()=>CheckPassword1()} className="inputBlock" type="password" id="password1"/>
                         <button onClick={()=>ChangePasswordVisible1()} id="password_visible1">visible</button>
                     </div>
                     <div>
                         <div id='password_check2' className='inputCheck'>Password check</div>
-                        <input onChange={()=>CheckPassword2()} className="inputBlock" type="text" id="password2"/>
+                        <input onChange={()=>CheckPassword2()} className="inputBlock" type="password" id="password2"/>
                         <button onClick={()=>ChangePasswordVisible2()} id="password_visible2">visible</button>
                     </div>
                     <button onClick={() => SignUp()}>Sign up</button>
@@ -118,11 +126,8 @@ function CheckEmail(){
         document.getElementById('email_check').style.color='#000'
 }
 function CheckPassword1(){
-    var password_input = document.getElementById('password1').value
-    if(password_input.length>password1.length)
-        password1+=password_input.substring(password1.length)
-    else
-        password1=password1.substring(0,password_input.length)
+    password1 = document.getElementById('password1').value
+
     var hasNum=false;
     var hasBig=false;
     var hasSmall=false;
@@ -172,11 +177,11 @@ function CheckPassword1(){
     else
         InvalidPassword1=true
     
+        CheckPassword2()
     if(InvalidPassword1)
         document.getElementById('password_check1').style.color='#f00'
     else
         document.getElementById('password_check1').style.color='#000'
-    ShowPassword1()
 }
 function ChangePasswordVisible1(){
     password_visible1=!password_visible1
@@ -184,23 +189,13 @@ function ChangePasswordVisible1(){
     {
         document.getElementById('password_visible1').style.color = '#FFF'
         document.getElementById('password_visible1').style.backgroundColor = '#000'
+        document.getElementById('password1').type='text'
     }
     else
     {
         document.getElementById('password_visible1').style.color = '#000'
         document.getElementById('password_visible1').style.backgroundColor = '#FFF'
-    }
-    ShowPassword1()
-}
-function ShowPassword1(){
-    if(password_visible1)
-        document.getElementById('password1').value = password1
-    else 
-    {
-        var password_show=''
-        for(var i=0;i<password1.length;i++)
-            password_show+='*'
-        document.getElementById('password1').value = password_show
+        document.getElementById('password1').type='password'
     }
 }
 function ChangePasswordVisible2(){
@@ -209,20 +204,17 @@ function ChangePasswordVisible2(){
     {
         document.getElementById('password_visible2').style.color = '#FFF'
         document.getElementById('password_visible2').style.backgroundColor = '#000'
+        document.getElementById('password2').type='text'
     }
     else
     {
         document.getElementById('password_visible2').style.color = '#000'
         document.getElementById('password_visible2').style.backgroundColor = '#FFF'
+        document.getElementById('password2').type='password'
     }
-    ShowPassword2()
 }
 function CheckPassword2(){
-    var password_input = document.getElementById('password2').value
-    if(password_input.length>password2.length)
-        password2+=password_input.substring(password2.length)
-    else
-        password2=password1.substring(0,password_input.length)
+    password2 = document.getElementById('password2').value
     
     if(password2===password1)
         InvalidPassword2=false
@@ -233,16 +225,4 @@ function CheckPassword2(){
         document.getElementById('password_check2').style.color='#f00'
     else
         document.getElementById('password_check2').style.color='#000'
-    ShowPassword2()
-}
-function ShowPassword2(){
-    if(password_visible2)
-        document.getElementById('password2').value = password2
-    else 
-    {
-        var password_show=''
-        for(var i=0;i<password2.length;i++)
-            password_show+='*'
-        document.getElementById('password2').value = password_show
-    }
 }

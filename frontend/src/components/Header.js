@@ -1,24 +1,19 @@
 import React from 'react';
 import { Outlet, Link,useLocation,useNavigate } from "react-router-dom";
 
-export var token = ''
-export var username = ''
 export default function Header() {
     const navigate = useNavigate()
     let location = useLocation()
     if(location.state!==null)
     {
-        token = location.state.token
-        username = location.state.username
-        localStorage.setItem("token", token)
-        localStorage.setItem("username", username)
+        localStorage.setItem("token", location.state.token)
+        localStorage.setItem("username", location.state.username)
     }
-    console.log(token,username)
+    //console.log(localStorage)
+    //console.log(token,username)
     const Logout = () =>{
-      localStorage.setItem("token", '')
-      localStorage.setItem("username", '')
       const data = {
-        token: '',
+        token: localStorage.getItem("token"),
       }
       const headers = new Headers({
         'Content-Type': 'application/json',
@@ -41,12 +36,14 @@ export default function Header() {
                 }
                 else 
                 {
+                    localStorage.setItem("token", '')
+                    localStorage.setItem("username", '')
                     navigate('/',{state:{token:'',username:''},replace:true})
                 }
             })
     } 
 
-    if(token==='')
+    if(localStorage.getItem("token")==='')
     {
     return(
       <div className='header'>
