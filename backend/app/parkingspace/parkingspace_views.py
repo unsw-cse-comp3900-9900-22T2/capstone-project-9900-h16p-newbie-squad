@@ -1,7 +1,7 @@
 from . import parkingspace_bp
 from flask import request,g
 from .. import db
-from ..models import Parking_space, Parking_time_range
+from ..models import Parking_space, Listing
 from datetime import datetime
 
 
@@ -27,14 +27,15 @@ def myparkingspacelisting():
         }
 
         date_range=[]
-        for each_listing in Parking_time_range.query.filter_by(parking_space=each_parking_space):
+        for each_listing in Listing.query.filter_by(parking_space=each_parking_space):
             duration=(each_listing.end_date-each_listing.start_date).total_seconds()/86400
             date_range.append({
                 "listing_id":each_listing.id,
                 "start_date":each_listing.start_date.strftime('%Y-%m-%d'),
                 "end_date":each_listing.end_date.strftime('%Y-%m-%d'),
                 "duration":duration,
-                "total_price":each_parking_space.price*duration
+                "total_price":each_parking_space.price*duration,
+                "published_time":each_listing.published_time.strftime('%Y-%m-%d,%H-%M-%S')
             })
 
         result["current_listings"]=date_range
@@ -44,6 +45,8 @@ def myparkingspacelisting():
 
     
     return {"all_parkingspaces":all_parking_spaces},200
+
+
 
 
 @parkingspace_bp.route('/myparkingspace/new',methods=['POST'])
@@ -69,6 +72,8 @@ def myparkingspaceNew():
     return {'new_parkingspace_id':new_parkingspace_id},200
 
 
+
+
 @parkingspace_bp.route('/myparkingspace/publish/<int:parkingspace_id>',methods=['PUT'])
 def publishParkingSpace(parkingspace_id):
     request_data=request.get_json()
@@ -85,22 +90,25 @@ def publishParkingSpace(parkingspace_id):
         except:
             return {'error':'invalid time format'},400
 
-        new_listing=Parking_time_range(start_date=start_date,end_date=end_date,\
+        new_listing=Listing(start_date=start_date,end_date=end_date,\
             parking_space=target_parking_space)
-        
+        #后台会自动生成当前时间的published time字段
+
         db.session.add(new_listing)
         db.session.commit()
     except:
         return {'error':'internal error'},400
 
-    new_listing_id=Parking_time_range.query.all()[-1].id
+    new_listing_id=Listing.query.all()[-1].id
 
     return {'new_listing_id':new_listing_id},200
 
 
+
+
 @parkingspace_bp.route('/myparkingspace/unpublish/<int:parkingspace_id>',methods=['PUT'])
 def unpublishParkingSpace(parkingspace_id):
-    all_listings=Parking_time_range.query.filter_by(parking_space_id=parkingspace_id).all()
+    all_listings=Listing.query.filter_by(parking_space_id=parkingspace_id).all()
 
     try:
         for each_listing in all_listings:
@@ -136,7 +144,7 @@ def getParkingSpace(parkingspace_id):
                 "current_listings":[]
             }
 
-    all_listings=Parking_time_range.query.filter_by(parking_space=target_parking_space).all()
+    all_listings=Listing.query.filter_by(parking_space=target_parking_space).all()
     print(all_listings)
 
     if all_listings:
@@ -148,7 +156,8 @@ def getParkingSpace(parkingspace_id):
                 "start_date:":each_listing.start_date.strftime('%Y-%m-%d'),
                 "end_date":each_listing.end_date.strftime('%Y-%m-%d'),
                 "duration":duration,
-                "total_price":target_parking_space.price*duration
+                "total_price":target_parking_space.price*duration,
+                "published_time":each_listing.published_time.strftime('%Y-%m-%d,%H-%M-%S')
                 }
             detail["current_listings"].append(listing)        
         
@@ -191,6 +200,10 @@ def updateParkingSpace(parkingspace_id):
         target_parking_space.length = info_to_update['length']
     if info_to_update.get('price'):
         target_parking_space.price = info_to_update['price']
+    if info_to_update.get('latitude'):
+        target_parking_space.price = info_to_update['latitude']
+    if info_to_update.get('longitude'):
+        target_parking_space.price = info_to_update['longitude']
 
     db.session.add(target_parking_space)
     db.session.commit()

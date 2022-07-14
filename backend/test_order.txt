@@ -45,17 +45,76 @@ Mock data (建立车辆)
 from app import db
 from app.models import Vehicle,Role,User
 jiaxin=User.query.filter_by(username='jiaxin').first()
-car_a=Vehicle(user=jiaxin, plate_number='ABC123', brand='Ford',width='4500',length='2200')
-car_b=Vehicle(user=jiaxin, plate_number='DEF456', brand='Honda',width='4300',length='2000')
+car_a=Vehicle(owner=jiaxin, plate_number='ABC123', brand='Ford',width='4500',length='2200')
+car_b=Vehicle(owner=jiaxin, plate_number='DEF456', brand='Honda',width='4300',length='2000')
 db.session.add(car_a)
 db.session.add(car_b)
 db.session.commit()
 Vehicle.query.all()
 
 
-
 第三部分，parking space creation and listing：
 from app import db
-from app.models import Vehicle,Role,User,Parking_space,Parking_time_range
+from app.models import Vehicle,Role,User,Parking_space,Listing
 Parking_space.query.all()
-Parking_time_range.query.all()
+
+
+
+第四部分，测试listing和booking（需修改）
+from app import db
+from app.models import Listing, Booking
+listing1=Listing(str='hello')
+listing2=Listing(str='world')
+db.session.add_all([listing1,listing2])
+db.session.commit()
+Listing.query.all()
+
+booking1=Booking(listing=listing1,status=1)
+booking2=Booking(listing=listing1,status=1)
+booking3=Booking(listing=listing2,status=1)
+db.session.add_all([booking1,booking2,booking3])
+db.session.commit()
+Booking.query.all()
+
+db.session.delete(listing1)
+db.session.commit()
+Booking.query.all()
+
+
+
+
+
+
+
+快速测试：
+建立三种角色，建立三个用户，在jiaxin下建立三辆车
+from app import db
+db.drop_all()
+db.create_all()
+from app import db
+from app.models import Role,User
+admin_role=Role(role_name='admin')
+customer_role=Role(role_name='customer')
+provider_role=Role(role_name='provider')
+db.session.add_all([admin_role,customer_role,provider_role])
+db.session.commit()
+Role.query.first()
+Role.query.all()
+admin_role=Role.query.filter_by(role_name='admin').first()
+customer_role=Role.query.filter_by(role_name='customer').first()
+provider_role=Role.query.filter_by(role_name='provider').first()
+yindi=User(username='yindi',email='123@email.com',password='123456',role=customer_role,bio='niubi1')
+jiaxin=User(username='jiaxin',email='456@email.com',password='123456',role=customer_role,bio='niubi2')
+bowen=User(username='bowen',email='789@email.com',password='123456',role=provider_role,bio='niubi3')
+db.session.add_all([yindi,jiaxin,bowen])
+db.session.commit()
+User.query.all()
+from app import db
+from app.models import Vehicle,Role,User
+jiaxin=User.query.filter_by(username='jiaxin').first()
+car_a=Vehicle(owner=jiaxin, plate_number='ABC123', brand='Ford',width='4500',length='2200')
+car_b=Vehicle(owner=jiaxin, plate_number='DEF456', brand='Honda',width='4300',length='2000')
+db.session.add(car_a)
+db.session.add(car_b)
+db.session.commit()
+Vehicle.query.all()

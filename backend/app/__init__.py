@@ -33,5 +33,11 @@ def create_app(name):
     from .parkingspace import parkingspace_bp
     app.register_blueprint(parkingspace_bp)
 
+    from .listing import listing_bp
+    app.register_blueprint(listing_bp)
+
+    from .booking import booking_bp
+    app.register_blueprint(booking_bp)
+
     return app
 

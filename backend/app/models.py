@@ -4,15 +4,13 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
 from itsdangerous.serializer import Serializer
 from flask import current_app
+from datetime import datetime
 
 import base64
 
 class Role(db.Model):
     __tablename__ = 'roles'
-    # id = db.Column(db.Integer, server_default=str(uuid.uuid4()), primary_key=True)
     id = db.Column(db.Integer, primary_key=True)
-    # id = db.Column('id', db.String(36), default=lambda: str(uuid.uuid4()), primary_key=True)
-    #role_name is: admin, customer, provider
     role_name = db.Column(db.String(64), unique=True)
     #从Role到User一对多
     users = db.relationship('User', backref='role', lazy='dynamic')
@@ -23,10 +21,7 @@ class Role(db.Model):
 
 class User(db.Model):
     __tablename__ = 'users'
-    # id = db.Column(db.Integer, server_default=str(uuid.uuid4()),primary_key=True)
-    # id = db.Column('id', db.String(36), default=lambda: str(uuid.uuid4()), primary_key=True)
     id = db.Column(db.Integer, primary_key=True)
-    #index attribute: If set to True, create an index for this column, so that queries are more efficient.
     username = db.Column(db.String(32), unique=True, index=True)
     email = db.Column(db.String(64), unique=True, index=True)
     password_hash = db.Column(db.String(128))
@@ -41,9 +36,11 @@ class User(db.Model):
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
 
     #从user到vehicle表（一对多，一的那一侧）
-    vehicles = db.relationship('Vehicle', backref='user', lazy='dynamic')
+    vehicles = db.relationship('Vehicle', backref='owner', lazy='dynamic')
     #从user到parking_space表（一对多，一的那一侧）
-    parking_spaces = db.relationship('Parking_space', backref='user', lazy='dynamic')
+    parking_spaces = db.relationship('Parking_space', backref='owner', lazy='dynamic')
+
+    customer=db.relationship('Booking',backref='customer',lazy='dynamic')
 
     @property
     def password(self):
@@ -63,12 +60,7 @@ class User(db.Model):
 
     @staticmethod
     def verify_auth_token(token):
-        #print(token)
-        #print(type(token))
-        #token=str(token)
-        #print('SECRET_KEY',current_app.config['SECRET_KEY'])
         s = Serializer(current_app.config['SECRET_KEY'])
-
         try:
             data = s.loads(token)
         except:
@@ -96,11 +88,8 @@ class User(db.Model):
 class Vehicle(db.Model):
     __tablename__ = 'vehicles'
 
-    # id, vehicle_owner_id, vehicle_type_id, vehicle_license_plate,vehicle_width,vehicle_length,vehicle_height,vehicle_weight
-    # id = db.Column('id', db.String(36), default=lambda: str(uuid.uuid4()), primary_key=True)
     id = db.Column(db.Integer, primary_key=True)
     owner_id = db.Column(db.String(32), db.ForeignKey('users.id'))
-    #vehicle_type_id = db.Column(db.String(36), db.ForeignKey('vehicle_types.id'))
     plate_number = db.Column(db.String(32), unique=True,index=True)
     brand=db.Column(db.String(32))
     width = db.Column(db.Float, nullable=True)
@@ -149,26 +138,68 @@ class Parking_space(db.Model):
     #parking_space_height = db.Column(db.Float, nullable=True)
     price = db.Column(db.Float, nullable=True)
 
-    #TODO
-    #parking_space_is_booked = db.Column(db.Boolean, nullable=True)
-
     #一对多，一的那一侧
-    parking_time_ranges = db.relationship('Parking_time_range', backref='parking_space', lazy='dynamic')
+    #车位下架，listing自动也下架
+    listings = db.relationship('Listing', backref='parking_space', lazy='dynamic'\
+        ,cascade='all,delete-orphan')
 
     def __repr__(self):
         return '<Parking_space %r>' % self.id
 
 
-class Parking_time_range(db.Model):
-    __tablename__='parking_time_ranges'
+class Listing(db.Model):
+    __tablename__='listings'
     id = db.Column(db.Integer, primary_key=True)
 
     #一对多，多的那一侧
     parking_space_id=db.Column(db.Integer, db.ForeignKey('parking_spaces.id'))
-    #start_date = db.Column(db.String(32))
-    #end_date = db.Column(db.String(32))
     start_date = db.Column(db.Date)
     end_date = db.Column(db.Date)
+    published_time=db.Column(db.DateTime,default=datetime.now)
+
+    #一对多，一的那一侧
+    bookings=db.relationship('Booking', backref='listing', lazy='dynamic')
 
     def __repr__(self):
-        return '<Parking_time_ranges %r>' % self.id
+        return '<listings %r>' % self.id
+
+
+class Status:
+    Pending=1
+    Accepted_Payment_Required=2
+    Rejected=3
+    Successful=4
+    Cancelled=5
+
+
+#The default
+#cascade behavior when an object is deleted is to set the foreign key in any related
+#objects that link to it to a null value.
+#Booking记录永远不会消失
+class Booking(db.Model):
+    __tablename__='bookings'
+    id = db.Column(db.Integer, primary_key=True)
+    #一对多，多的那一侧，如果listing已经下架了，那么listing字段为null
+    listing_id=db.Column(db.Integer,db.ForeignKey('listings.id'))
+    customer_id=db.Column(db.Integer,db.ForeignKey('users.id'))
+    status=db.Column(db.Integer)
+    booking_time=db.Column(db.DateTime,default=datetime.now)
+    
+    def __repr__(self):
+        return '<bookings %r>' % self.id
+
+
+class Billing(db.Model):
+    __tablename__='billings'
+    id = db.Column(db.Integer, primary_key=True)
+    provider_name=db.Column(db.String(32))
+    customer_name=db.Column(db.String(32))
+    #这张表只是存储历史记录，因此address不再分开了，生成历史记录的时候把street，suburb等合成一个字符串
+    address=db.Column(db.String(64))
+    start_date=db.Column(db.Date)
+    end_date=db.Column(db.Date)
+    unit_price=db.Column(db.Integer)
+    total_price=db.Column(db.Integer)
+    #存储付款时用的银行卡号
+    bank_number=db.Column(db.String(32))
+
