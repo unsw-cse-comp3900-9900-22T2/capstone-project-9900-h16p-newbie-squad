@@ -12,3 +12,5 @@ week 3:
 • Drawed all interface diagrams based on user stories
 • Chose 12 user stories that must completed during sprint 1
 • Integrated the proposal
+
+week 4:
