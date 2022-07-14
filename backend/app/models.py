@@ -141,6 +141,8 @@ class Parking_space(db.Model):
     state=db.Column(db.String(32), nullable=False)
     postcode=db.Column(db.Integer, nullable=False)
 
+    latitude=db.Column(db.String(32), nullable=True)
+    longitude=db.Column(db.String(32), nullable=True)
 
     width = db.Column(db.Float, nullable=True)
     length = db.Column(db.Float, nullable=True)

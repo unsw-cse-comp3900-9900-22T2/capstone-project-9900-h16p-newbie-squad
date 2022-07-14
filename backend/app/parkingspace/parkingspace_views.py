@@ -21,7 +21,9 @@ def myparkingspacelisting():
             "postcode":each_parking_space.postcode,
             "width":each_parking_space.width,
             "length":each_parking_space.length,
-            "price":each_parking_space.price
+            "price":each_parking_space.price,
+            "latitude":each_parking_space.latitude,
+            "longitude":each_parking_space.longitude
         }
 
         date_range=[]
@@ -29,7 +31,7 @@ def myparkingspacelisting():
             duration=(each_listing.end_date-each_listing.start_date).total_seconds()/86400
             date_range.append({
                 "listing_id":each_listing.id,
-                "start_date:":each_listing.start_date.strftime('%Y-%m-%d'),
+                "start_date":each_listing.start_date.strftime('%Y-%m-%d'),
                 "end_date":each_listing.end_date.strftime('%Y-%m-%d'),
                 "duration":duration,
                 "total_price":each_parking_space.price*duration
@@ -54,7 +56,8 @@ def myparkingspaceNew():
             user=curr_user,street=request_data.get('street'),suburb=request_data.get('suburb'),\
             state=request_data.get('state'),postcode=request_data.get('postcode'),\
             width=request_data.get('width'),length=request_data.get('length'),\
-            price=request_data.get('price')
+            price=request_data.get('price'),latitude=request_data.get('latitude'),\
+            longitude=request_data.get('longitude')
         )
         db.session.add(new_parking_space)
         db.session.commit()
@@ -124,6 +127,8 @@ def getParkingSpace(parkingspace_id):
                 "suburb":target_parking_space.suburb,
                 "state":target_parking_space.state,
                 "postcode":target_parking_space.postcode,
+                "latitude":target_parking_space.latitude,
+                "longitude":target_parking_space.longitude,
                 "width":target_parking_space.width,
                 "length":target_parking_space.length,
                 "price":target_parking_space.price,
