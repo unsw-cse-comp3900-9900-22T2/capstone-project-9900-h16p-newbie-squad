@@ -45,10 +45,18 @@ export default function CarSpaceForm({ setCarSpaceSelected, setCarSpaceInformati
     }
 
     const updateLength = (e) => {
+        if (parseFloat(e.target.value) < 1.5) {
+            setLength(1.5)
+            return
+        }
         setLength(parseFloat(e.target.value))
         // console.log(parseFloat(e.target.value));
     }
     const updateWidth = (e) => {
+        if (parseFloat(e.target.value) < 1.5) {
+            setWidth(2)
+            return
+        }
         setWidth(parseFloat(e.target.value))
         // console.log(parseFloat(e.target.value));
     }

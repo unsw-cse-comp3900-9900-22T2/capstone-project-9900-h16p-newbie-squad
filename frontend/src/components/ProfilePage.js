@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { useEffect } from 'react'
-import {token} from './Header'
 
 export default function ProfilePage() {
   const [digemail, setDigemail] = useState('')
@@ -60,7 +59,7 @@ export default function ProfilePage() {
     }
     const headers = new Headers({
       'Content-Type': 'application/json',
-      'token': token
+      'token': localStorage.getItem("token")
       });
       fetch('http://localhost:5000/profile',
       {
@@ -98,7 +97,7 @@ export default function ProfilePage() {
     }
     const headers = new Headers({
       'Content-Type': 'application/json',
-      'token': token
+      'token': localStorage.getItem("token")
       });
       fetch('http://localhost:5000/profile',
       {
@@ -136,7 +135,7 @@ export default function ProfilePage() {
     }
     const headers = new Headers({
       'Content-Type': 'application/json',
-      'token': token
+      'token': localStorage.getItem("token")
       });
       fetch('http://localhost:5000/profile',
       {
@@ -171,7 +170,7 @@ export default function ProfilePage() {
   const initUser = () => {
     const headers = new Headers({
       'Content-Type': 'application/json',
-      'token': token
+      'token': localStorage.getItem("token")
       });
       fetch('http://localhost:5000/profile',
       {

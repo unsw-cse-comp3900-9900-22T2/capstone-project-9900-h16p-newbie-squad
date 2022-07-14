@@ -12,3 +12,14 @@ week 3:
 • Drawed all interface diagrams based on user stories
 • Chose 12 user stories that must completed during sprint 1
 • Integrated the proposal
+
+week 4:
+• Developed login & signup frontend
+
+week 5:
+• Connected login & signup frontend with backend
+
+week 6:
+• Held retrospective meeting of demoA
+• Chosed user stories of sprint 2
+• Fixed several issues in demoA

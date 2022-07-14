@@ -8,7 +8,7 @@ export default function PublishForm({ setPublishFormSelected, carSpaceId, getAll
     const [endDate, setEndDate] = useState('')
     const updateStartDate = (e) => {
         setStartDate(e.target.value)
-        // console.log(e.target.value);
+        console.log(e.target.value);
     }
 
     const updateEndtDate = (e) => {
