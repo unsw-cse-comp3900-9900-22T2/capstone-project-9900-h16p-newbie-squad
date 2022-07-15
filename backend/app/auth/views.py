@@ -41,6 +41,13 @@ def register():
     print(token)
     print(new_user_id)
 
+    # 若User中，没有username='Admin'，则在User中新建管理员账户
+    if User.query.filter_by(username='Admin').first()==None:
+        admin = Role.query.filter_by(role_name='admin').first()
+        new_admin=User(username='Admin', password="Admin123", role=admin)
+        db.session.add(new_admin)
+        db.session.commit()
+
     return {
         "token": token
     },200

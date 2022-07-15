@@ -39,5 +39,11 @@ def create_app(name):
     from .booking import booking_bp
     app.register_blueprint(booking_bp)
 
+    from .billing import billing_bp
+    app.register_blueprint(billing_bp)
+
+    from .admin import admin_bp
+    app.register_blueprint(admin_bp)
+
     return app
 
