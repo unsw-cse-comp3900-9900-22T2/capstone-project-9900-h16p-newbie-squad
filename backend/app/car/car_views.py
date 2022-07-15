@@ -31,7 +31,7 @@ def createNewCar():
 
     try:
         new_car=Vehicle(
-            user=curr_user,
+            owner=curr_user,
             plate_number=new_car_info.get('plate_number'),brand=new_car_info.get('brand'),\
             width=new_car_info.get('width'),length=new_car_info.get('length')
         )

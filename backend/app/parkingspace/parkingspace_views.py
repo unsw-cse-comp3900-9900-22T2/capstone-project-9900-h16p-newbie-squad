@@ -11,7 +11,7 @@ def myparkingspacelisting():
 
     all_parking_spaces=[]
 
-    for each_parking_space in Parking_space.query.filter_by(user=curr_user).all():
+    for each_parking_space in Parking_space.query.filter_by(owner=curr_user).all():
         result={
             "id":each_parking_space.id,
             "owner":curr_user.username,
@@ -56,7 +56,7 @@ def myparkingspaceNew():
 
     try:
         new_parking_space=Parking_space(
-            user=curr_user,street=request_data.get('street'),suburb=request_data.get('suburb'),\
+            owner=curr_user,street=request_data.get('street'),suburb=request_data.get('suburb'),\
             state=request_data.get('state'),postcode=request_data.get('postcode'),\
             width=request_data.get('width'),length=request_data.get('length'),\
             price=request_data.get('price'),latitude=request_data.get('latitude'),\

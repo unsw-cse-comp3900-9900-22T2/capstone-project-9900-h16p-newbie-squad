@@ -1,12 +1,9 @@
-from re import S
-import uuid
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
 from itsdangerous.serializer import Serializer
 from flask import current_app
 from datetime import datetime
 
-import base64
 
 class Role(db.Model):
     __tablename__ = 'roles'
@@ -184,22 +181,36 @@ class Booking(db.Model):
     customer_id=db.Column(db.Integer,db.ForeignKey('users.id'))
     status=db.Column(db.Integer)
     booking_time=db.Column(db.DateTime,default=datetime.now)
+    #snapshot?
     
     def __repr__(self):
         return '<bookings %r>' % self.id
 
 
+#所有的订单记录都保存在这张表中
 class Billing(db.Model):
     __tablename__='billings'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True,index=True)
+
+    #永久保存订单成功当时的provider和customer的id，便于后面搜索
+    provider_id=db.Column(db.Integer,index=True)
+    customer_id=db.Column(db.Integer,index=True)
+
+    #永久保存订单成功当时的provider和customer的username
     provider_name=db.Column(db.String(32))
     customer_name=db.Column(db.String(32))
+
     #这张表只是存储历史记录，因此address不再分开了，生成历史记录的时候把street，suburb等合成一个字符串
     address=db.Column(db.String(64))
     start_date=db.Column(db.Date)
     end_date=db.Column(db.Date)
     unit_price=db.Column(db.Integer)
     total_price=db.Column(db.Integer)
-    #存储付款时用的银行卡号
-    bank_number=db.Column(db.String(32))
+    payment_time=db.Column(db.DateTime,default=datetime.now)
+    
+    #永久保存customer付款时用的银行卡号
+    customer_card_number=db.Column(db.String(32))
+
+    #永久保存provider收款时用的银行卡号
+    provider_card_number=db.Column(db.String(32))
 
