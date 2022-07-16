@@ -1,4 +1,3 @@
-from turtle import width
 from . import profile_bp
 
 from flask import request,g

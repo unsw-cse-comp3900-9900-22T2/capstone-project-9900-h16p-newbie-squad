@@ -16,8 +16,8 @@ def getListings():
             "suburb":parking_space.suburb,
             "state":parking_space.state,
             "postcode":parking_space.postcode,
-            #"latitude":parking_space.latitude,
-            #"longitude":parking_space.longitude,
+            "latitude":parking_space.latitude,
+            "longitude":parking_space.longitude,
             "width":parking_space.width,
             "length":parking_space.length,
             "price":parking_space.price

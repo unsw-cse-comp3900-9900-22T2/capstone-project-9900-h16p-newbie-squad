@@ -1,0 +1,17 @@
+.map-container {
+    position: relative;
+}
+.search-map {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    width: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+}
+
+.search-map input {
+    padding: 0.3rem;
+    font-size: 0.8rem;
+    width: 100%;
+  }

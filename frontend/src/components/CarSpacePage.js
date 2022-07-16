@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import CarSpaceForm from './CarSpaceForm'
 import PublishForm from './PublishForm'
 import CarSpaceEditForm from './CarSpaceEditForm'
+import usePlacesAutocomplete, { getGeocode, getLatLng } from 'use-places-autocomplete';
+
 
 
 // const token = "4.UJsETXTotkCToYT7_SdxwOMYBMo"
@@ -72,10 +74,46 @@ export default function CarSpacePage() {
     .catch(error => console.log(error))
   }
 
+  const deleteSpace = (space_id) => {
+    const requestOption = {
+      method: "DELETE",
+      headers: {
+          'Content-Type': 'application/json',
+          'token': token
+      },
+    }
+    fetch(`http://127.0.0.1:5000/myparkingspace/${space_id}`, requestOption)
+    .then(res => {
+        if (res.status === 200) {
+            getAllListings()
+            return
+        } else {
+            throw(res)
+        }
+    })
+    .then(data => {
+        console.log(data)
+    })
+    .catch(error => console.log(error))
+  }
+
+  // const getLocation = async (address) => {
+  //   try {
+  //       const results = await getGeocode({address: address})
+  //       console.log(results);
+  //       // const {lat, lng} = await getLatLng(results[0])
+  //       // return {lat, lng}
+  //   } catch(error) {
+  //       console.log(error);
+  //   }  
+  // }
+  // const [test, setTest] = useState("")
 
   return (
     <div>
       <button onClick={leaseCarSpace}>Lease my car space</button>
+      {/* <input placeholder='address' onChange={(e) => setTest(e.target.value)}/>
+      <button onClick={() => getLocation(test)}>test</button> */}
       {carSpaceSelected && <CarSpaceForm 
         setCarSpaceSelected={setCarSpaceSelected}
         setCarSpaceInformation={setCarSpaceInformation}
@@ -123,7 +161,11 @@ export default function CarSpacePage() {
           <button onClick={() => {
             openEditForm()
             setCarSpaceId(space.id)
-          }}>Edit</button>          
+          }}>Edit</button> 
+
+          <button onClick={() => {
+            deleteSpace(space.id)
+          }}>Delete</button>          
 
         </div>
       ))}

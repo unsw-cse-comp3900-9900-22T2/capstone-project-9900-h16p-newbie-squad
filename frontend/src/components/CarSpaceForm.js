@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import usePlacesAutocomplete, { getGeocode, getLatLng } from 'use-places-autocomplete';
 
 // const token = "4.UJsETXTotkCToYT7_SdxwOMYBMo"
 
@@ -61,8 +62,22 @@ export default function CarSpaceForm({ setCarSpaceSelected, setCarSpaceInformati
         // console.log(parseFloat(e.target.value));
     }
 
-    const onSubmit = () => {
+    const getLocation = async (address) => {
+        try {
+            const results = await getGeocode({address})
+            const {lat, lng} = await getLatLng(results[0])
+            return {lat, lng}
+        } catch(error) {
+            console.log(error);
+        }  
+    }
+
+    const onSubmit = async() => {
         // todo: I should fetch the backend to update my new car space
+        const address = street + ", " + suburb + " " + state + ", " + postcode
+        const {lat, lng} = await getLocation(address)
+        console.log(lat, lng);
+      
         const data = {
             "street": street,
             "suburb": suburb,
@@ -71,6 +86,8 @@ export default function CarSpaceForm({ setCarSpaceSelected, setCarSpaceInformati
             "length": length,
             "width": width,
             "price": price,
+            "latitude": lat,
+            "longitude": lng
         }
         const requestOption = {
             method: "POST",
