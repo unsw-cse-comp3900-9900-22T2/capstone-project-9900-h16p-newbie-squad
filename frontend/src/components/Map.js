@@ -3,7 +3,9 @@ import { GoogleMap, useLoadScript, Marker, InfoWindow } from "@react-google-maps
 import usePlacesAutocomplete, { getGeocode, getLatLng } from 'use-places-autocomplete';
 import MapStyle from './MapStyle'
 import Search from './Search'
+import Locate from './Locate';
 import './MapAndListingPage.css'
+import './../App.css';
 
 const google = window.google
 const API_KEY = "AIzaSyCBM5x-xql7TePUP3oHu73CQXJaMmB80fw"
@@ -27,7 +29,7 @@ const mapContainerStyle = {
     },
   }
 
-export default function Map({ listings, address }) {
+export default function Map({ listings, address, setListings, setSearchedAddress, priceMode }) {
     // console.log("first address: ", address);
     const [ libraries ] = useState(['places']);
     const {isLoaded, loadError} = useLoadScript({
@@ -94,12 +96,28 @@ export default function Map({ listings, address }) {
       setDestination(address)
     }, [])
 
+    const priceMonthly = (price) => {
+      return price * 28
+    }
+
     if (loadError) return "Error loading maps"
     if (!isLoaded) return "loading..."
 
     return (
     <div className='map-container'>
-      <Search panTo={panTo} setTempMarker={setTempMarker} setDestination={setDestination} address={address}/>
+      <Search 
+        panTo={panTo}
+        setTempMarker={setTempMarker}
+        setDestination={setDestination} 
+        address={address}
+        setListings={setListings}
+        listings={listings}
+        setSearchedAddress={setSearchedAddress}
+      />
+      <Locate 
+        panTo={panTo} 
+        setTempMarker={setTempMarker}
+      />
       <GoogleMap
         mapContainerStyle={mapContainerStyle}
         zoom={12}
@@ -128,7 +146,11 @@ export default function Map({ listings, address }) {
             setDistance('')
             }}>
             <div>
-              <h3>hello</h3>
+              {priceMode === 'day' ? 
+                <div>{selected.price} $</div>
+                :
+                <div>{priceMonthly(selected.price)} $</div>
+              }
               {distance && <div>{distance}</div>}
             </div>
           </InfoWindow>) 

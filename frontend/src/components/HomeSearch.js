@@ -13,7 +13,8 @@ export default function HomeSearch() {
         setAddress(e.target.value);
     }
     const goToMap = () => {
-        navigate('/MapAndListing-page',{state:{address: address}});
+        // navigate('/MapAndListing-page',{state:{address: address}});
+        localStorage.setItem("address", address)
     }
 
   return (
@@ -23,10 +24,12 @@ export default function HomeSearch() {
             type="text" 
             id="search_input" 
             onChange={updateInput}
+            placeholder="eg. 850 Bourke street, Waterloo NSW, 2017"
         />
-        {/* <Link to="/MapAndListing-page"> */}
+        <Link to="/MapAndListing-page">
             <button className="button_40px" onClick={goToMap}>Search</button>
-        {/* </Link> */}
+        </Link>
+        {/* <Link to="/test"> <button>test</button> </Link> */}
     </div>
   )
 }

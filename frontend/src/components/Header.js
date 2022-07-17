@@ -1,6 +1,6 @@
 import React from 'react';
 import { Outlet, Link,useLocation,useNavigate } from "react-router-dom";
-
+import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 export default function Header() {
     const navigate = useNavigate()
     let location = useLocation()
@@ -71,7 +71,7 @@ export default function Header() {
         {'welcome,' + localStorage.getItem("username")}
       </div>
       <div className='my-account'>
-        <Link to="/personal-info"> <button>My account</button></Link>
+        <Link to="/personal-info"> <AccountCircleRoundedIcon sx={{ color: 'white' }}/> </Link>
         <Outlet />
       </div>
     </div>

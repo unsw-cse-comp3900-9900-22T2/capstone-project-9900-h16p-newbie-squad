@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useLoadScript } from "@react-google-maps/api";
 import usePlacesAutocomplete, { getGeocode, getLatLng } from 'use-places-autocomplete';
 import {
@@ -13,14 +13,21 @@ import "@reach/combobox/styles.css";
 import "./HomePage.css"
 import './MapAndListingPage.css'
 
-export default function Search({ panTo, setTempMarker, setDestination, address}) {
+export default function Search({ panTo, setTempMarker, setDestination, address, setListings, listings, setSearchedAddress }) {
     const API_KEY = "AIzaSyCBM5x-xql7TePUP3oHu73CQXJaMmB80fw"
-    const libraries = ["places"]
+    const [ libraries ] = useState(['places']);
     const {isLoaded, loadError} = useLoadScript({
         // googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
         googleMapsApiKey: API_KEY,
         libraries,
     })
+    const filterListingBySearch = (address) => {
+        const currentSuburb = address.split(", ")[1].split(' ')[0]
+        console.log(currentSuburb);
+        const newListings = listings.filter(listing => listing.suburb.toUpperCase() === currentSuburb.toUpperCase())
+        newListings.map(listing => console.log(`${listing.street}, ${listing.suburb}`))
+        setListings(newListings)
+    }
     
     const {ready, value, suggestions: {status, data}, setValue, clearSuggestions} = usePlacesAutocomplete({
         requestOptions: {
@@ -37,11 +44,13 @@ export default function Search({ panTo, setTempMarker, setDestination, address})
             <Combobox onSelect={async(address) => {
                 setValue(address, false)
                 setDestination(address)
+                setSearchedAddress(address)
                 clearSuggestions()
                 try {
                     const results = await getGeocode({address})
                     const {lat, lng} = await getLatLng(results[0])
                     // console.log(lat, lng)
+                    // filterListingBySearch(address)
                     panTo({lat: lat, lng: lng})
                     setTempMarker({lat, lng})
                 } catch(error) {
