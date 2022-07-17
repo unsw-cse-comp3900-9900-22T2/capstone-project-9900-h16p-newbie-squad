@@ -14,13 +14,13 @@ def parseStatusCode(status_code):
         case Status.Cancelled: return 'Cancelled'
 
 
-def hello():
-    while True:
-        print("hello,world!")
-        sleep(3)
+# def hello():
+#     while True:
+#         print("hello,world!")
+#         sleep(3)
     
-test=Thread(target=hello)
-test.run()
+# test=Thread(target=hello)
+# test.run()
 
 
 @booking_bp.route("/bookings/mybookings",methods=['GET'])

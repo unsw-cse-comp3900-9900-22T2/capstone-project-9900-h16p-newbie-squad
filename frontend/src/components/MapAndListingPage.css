@@ -1,0 +1,200 @@
+.map-container {
+    position: relative;
+}
+.search-map {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    width: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+}
+
+.search-map input {
+    padding: 0.3rem;
+    font-size: 0.8rem;
+    width: 100%;
+}
+
+.left-listings {
+    flex-grow: 2;
+    background-color: #f6f6f6;
+    max-width: 500px;
+    min-width: 300px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+}
+
+.right-map {
+    position: relative;
+    flex-grow: 5;
+    /* background-color: #282c34; */
+    overflow-y: scroll;
+}
+
+.container-map-and-listing {
+    position: fixed;
+    border: #f6f6f6 solid 1px;
+    height: 85%;
+    width: 95%;
+    top: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: row;
+}
+
+.filter-section {
+    width: 100%;
+    height: 50px;
+    position: relative;
+}
+
+.listing-card {
+    height: 50px;
+    width: 97%;
+    padding: 3px;
+    position: relative;
+}
+.listing-card-container {
+    padding: 3px;
+}
+
+.listing-img {
+    height: 50px;
+    width: 50px;
+    background-color: #c8d7d4;
+    display: inline-block;
+    padding-right: 5px;
+}
+.listing-info {
+    display: inline-block;
+    position: absolute;
+    left: 60px;
+    /* padding-left: 5px; */
+    top: 3px;
+    font-size: 9px;
+    width: 180px;
+    font-weight: bold;
+}
+.price-book {
+    /* background-color: #c8d7d4; */
+    position: absolute;
+    right: 3px;
+    top: 3px;
+    height: 50px;
+    width: 50px;
+    text-align: center;
+}
+.per-day {
+    font-size: 5px;
+}
+.price {
+    /* align-items: center; */
+}
+
+.book-button {
+    /* background-color: #c8d7d4; */
+    background-color: #27b688;
+    border: #c8d7d4;
+    border-radius: 4px;
+    color: #ffffff;
+    size: 8px;
+    font-weight: bold;
+}
+
+.book-button:hover {
+    cursor: pointer;
+}
+.dropdown-price {
+    width: 50px;
+    height: 30px;
+}
+
+.dropdown-price-option {
+    size: 5px;
+}
+.dropdown-price-container {
+    position: absolute;
+    top: 10px;
+    right: 5px;
+}
+
+.price-button {
+    position: absolute;
+    top: 10px;
+    left: 5px;
+
+}
+
+.availability-button {
+    position: absolute;
+    top: 10px;
+    left: 25px;
+
+}
+
+.price-range-page {
+    width: 200px;
+    height: 150px;
+    position: absolute;
+    left: 3px;
+    z-index: 10;
+    top: 30%;
+    text-align: center;
+}
+
+.plain-text {
+    padding: 5px;
+    font-size: 12px;
+}
+
+.price-slider {
+    position: absolute;
+    left: 10px;
+    top: 50px;
+}
+.price-slider-divider {
+    position: absolute;
+    bottom: 50px;
+}
+
+.price-slider-save {
+    position: absolute;
+    bottom: 10px;
+    left: 110px;
+    background-color: #27b688;
+    border: #c8d7d4;
+    border-radius: 4px;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.price-slider-close {
+    position: absolute;
+    bottom: 10px;
+    left: 40px;
+    background-color: #27b688;
+    border: #c8d7d4;
+    border-radius: 4px;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.date-style {
+    font-size: 10px;
+    font-weight: 400;
+}
+
+.date-range-page {
+    width: 200px;
+    height: 150px;
+    position: absolute;
+    left: 3px;
+    z-index: 10;
+    top: 30%;
+    text-align: center;
+}

@@ -7,6 +7,8 @@ import { BrowserRouter, Routes, Route, } from "react-router-dom";
 import PersonalInfo from './components/PersonalInfo';
 import LoginPage from './components/LoginPage';
 import SignUpPage from './components/SignUpPage';
+import MapAndListingPage from './components/MapAndListingPage';
+import Test from './components/Test';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -17,6 +19,8 @@ root.render(
       <Route path="personal-info" element={<PersonalInfo />} />
       <Route path="login-page" element={<LoginPage />} />
       <Route path="SignUp-page" element={<SignUpPage />} />
+      <Route path="MapAndListing-page" element={<MapAndListingPage />}/>
+      <Route path="test" element={<Test />}/>
       {/* </Route> */}
     </Routes>
     
