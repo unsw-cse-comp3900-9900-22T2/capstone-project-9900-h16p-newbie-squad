@@ -10,7 +10,7 @@ import DateRangePage from './DateRangePage'
 export default function ShowListings({ listings, searchedAddress, setPriceMode, priceMode }) {
     console.log(searchedAddress);
     const [priceRange, setPriceRange] = useState([0,100])
-    const [dateRange, setDateRange] = useState(["2000-01-01", "2099-12-31"])
+    const [dateRange, setDateRange] = useState(["2099-12-31", "2000-01-01"])
     const currentSuburb = searchedAddress.split(", ")[1]?.split(' ')[0]
     const newListings = listings.filter(listing => {
         // if (priceMode === 'day') {
@@ -22,7 +22,7 @@ export default function ShowListings({ listings, searchedAddress, setPriceMode, 
         // console.log("current date: ", dateRange);
         return listing.suburb.toUpperCase() === currentSuburb?.toUpperCase()
             && (listing.price >= priceRange[0] && listing.price <= priceRange[1])
-            && (listing.start_date >= dateRange[0] && listing.end_date <= dateRange[1])
+            && (listing.start_date <= dateRange[0] && listing.end_date >= dateRange[1])
     })
 
     const [showPriceRangePage, setShowPriceRangePage] = useState(false)
