@@ -1,5 +1,5 @@
 from flask import request,g
-from .models import User,Role
+from .models import User, Role
 
 def before_request_check_token():
     print('for current request, handler blueprint is:',request.blueprint)

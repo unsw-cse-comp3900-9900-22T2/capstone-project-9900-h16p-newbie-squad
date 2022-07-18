@@ -14,7 +14,15 @@ def adminGetParkingSpaces():
         if parking_space.published:
             all_parking_spaces.append(parking_space.to_dict())
 
-    return {'all_parking_spaces': all_parking_spaces}, 200
+    return {'admin_all_parking_spaces': all_parking_spaces}, 200
+
+
+@admin_bp.route("/admin/parkingspaces/<int:parkingspace_id>", methods=['GET'])
+def adminGetParkingSpaceDetail(parkingspace_id):
+    # 此时输入应为有效的parkingspace_id，故不做验证
+    parkingspace = Parking_space.query.filter_by(id=parkingspace_id).first()
+
+    return parkingspace.to_dict(), 200
 
 
 @admin_bp.route('/admin/delete/<int:parkingspace_id>', methods=['DELETE'])
