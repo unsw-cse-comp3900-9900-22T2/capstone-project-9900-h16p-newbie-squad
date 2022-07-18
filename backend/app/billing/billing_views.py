@@ -50,4 +50,4 @@ def myBilling():
 
         provider_billings.append(copy.deepcopy(billing_info))
 
-        return {'customer_billings': customer_billings, 'provider_billings': provider_billings}, 200
+    return {'customer_billings': customer_billings, 'provider_billings': provider_billings}, 200
