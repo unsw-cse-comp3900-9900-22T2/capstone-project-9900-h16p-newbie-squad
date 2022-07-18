@@ -13,6 +13,9 @@ export default function MapAndListingPage() {
     const address = localStorage.getItem("address")
     const [searchedAddress, setSearchedAddress] = useState(address)
     const [priceMode, setPriceMode] = useState('day')
+    const [priceRange, setPriceRange] = useState([0,100])
+    const [dateRange, setDateRange] = useState(["2099-12-31", "2000-01-01"])
+
     const AllListings = () => {
         const requestOption = {
             method: "GET",
@@ -48,6 +51,10 @@ export default function MapAndListingPage() {
                         searchedAddress={searchedAddress}
                         setPriceMode={setPriceMode}
                         priceMode={priceMode}
+                        setPriceRange={setPriceRange}
+                        priceRange={priceRange}
+                        setDateRange={setDateRange}
+                        dateRange={dateRange}
                     />
                 </div>
                 <div className='flex-item right-map'>
@@ -57,6 +64,8 @@ export default function MapAndListingPage() {
                         setListings={setListings}
                         setSearchedAddress={setSearchedAddress}
                         priceMode={priceMode}
+                        priceRange={priceRange}
+                        dateRange={dateRange}
                     />
                 </div>
             </div>
