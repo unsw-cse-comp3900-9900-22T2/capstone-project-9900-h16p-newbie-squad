@@ -7,10 +7,10 @@ import PriceRangePage from './PriceRangePage';
 import DateRangePage from './DateRangePage'
 
 
-export default function ShowListings({ listings, searchedAddress, setPriceMode, priceMode }) {
-    console.log(searchedAddress);
-    const [priceRange, setPriceRange] = useState([0,100])
-    const [dateRange, setDateRange] = useState(["2099-12-31", "2000-01-01"])
+export default function ShowListings({ listings, searchedAddress, setPriceMode, priceMode, setPriceRange, priceRange, setDateRange, dateRange }) {
+    // console.log(searchedAddress);
+    // const [priceRange, setPriceRange] = useState([0,100])
+    // const [dateRange, setDateRange] = useState(["2099-12-31", "2000-01-01"])
     const currentSuburb = searchedAddress.split(", ")[1]?.split(' ')[0]
     const newListings = listings.filter(listing => {
         // if (priceMode === 'day') {
@@ -27,6 +27,11 @@ export default function ShowListings({ listings, searchedAddress, setPriceMode, 
 
     const [showPriceRangePage, setShowPriceRangePage] = useState(false)
     const [showDateRangePage, setShowDateRangePage] = useState(false)
+
+    const resetOnclick = () => {
+        setPriceRange([0,100])
+        setDateRange(["2099-12-31", "2000-01-01"])
+    }
   return (
     <div>
         {showPriceRangePage && 
@@ -62,6 +67,8 @@ export default function ShowListings({ listings, searchedAddress, setPriceMode, 
             </Button>
             {/* <button>Availability</button> */}
             <PriceMode setPriceMode={setPriceMode} priceMode={priceMode}/>
+            {/* <button onClick={resetOnclick}>reset</button> */}
+            <div className='reset' onClick={resetOnclick}>Reset</div>
         </div>
         <Divider variant="middle"/>
         {newListings.map((listing, index) => (

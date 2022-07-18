@@ -29,7 +29,7 @@ const mapContainerStyle = {
     },
   }
 
-export default function Map({ listings, address, setListings, setSearchedAddress, priceMode }) {
+export default function Map({ listings, address, setListings, setSearchedAddress, priceMode, priceRange, dateRange }) {
     // console.log("first address: ", address);
     const [ libraries ] = useState(['places']);
     const {isLoaded, loadError} = useLoadScript({
@@ -40,6 +40,12 @@ export default function Map({ listings, address, setListings, setSearchedAddress
     const [tempMarker, setTempMarker] = useState(null)
     const [destination, setDestination] = useState('')
     const [distance, setDistance] = useState('')
+
+    const newListings = listings.filter(listing => {
+      // return listing.suburb.toUpperCase() === currentSuburb?.toUpperCase()
+          return (listing.price >= priceRange[0] && listing.price <= priceRange[1])
+          && (listing.start_date <= dateRange[0] && listing.end_date >= dateRange[1])
+    })
 
     const mapRef = useRef()
     const onMapLoad = useCallback(map =>{
@@ -126,7 +132,7 @@ export default function Map({ listings, address, setListings, setSearchedAddress
         onClick={(e) => console.log(e.latLng.lat(),e.latLng.lng())}
         onLoad={onMapLoad}
       >
-        {listings.map((listing, index) => 
+        {newListings.map((listing, index) => 
           <Marker
             key={index} 
             position={{lat: parseFloat(listing.latitude), lng: parseFloat(listing.longitude)}}  
