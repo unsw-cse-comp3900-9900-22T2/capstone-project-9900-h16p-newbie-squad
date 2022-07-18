@@ -209,3 +209,5 @@ def updateParkingSpace(parkingspace_id):
     db.session.commit()
 
     return {},200
+
+
