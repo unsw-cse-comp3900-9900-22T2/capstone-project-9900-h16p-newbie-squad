@@ -17,10 +17,8 @@ def adminGetParkingSpaces():
     return {'all_parking_spaces': all_parking_spaces}, 200
 
 
-@admin_bp.route('/admin/<int:parkingspace_id>', methods=['DELETE'])
+@admin_bp.route('/admin/delete/<int:parkingspace_id>', methods=['DELETE'])
 def adminDeleteParkingSpace(parkingspace_id):
-    # if g.curr_user_role != 'admin':
-    #     return {'error': 'you are not admin'}, 400
 
     target_parking_space = Parking_space.query.filter_by(id=parkingspace_id).first()
     if target_parking_space == None:
@@ -32,10 +30,8 @@ def adminDeleteParkingSpace(parkingspace_id):
     return {}, 200
 
 
-@admin_bp.route('/admin/<int:parkingspace_id>',methods=['PUT'])
+@admin_bp.route('/admin/update/<int:parkingspace_id>',methods=['PUT'])
 def adminUpdateParkingSpace(parkingspace_id):
-    # if g.curr_user_role != 'admin':
-    #     return {'error': 'you are not admin'}, 400
 
     target_parking_space=Parking_space.query.filter_by(id=parkingspace_id).first()
     if target_parking_space==None:
@@ -67,7 +63,7 @@ def adminUpdateParkingSpace(parkingspace_id):
 
     return {}, 200
 
-
+# admin登陆，需要可以用
 # @admin_bp.route('/admin_login',methods=["POST"])
 # def adminLogin():
 #     print('Postman request: ',end='')
