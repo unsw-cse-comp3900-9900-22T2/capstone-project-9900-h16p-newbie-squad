@@ -9,10 +9,9 @@ from ..models import Role, User, Parking_space, Listing
 def adminGetParkingSpaces():
 
     all_parking_spaces = []
-    # return all parking spaces in the database, "published" ==true
+    # 管理员可以查看所有已经注册的parking_space，不论车位是否可见
     for parking_space in Parking_space.query.all():
-        if parking_space.published:
-            all_parking_spaces.append(parking_space.to_dict())
+        all_parking_spaces.append(parking_space.to_dict())
 
     return {'admin_all_parking_spaces': all_parking_spaces}, 200
 
