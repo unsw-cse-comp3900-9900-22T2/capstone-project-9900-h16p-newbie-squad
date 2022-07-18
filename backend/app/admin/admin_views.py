@@ -5,29 +5,16 @@ from ..models import Role, User, Parking_space, Listing
 
 
 
-@admin_bp.route("/admin/listings", methods=['GET'])
-def adminGetListings():
-    listings = []
-    for each_listing in Listing.query.all():
-        parking_space = each_listing.parking_space
-        listing = {
-            "listing_id": each_listing.id,
-            "start_date": each_listing.start_date.strftime('%Y-%m-%d'),
-            "end_date": each_listing.end_date.strftime('%Y-%m-%d'),
-            "published_time": each_listing.published_time.strftime('%Y-%m-%d,%H-%M-%S'),
-            "street": parking_space.street,
-            "suburb": parking_space.suburb,
-            "state": parking_space.state,
-            "postcode": parking_space.postcode,
-            # "latitude":parking_space.latitude,
-            # "longitude":parking_space.longitude,
-            "width": parking_space.width,
-            "length": parking_space.length,
-            "price": parking_space.price
-        }
-        listings.append(listing)
+@admin_bp.route("/admin/parkingspaces", methods=['GET'])
+def adminGetParkingSpaces():
 
-    return {"all_listings": listings}, 200
+    all_parking_spaces = []
+    # return all parking spaces in the database, "published" ==true
+    for parking_space in Parking_space.query.all():
+        if parking_space.published:
+            all_parking_spaces.append(parking_space.to_dict())
+
+    return {'all_parking_spaces': all_parking_spaces}, 200
 
 
 @admin_bp.route('/admin/<int:parkingspace_id>', methods=['DELETE'])
@@ -78,7 +65,7 @@ def adminUpdateParkingSpace(parkingspace_id):
     db.session.add(target_parking_space)
     db.session.commit()
 
-    return {},200
+    return {}, 200
 
 
 # @admin_bp.route('/admin_login',methods=["POST"])
