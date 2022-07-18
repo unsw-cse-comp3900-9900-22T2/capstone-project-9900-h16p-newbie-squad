@@ -32,8 +32,8 @@ def adminGetListings():
 
 @admin_bp.route('/admin/<int:parkingspace_id>', methods=['DELETE'])
 def adminDeleteParkingSpace(parkingspace_id):
-    if g.curr_user_role != 'admin':
-        return {'error': 'you are not admin'}, 400
+    # if g.curr_user_role != 'admin':
+    #     return {'error': 'you are not admin'}, 400
 
     target_parking_space = Parking_space.query.filter_by(id=parkingspace_id).first()
     if target_parking_space == None:
@@ -47,8 +47,8 @@ def adminDeleteParkingSpace(parkingspace_id):
 
 @admin_bp.route('/admin/<int:parkingspace_id>',methods=['PUT'])
 def adminUpdateParkingSpace(parkingspace_id):
-    if g.curr_user_role != 'admin':
-        return {'error': 'you are not admin'}, 400
+    # if g.curr_user_role != 'admin':
+    #     return {'error': 'you are not admin'}, 400
 
     target_parking_space=Parking_space.query.filter_by(id=parkingspace_id).first()
     if target_parking_space==None:
