@@ -1,12 +1,18 @@
 import React from 'react'
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
+import BookingButton from './BookingButton';
+// import {Link, useNavigate} from 'react-router-dom';
 
 
 export default function ListingCard({listing, priceMode, setSelected}) {
     const priceMonthly = (price) => {
         return price * 28
     }
+    // const navigate = useNavigate();
+    // const bookOnclick = () => {
+    //     navigate('/test',{state:{listing: listing}});
+    // }
   return (
     <Paper className='listing-card'>
         <div className='listing-img'></div>
@@ -31,7 +37,8 @@ export default function ListingCard({listing, priceMode, setSelected}) {
             }
             
             {/* <Button variant="contained" size="medium" className='book-button'>Book</Button> */}
-            <button className='book-button'>Book</button>
+            {/* <button className='book-button' onClick={bookOnclick}>Book</button> */}
+            <BookingButton listing={listing}/>
         </div>
     </Paper>
   )

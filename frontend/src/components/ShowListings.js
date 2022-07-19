@@ -76,7 +76,6 @@ export default function ShowListings({ listings, searchedAddress, setPriceMode, 
                 <ListingCard listing={listing} priceMode={priceMode} setSelected={setSelected}/>
             </div>
         ))}
-        
     </div>
   )
 }

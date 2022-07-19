@@ -33,7 +33,7 @@ export default function MapAndListingPage() {
             }
         })
         .then(data => {
-            console.log(data)
+            // console.log(data.all_listings)
             setListings(data.all_listings)
         })
         .catch(error => console.log(error))
