@@ -7,7 +7,7 @@ import PriceRangePage from './PriceRangePage';
 import DateRangePage from './DateRangePage'
 
 
-export default function ShowListings({ listings, searchedAddress, setPriceMode, priceMode, setPriceRange, priceRange, setDateRange, dateRange }) {
+export default function ShowListings({ listings, searchedAddress, setPriceMode, priceMode, setPriceRange, priceRange, setDateRange, dateRange, setSelected }) {
     // console.log(searchedAddress);
     // const [priceRange, setPriceRange] = useState([0,100])
     // const [dateRange, setDateRange] = useState(["2099-12-31", "2000-01-01"])
@@ -72,8 +72,8 @@ export default function ShowListings({ listings, searchedAddress, setPriceMode, 
         </div>
         <Divider variant="middle"/>
         {newListings.map((listing, index) => (
-            <div key={index} className="listing-card-container">
-                <ListingCard listing={listing} priceMode={priceMode}/>
+            <div key={index} className="listing-card-container" >
+                <ListingCard listing={listing} priceMode={priceMode} setSelected={setSelected}/>
             </div>
         ))}
         

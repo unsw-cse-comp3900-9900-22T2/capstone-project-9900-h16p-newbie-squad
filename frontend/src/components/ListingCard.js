@@ -3,14 +3,14 @@ import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 
 
-export default function ListingCard({listing, priceMode}) {
+export default function ListingCard({listing, priceMode, setSelected}) {
     const priceMonthly = (price) => {
         return price * 28
     }
   return (
     <Paper className='listing-card'>
         <div className='listing-img'></div>
-        <div className='listing-info'>
+        <div className='listing-info' onClick={() => setSelected(listing)}>
             {listing.street}, {listing.suburb} {listing.state}, {listing.postcode}
             <div className='date-style'>
                 <div>From: {listing.start_date}</div>

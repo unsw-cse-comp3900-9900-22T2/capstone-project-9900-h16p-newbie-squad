@@ -29,14 +29,14 @@ const mapContainerStyle = {
     },
   }
 
-export default function Map({ listings, address, setListings, setSearchedAddress, priceMode, priceRange, dateRange }) {
+export default function Map({ listings, address, setListings, setSearchedAddress, priceMode, priceRange, dateRange, selected, setSelected }) {
     // console.log("first address: ", address);
     const [ libraries ] = useState(['places']);
     const {isLoaded, loadError} = useLoadScript({
       googleMapsApiKey: API_KEY,
       libraries
     })
-    const [selected, setSelected] = useState(null)
+    // const [selected, setSelected] = useState(null)
     const [tempMarker, setTempMarker] = useState(null)
     const [destination, setDestination] = useState('')
     const [distance, setDistance] = useState('')

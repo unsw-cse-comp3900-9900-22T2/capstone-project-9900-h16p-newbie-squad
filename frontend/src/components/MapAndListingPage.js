@@ -15,6 +15,7 @@ export default function MapAndListingPage() {
     const [priceMode, setPriceMode] = useState('day')
     const [priceRange, setPriceRange] = useState([0,100])
     const [dateRange, setDateRange] = useState(["2099-12-31", "2000-01-01"])
+    const [selected, setSelected] = useState(null)
 
     const AllListings = () => {
         const requestOption = {
@@ -55,6 +56,7 @@ export default function MapAndListingPage() {
                         priceRange={priceRange}
                         setDateRange={setDateRange}
                         dateRange={dateRange}
+                        setSelected={setSelected}
                     />
                 </div>
                 <div className='flex-item right-map'>
@@ -66,6 +68,8 @@ export default function MapAndListingPage() {
                         priceMode={priceMode}
                         priceRange={priceRange}
                         dateRange={dateRange}
+                        selected={selected}
+                        setSelected={setSelected}
                     />
                 </div>
             </div>

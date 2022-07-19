@@ -60,6 +60,9 @@
 .listing-card-container {
     padding: 3px;
 }
+/* .listing-card-container:hover {
+    cursor: pointer;
+} */
 
 .listing-img {
     height: 50px;
@@ -77,6 +80,10 @@
     font-size: 9px;
     width: 180px;
     font-weight: bold;
+}
+
+.listing-info:hover {
+    cursor: pointer;
 }
 .price-book {
     /* background-color: #c8d7d4; */
