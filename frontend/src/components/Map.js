@@ -4,6 +4,7 @@ import usePlacesAutocomplete, { getGeocode, getLatLng } from 'use-places-autocom
 import MapStyle from './MapStyle'
 import Search from './Search'
 import Locate from './Locate';
+import BookingButton from './BookingButton';
 import './MapAndListingPage.css'
 import './../App.css';
 
@@ -158,6 +159,7 @@ export default function Map({ listings, address, setListings, setSearchedAddress
                 <div>{priceMonthly(selected.price)} $</div>
               }
               {distance && <div>{distance}</div>}
+              <BookingButton listing={selected}/>
             </div>
           </InfoWindow>) 
         : null}  
