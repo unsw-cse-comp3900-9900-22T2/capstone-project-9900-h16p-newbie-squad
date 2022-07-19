@@ -119,8 +119,8 @@ class Parking_space(db.Model):
     id = db.Column(db.Integer, primary_key=True)
 
     #一对多，多的那一侧
-    # owner_id = db.Column(db.String(32), db.ForeignKey('users.id'))
-    owner = db.Column(db.String(32), db.ForeignKey('users.id'))
+    owner_id = db.Column(db.String(32), db.ForeignKey('users.id'))
+    # owner = db.Column(db.String(32), db.ForeignKey('users.id'))
     #parking_space_type_id = db.Column(db.String(36), db.ForeignKey('Parking_space_types.id'))
 
     street = db.Column(db.String(32), nullable=False)
