@@ -1,4 +1,4 @@
-from ..models import Billing, Listing, Booking, Status, Parking_space
+from ..models import Billing, Listing, Booking, Status, Parking_space, Credit_card, Bank_account
 from . import booking_bp
 from flask import g, request
 from .. import db
@@ -187,7 +187,7 @@ def payForBooking(booking_id):
     provider=target_parking_space.owner
     customer=target_booking.customer
 
-    provider_card_number=provider.bank_account if provider.bank_account else 'None'
+    provider_bank_account=provider.bank_account if provider.bank_account else 'None'
     customer_card_number=request.get_json().get('card_number')
 
     address='Address: %s %s %s %s.'%(target_parking_space.street,target_parking_space.suburb,\
@@ -212,8 +212,8 @@ def payForBooking(booking_id):
         total_price=total_price,
         #永久保存customer付款时用的银行卡号
         customer_card_number=customer_card_number,
-        #永久保存provider收款时用的银行卡号
-        provider_card_number=provider_card_number
+        #永久保存provider收款时用的账户号
+        provider_bank_account=provider_bank_account
     )
 
     #向数据库中添加订单历史记录

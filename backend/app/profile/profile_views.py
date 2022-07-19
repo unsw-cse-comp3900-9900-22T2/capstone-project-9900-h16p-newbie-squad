@@ -38,6 +38,7 @@ def profile():
         'email':curr_user.email,
         'phone_num':curr_user.phone_num,
         'bank_account':curr_user.bank_account,
+        'credit_card':curr_user.credit_card,
         'avatar':curr_user.avatar,
         'bio':curr_user.bio,
         'role':curr_user_role
@@ -63,6 +64,8 @@ def profile():
             curr_user.phone_num = info_to_update['phone_num']
         if info_to_update.get('bank_account'):
             curr_user.bank_account = info_to_update['bank_account']
+        if info_to_update.get('credit_card'):
+            curr_user.credit_card = info_to_update['credit_card']
         if info_to_update.get('avatar'):
             curr_user.avatar = info_to_update['avatar']
         if info_to_update.get('bio'):

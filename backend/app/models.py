@@ -24,6 +24,7 @@ class User(db.Model):
     password_hash = db.Column(db.String(128))
     phone_num = db.Column(db.String(32), unique=True, index=True)
     bank_account = db.Column(db.String(32), unique=True, index=True)
+    credit_card = db.Column(db.String(32), unique=True, index=True)
 
     #前端将图片进行base64编码之后直接发送给后端，后端数据库存储该base64字节串
     avatar=db.Column(db.LargeBinary,nullable=True)
@@ -36,7 +37,10 @@ class User(db.Model):
     vehicles = db.relationship('Vehicle', backref='owner', lazy='dynamic')
     #从user到parking_space表（一对多，一的那一侧）
     parking_spaces = db.relationship('Parking_space', backref='owner', lazy='dynamic')
-
+    # 从user到bank_accounts表（一对多，一的那一侧）
+    bank_accounts = db.relationship('Bank_account', backref='owner', lazy='dynamic')
+    # 从user 到 credit_card表（一对多，一的那一侧）
+    credit_cards = db.relationship('Credit_card', backref='owner', lazy='dynamic')
     customer=db.relationship('Booking',backref='customer',lazy='dynamic')
 
     @property
@@ -208,10 +212,40 @@ class Billing(db.Model):
     unit_price=db.Column(db.Integer)
     total_price=db.Column(db.Integer)
     payment_time=db.Column(db.DateTime,default=datetime.now)
-    
+
     #永久保存customer付款时用的银行卡号
     customer_card_number=db.Column(db.String(32))
 
-    #永久保存provider收款时用的银行卡号
-    provider_card_number=db.Column(db.String(32))
+    #永久保存provider收款时用银行账户
+    provider_bank_account=db.Column(db.String(32))
+
+    # #永久保存provider收款时用的银行卡号
+    # provider_card_number=db.Column(db.String(32))
+
+class Bank_account(db.Model):
+    __tablename__ = 'bank_accounts'
+    # accoount_id, owner_id, account_name, bsb
+    account_id = db.Column(db.String(32), primary_key=True)
+    # 一对多，多的那个
+    owner_id = db.Column(db.String(32), db.ForeignKey('users.id'))
+    account_name = db.Column(db.String(32))
+    bsb = db.Column(db.String(32))
+
+    def __repr__(self):
+        return '<Vehicle %r>' % self.account_id
+
+class Credit_card(db.Model):
+    __tablename__ = 'credit_cards'
+    # owner_id(db.ForeignKey('users.id')), card_number, card_name,Expiry_date, cvv
+    card_number = db.Column(db.String(32), primary_key=True)
+    # 一对多，多的那个
+    owner_id = db.Column(db.String(32), db.ForeignKey('users.id'))
+    card_name = db.Column(db.String(32))
+    Expiry_date = db.Column(db.Date)
+    cvv = db.Column(db.String(32))
+
+    def __repr__(self):
+        return '<Vehicle %r>' % self.card_number
+
+
 
