@@ -241,7 +241,7 @@ class Credit_card(db.Model):
     # 一对多，多的那个
     owner_id = db.Column(db.String(32), db.ForeignKey('users.id'))
     card_name = db.Column(db.String(32))
-    Expiry_date = db.Column(db.Date)
+    expiry_date = db.Column(db.String(32))
     cvv = db.Column(db.String(32))
 
     def __repr__(self):

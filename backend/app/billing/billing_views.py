@@ -59,7 +59,12 @@ def myBankAccount():
     curr_user=g.curr_user
     curr_bank_account = Bank_account.query.filter_by(owner=curr_user).first()
     if request.method == 'GET':
-        return curr_bank_account.to_dict(), 200
+        return_dict = {
+            "account_id": curr_bank_account.account_id,
+            "account_name": curr_bank_account.account_name,
+            "bsb": curr_bank_account.bsb
+        }
+        return return_dict, 200
 
     elif request.method == 'POST':
         info_to_update = request.get_json()
@@ -81,17 +86,23 @@ def myCreditCard():
     curr_user=g.curr_user
     curr_credit_card = Credit_card.query.filter_by(owner=curr_user).first()
     if request.method == 'GET':
-        return curr_credit_card.to_dict(), 200
+        return_dict = {
+            "card_number": curr_credit_card.card_number,
+            "card_name": curr_credit_card.card_name,
+            "expiry_date": curr_credit_card.expiry_date,
+            "cvv": curr_credit_card.cvv
+        }
+        return return_dict, 200
     elif request.method == 'POST':
         info_to_update = request.get_json()
         if info_to_update.get('card_number'):
             curr_credit_card.card_number = info_to_update.get('card_number')
         if info_to_update.get('card_name'):
             curr_credit_card.card_name = info_to_update.get('card_name')
-        if info_to_update.get('card_expiry_date'):
-            curr_credit_card.card_expiry_date = info_to_update.get('card_expiry_date')
-        if info_to_update.get('card_cvv'):
-            curr_credit_card.card_cvv = info_to_update.get('card_cvv')
+        if info_to_update.get('expiry_date'):
+            curr_credit_card.expiry_date = info_to_update.get('expiry_date')
+        if info_to_update.get('cvv'):
+            curr_credit_card.cvv = info_to_update.get('cvv')
         db.session.add(curr_credit_card)
         db.session.commit()
         return {}, 200
