@@ -52,6 +52,12 @@ def myBillings():
 
     return {'customer_billings': customer_billings, 'provider_billings': provider_billings}, 200
 
+@billing_bp.route('/billing/<int:billing_id>', methods=["GET"])
+def getSpecificBilling(billing_id):
+    billing = Billing.query.filter_by(id=billing_id).first()
+    if not billing:
+        return {'message': 'Billing not found'}, 400
+    return billing.to_dict(), 200
 
 @billing_bp.route('/profile/bank_account',methods=["GET", "POST"])
 def myBankAccount():
