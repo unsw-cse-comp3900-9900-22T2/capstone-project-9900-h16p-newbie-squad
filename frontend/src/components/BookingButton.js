@@ -9,7 +9,7 @@ export default function BookingButton({listing}) {
     }
   return (
     <Link to={`/booking-page/${listing.listing_id}`}>
-        <button className='book-button' onClick={bookOnclick}>Book</button>
+        <button className='book-button' onClick={bookOnclick}>Detail</button>
     </Link>
   )
 }
