@@ -41,25 +41,37 @@ def getMyBookings():
 
 
 #make a new booking request towards listing: listing_id
+big_lock=Lock()
 @booking_bp.route("/bookings/new/<int:listing_id>",methods=['POST'])
 def makeBookingRequest(listing_id):
+    big_lock.acquire()
     curr_user=g.curr_user
 
     target_listing=Listing.query.filter_by(id=listing_id).first()
 
     if target_listing==None:
+        big_lock.release()
         return {'error':'cannot find this listing'},400
 
-    new_booking=Booking(listing=target_listing,customer=curr_user,status=Status.Pending)
+
+    for eachBooking in target_listing.bookings:
+        if eachBooking.Status==Status.Accepted_Payment_Required:
+            big_lock.release()
+            return {'error':'this listing is already booked by other people'},400
+
+    new_booking=Booking(listing=target_listing,customer=curr_user,\
+        status=Status.Accepted_Payment_Required)
 
     try:
         db.session.add(new_booking)
         db.session.commit()
     except:
+        big_lock.release()
         return {'error':'internal error'},400
     
     new_booking_id=Booking.query.all()[-1].id
 
+    big_lock.release()
     return {'new_booking_id':new_booking_id},200
 
 
@@ -95,7 +107,7 @@ def fetchBookingsOfMyListings():
     return {'myRequests':result},200
 
 
-
+'''
 big_lock=Lock()
 @booking_bp.route("/bookings/accept/<int:booking_id>",methods=['POST'])
 def acceptBooking(booking_id):
@@ -129,9 +141,10 @@ def acceptBooking(booking_id):
         return {'error':'internal error'},400
 
     return {},200
+'''
 
 
-
+'''
 @booking_bp.route("/bookings/reject/<int:booking_id>",methods=['POST'])
 def rejectBooking(booking_id):
     try:
@@ -148,7 +161,7 @@ def rejectBooking(booking_id):
     except:
         return {'error':'internal error'},400
     return {},200
-
+'''
 
 
 @booking_bp.route("/bookings/cancel/<int:booking_id>",methods=['POST'])
@@ -157,8 +170,9 @@ def cancelBooking(booking_id):
         target_booking=Booking.query.filter_by(id=booking_id).first()
         if target_booking==None:
             return {'error':'cannot find this booking'},400
-        if target_booking.status!=Status.Pending:
-            return {'error':'this booking is not in Pending state, you cannot cancel it'},400
+        if target_booking.status!=Status.Accepted_Payment_Required:
+            return {'error':'this booking is not in Accepted_Payment_Required state,\
+                 you cannot cancel it'},400
 
         target_booking.status=Status.Cancelled
         db.session.add(target_booking)
@@ -223,11 +237,11 @@ def payForBooking(booking_id):
     target_booking.status=Status.Successful
     db.session.add(target_booking)
 
-    #所有处于Pending状态的booking自动转为rejected
+    '''#所有处于其他状态的booking自动转为rejected
     for eachBooking in target_listing.bookings:
         if eachBooking.status==Status.Pending:
             eachBooking.status=Status.Rejected
-            db.session.add(eachBooking)
+            db.session.add(eachBooking)'''
     
     #原listing自动下架
     db.session.delete(target_listing)
