@@ -28,7 +28,7 @@ def getListings():
 
 
 @listing_bp.route("/listings/<int:listing_id>",methods=['GET'])
-def getListings(listing_id):
+def getSpecificListings(listing_id):
     listing=Listing.query.filter_by(id=listing_id).first()
     if not listing:
         return {"message":"Listing not found"},400

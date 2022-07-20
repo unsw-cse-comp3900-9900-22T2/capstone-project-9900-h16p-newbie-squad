@@ -23,8 +23,8 @@ class User(db.Model):
     email = db.Column(db.String(64), unique=True, index=True)
     password_hash = db.Column(db.String(128))
     phone_num = db.Column(db.String(32), unique=True, index=True)
-    bank_account = db.Column(db.String(32), unique=True, index=True)
-    credit_card = db.Column(db.String(32), unique=True, index=True)
+    # bank_account = db.Column(db.String(32), unique=True, index=True)
+    # credit_card = db.Column(db.String(32), unique=True, index=True)
 
     #前端将图片进行base64编码之后直接发送给后端，后端数据库存储该base64字节串
     avatar=db.Column(db.LargeBinary,nullable=True)
@@ -37,10 +37,11 @@ class User(db.Model):
     vehicles = db.relationship('Vehicle', backref='owner', lazy='dynamic')
     #从user到parking_space表（一对多，一的那一侧）
     parking_spaces = db.relationship('Parking_space', backref='owner', lazy='dynamic')
-    # 从user到bank_accounts表（一对多，一的那一侧）
-    bank_accounts = db.relationship('Bank_account', backref='owner', lazy='dynamic')
-    # 从user 到 credit_card表（一对多，一的那一侧）
-    credit_cards = db.relationship('Credit_card', backref='owner', lazy='dynamic')
+    # 从user到bank_account表（一对一）
+    bank_account = db.relationship('Bank_account', backref='owner', uselist=False)
+    # 从user 到 credit_card表（一对一）
+    credit_card = db.relationship('Credit_card', backref='owner', uselist=False)
+
     customer=db.relationship('Booking',backref='customer',lazy='dynamic')
 
     @property
@@ -223,7 +224,7 @@ class Billing(db.Model):
     # provider_card_number=db.Column(db.String(32))
 
 class Bank_account(db.Model):
-    __tablename__ = 'bank_accounts'
+    __tablename__ = 'bank_account'
     # accoount_id, owner_id, account_name, bsb
     account_id = db.Column(db.String(32), primary_key=True)
     # 一对多，多的那个
@@ -235,7 +236,7 @@ class Bank_account(db.Model):
         return '<Vehicle %r>' % self.account_id
 
 class Credit_card(db.Model):
-    __tablename__ = 'credit_cards'
+    __tablename__ = 'credit_card'
     # owner_id(db.ForeignKey('users.id')), card_number, card_name,Expiry_date, cvv
     card_number = db.Column(db.String(32), primary_key=True)
     # 一对多，多的那个
