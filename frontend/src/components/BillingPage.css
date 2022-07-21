@@ -1,0 +1,77 @@
+.billingMain {
+    background-color: #eceaea;
+    display: flex;
+    height: 100%;
+}
+.billingLeft {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-right: 1px solid #000;
+}
+.billingLeft input {
+    padding-left: 5px;
+}
+.billingLeftTop {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+.billingMain h3 {
+    margin: 0 !important;
+    margin: 10px;
+}
+.billingLeftBottom {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+.billingRight {
+    flex: 1;
+}
+.billingLeftTopItems span {
+    color: #ababab;
+}
+.billingLeftTopItems input {
+    width: 100%;
+}
+.billingLeftButton {
+    background-color: #22b686;
+    color: #fff;
+    border: 0;
+    padding: 10px 5px;
+    margin: 0 auto;
+    display: block;
+    margin-top: 10px;
+}
+
+
+.billingRightListing {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.billingRightListingItems {
+    width: 96%;
+    background-color: #ffffff;
+    margin: 10px auto;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    cursor: pointer;
+}
+
+.billingRightListing a {
+    color: #000 !important;
+    text-decoration:  none !important;
+}
+
+.Payment {
+    color: #007acc;
+}
+.Earning {
+    color: #22b686;
+}

@@ -9,6 +9,8 @@ import LoginPage from './components/LoginPage';
 import SignUpPage from './components/SignUpPage';
 import MapAndListingPage from './components/MapAndListingPage';
 import BookingPage from './components/BookingPage';
+import PayPage from './components/PayPage';
+import BillingDetail  from './components/BillingDetail'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -21,6 +23,8 @@ root.render(
       <Route path="SignUp-page" element={<SignUpPage />} />
       <Route path="MapAndListing-page" element={<MapAndListingPage />}/>
       <Route path="booking-page/:listing_id" element={<BookingPage />}/>
+      <Route path="pay-page/:booking_id" element={<PayPage />}/>
+      <Route path="billing-page/:bill_id" element={<BillingDetail />}/>
       {/* </Route> */}
     </Routes>
     

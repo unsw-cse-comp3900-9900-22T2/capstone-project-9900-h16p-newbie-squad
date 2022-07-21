@@ -66,7 +66,9 @@ export default function BookingHistoryPage(){
                 <div><br /></div>
                 {bookingInformation.map((booking, index) => (
                     <div key={index} className='bottom-border'>
-                        <div>Booking time: {booking.booking_time}</div>
+                        <div>Address: {booking.address}</div>
+                        <div>Booked time: {booking.start_date} to {booking.end_date} </div>
+                        <div>Price: {booking.price}</div>
                         <div>Statu: {booking.status}</div>
                         <Link to={`/booking-page/${booking.listing_id}`}>
                             <button className='book-button'>Detail</button>
@@ -79,7 +81,9 @@ export default function BookingHistoryPage(){
                 <div><br /></div>
                 {bookingToMeInformation.map((booking, index) => (
                     <div key={index} className='bottom-border'>
-                        <div>Booking time: {booking.booking_time}</div>
+                        <div>Address: {booking.address}</div>
+                        <div>Booked time: {booking.start_date} to {booking.end_date} </div>
+                        <div>Price: {booking.price}/day</div>
                         <div>Statu: {booking.status}</div>
                     </div>
                 ))}

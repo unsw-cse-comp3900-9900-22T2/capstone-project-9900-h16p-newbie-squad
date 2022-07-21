@@ -1,0 +1,28 @@
+.billingDetailMain {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.billingDetailContent {
+    width: 90%;
+    height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #000;
+}
+
+.billingDetailAll {
+    width: 600px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.billingDetailAll h6 {
+    margin: 10px 0 !important;
+    padding-left: 15px;
+}
