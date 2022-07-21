@@ -4,7 +4,6 @@ import {useLocation, useParams, Link} from 'react-router-dom';
 import Header from './Header';
 import './BookingPage.css'
 
-var booking_id=''
 export default function BookingPage() {
     // const listing = JSON.parse(localStorage.getItem("listing-book"))
     // console.log(listing);
@@ -12,6 +11,7 @@ export default function BookingPage() {
     const {listing_id} = useParams()
     console.log(listing_id);
     console.log(localStorage.getItem("token"))
+    const [booking_id,setbooking_id]=useState(null)
     const [street,setstreet]=useState(null)
     const [suburb,setsuburb]=useState(null)
     const [state,setstate]=useState(null)
@@ -49,7 +49,7 @@ export default function BookingPage() {
             else 
             {
               console.log(response)
-              booking_id = response.new_booking_id.toString()
+              setbooking_id(response.new_booking_id.toString())
               bookDisplay(true)
             }
         })
@@ -114,7 +114,7 @@ export default function BookingPage() {
                 if(response.mybookings[i].listing_id===parseInt(listing_id) && response.mybookings[i].status==='Accepted_Payment_Required')
                 {  
                   bookDisplay(true)
-                  booking_id = response.mybookings[i].booking_id.toString()
+                  setbooking_id(response.mybookings[i].booking_id.toString())
                   console.log(booking_id)
                   return
                 }
