@@ -21,6 +21,7 @@ root.render(
       <Route path="SignUp-page" element={<SignUpPage />} />
       <Route path="MapAndListing-page" element={<MapAndListingPage />}/>
       <Route path="booking-page/:listing_id" element={<BookingPage />}/>
+      <Route path="pay-page/:booking_id" element={<PayPage />}/>
       {/* </Route> */}
     </Routes>
     
