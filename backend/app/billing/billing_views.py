@@ -96,7 +96,7 @@ def myBillings():
 def getSpecificBilling(billing_id):
     billing = Billing.query.filter_by(id=billing_id).first()
     if not billing:
-        return {'message': 'Billing not found'}, 400
+        return {'error': 'Billing not found'}, 400
     return billing.to_dict(), 200
 
 @billing_bp.route('/profile/bank_account',methods=["GET", "POST"])
@@ -104,9 +104,10 @@ def myBankAccount():
 
     curr_user=g.curr_user
     curr_bank_account = Bank_account.query.filter_by(owner=curr_user).first()
+    if not curr_bank_account:
+        return {'error': 'No bank account found'}, 400
     if request.method == 'GET':
-        if not curr_bank_account:
-            return {'message': 'No bank account found'}, 400
+
         # return_dict = {
         #     "account_id": curr_bank_account.account_id,
         #     "account_name": curr_bank_account.account_name,
@@ -133,9 +134,9 @@ def myBankAccount():
 def myCreditCard():
     curr_user=g.curr_user
     curr_credit_card = Credit_card.query.filter_by(owner=curr_user).first()
+    if not curr_credit_card:
+        return {'error': 'No credit card found'}, 400
     if request.method == 'GET':
-        if not curr_credit_card:
-            return {'message': 'No credit card found'}, 400
         # return_dict = {
         #     "card_number": curr_credit_card.card_number,
         #     "card_name": curr_credit_card.card_name,
