@@ -36,10 +36,14 @@ def getMyBookings():
             address = 'Address: %s %s %s %s.' % (target_parking_space.street, target_parking_space.suburb,
                                                 target_parking_space.state, target_parking_space.postcode)
             price=target_parking_space.price
+            start_date=eachOfMyBooking.start_date.strftime('%Y-%m-%d')
+            end_date=eachOfMyBooking.end_date.strftime('%Y-%m-%d')
             mybookings.append({
                 'booking_id':eachOfMyBooking.id,
                 'listing_id':eachOfMyBooking.listing_id,
-                'booking_time':eachOfMyBooking.booking_time.strftime('%Y-%m-%d,%H-%M-%S'),
+                #'booking_time':eachOfMyBooking.booking_time.strftime('%Y-%m-%d,%H-%M-%S'),
+                'start_date':eachOfMyBooking.start_date.strftime('%Y-%m-%d'),
+                'end_date':eachOfMyBooking.end_date.strftime('%Y-%m-%d'),
                 'status':parseStatusCode(eachOfMyBooking.status),
                 'address': address,
                 'price':target_parking_space.price
@@ -51,6 +55,8 @@ def getMyBookings():
                 'listing_id':eachOfMyBooking.listing_id,
                 'booking_time':eachOfMyBooking.booking_time.strftime('%Y-%m-%d,%H-%M-%S'),
                 'status':parseStatusCode(eachOfMyBooking.status),
+                'start_date':eachOfMyBooking.start_date.strftime('%Y-%m-%d'),
+                'end_date':eachOfMyBooking.end_date.strftime('%Y-%m-%d'),
                 'address': "This listing has been removed.",
                 'price':0
             })
