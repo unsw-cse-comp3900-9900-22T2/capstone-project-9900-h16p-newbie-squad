@@ -116,13 +116,17 @@ def fetchBookingsOfMyListings():
     for each_parkingspace in Parking_space.query.filter_by(owner=curr_user).all():
         if each_parkingspace.listings:
             myListings.extend(each_parkingspace.listings)
+    if len(myListings)==0:
+        return {'myListings':myListings},200
     
     #here myBookingRequests means those booking requests towards my listing
     myBookingRequests=[]
     for eachListing in myListings:
         if eachListing.bookings:
             myBookingRequests.extend(eachListing.bookings)
-    
+    if len(myBookingRequests)==0:
+        return {'myBookingRequests':myBookingRequests},200
+
     result=[]
     for eachRequest in myBookingRequests:
         target_listing = Listing.query.filter_by(id=eachRequest.listing_id).first()

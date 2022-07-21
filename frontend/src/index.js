@@ -9,6 +9,7 @@ import LoginPage from './components/LoginPage';
 import SignUpPage from './components/SignUpPage';
 import MapAndListingPage from './components/MapAndListingPage';
 import BookingPage from './components/BookingPage';
+import PayPage from './components/PayPage'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
