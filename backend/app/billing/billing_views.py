@@ -50,6 +50,46 @@ def myBillings():
 
         provider_billings.append(copy.deepcopy(billing_info))
 
+    # if len(customer_billings) == 0 and len(provider_billings) == 0:
+    #     return {"message": "No billings found"}, 404
+    if len(customer_billings) == 0 and len(provider_billings) == 0:
+        # add new customer billing manually
+        new_billing = Billing(
+            provider_id=curr_user.id,
+            provider_name=curr_user.username,
+            customer_id=curr_user.id,
+            customer_name=curr_user.ueername,
+            address="16 eden street, north sydney, NSW",
+            start_date="2022-07-17",
+            end_date="2022-07-19",
+            unit_price=350,
+            total_price=700,
+            payment_time="2022-07-15,19-49-06",
+            customer_card_number="1111-2222-3333-4444",
+            provider_bank_account="2222-3333-4444-5555"
+        )
+        db.session.add(new_billing)
+        db.session.commit()
+        customer_billings.append(copy.deepcopy(new_billing.to_dict()))
+        # add new provider billing manually
+        new_billing_2 = Billing(
+            provider_id=curr_user.id,
+            provider_name=curr_user.username,
+            customer_id=curr_user.id,
+            customer_name=curr_user.username,
+            address="16 eden street, north sydney, NSW",
+            start_date="2022-07-17",
+            end_date="2022-07-19",
+            unit_price=350,
+            total_price=700,
+            payment_time="2022-07-15,19-49-06",
+            customer_card_number="1111-2222-3333-4444",
+            provider_bank_account="2222-3333-4444-5555"
+        )
+        db.session.add(new_billing_2)
+        db.session.commit()
+        provider_billings.append(copy.deepcopy(new_billing_2.to_dict()))
+
     return {'customer_billings': customer_billings, 'provider_billings': provider_billings}, 200
 
 @billing_bp.route('/billing/<int:billing_id>', methods=["GET"])

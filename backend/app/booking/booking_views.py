@@ -4,17 +4,21 @@ from flask import g, request
 from .. import db
 from threading import Thread, Lock
 from time import sleep
+from datetime import datetime
 
 def parseStatusCode(status_code):
-    match status_code:
-        case Status.Pending: return 'Pending'
-        case Status.Accepted_Payment_Required: return 'Accepted_Payment_Required'
-        case Status.Rejected: return 'Rejected'
-        case Status.Successful: return 'Successful'
-        case Status.Cancelled: return 'Cancelled'
+    # match status_code:
+    #     case Status.Pending: return 'Pending'
+    #     case Status.Accepted_Payment_Required: return 'Accepted_Payment_Required'
+    #     case Status.Rejected: return 'Rejected'
+    #     case Status.Successful: return 'Successful'
+    #     case Status.Cancelled: return 'Cancelled'
+    if status_code.Pending: return 'Pending'
+    if status_code.Accepted_Payment_Required: return 'Accepted_Payment_Required'
+    if status_code.Rejected: return 'Rejected'
+    if status_code.Successful: return 'Successful'
+    if status_code.Cancelled: return 'Cancelled'
 
-
-# def hello():
 #     while True:
 #         print("hello,world!")
 #         sleep(3)
@@ -29,11 +33,17 @@ def getMyBookings():
 
     mybookings=[]
     for eachOfMyBooking in Booking.query.filter_by(customer=curr_user).all():
+        target_listing = Listing.query.filter_by(id=eachOfMyBooking.listing_id).first()
+        target_parking_space = Parking_space.query.filter_by(id=target_listing.parking_space_id).first()
+        address = 'Address: %s %s %s %s.' % (target_parking_space.street, target_parking_space.suburb,
+                                             target_parking_space.state, target_parking_space.postcode)
         mybookings.append({
             'booking_id':eachOfMyBooking.id,
             'listing_id':eachOfMyBooking.listing_id,
             'booking_time':eachOfMyBooking.booking_time.strftime('%Y-%m-%d,%H-%M-%S'),
-            'status':parseStatusCode(eachOfMyBooking.status)
+            'status':parseStatusCode(eachOfMyBooking.status),
+            'address': address,
+            'price':target_parking_space.price
         })
     
     return {'mybookings':mybookings},200
@@ -42,10 +52,17 @@ def getMyBookings():
 
 #make a new booking request towards listing: listing_id
 big_lock=Lock()
-@booking_bp.route("/bookings/new/<int:listing_id>",methods=['POST'])
+@booking_bp.route("/bookings/new/<int:listing_id>",methods=['PUT'])
 def makeBookingRequest(listing_id):
     big_lock.acquire()
     curr_user=g.curr_user
+    request_data = request.get_json()
+    try:
+        # start_date,end_date是一个Date类型的对象
+        start_date = datetime.strptime(request_data.get('start_date'), '%Y-%m-%d').date()
+        end_date = datetime.strptime(request_data.get('end_date'), '%Y-%m-%d').date()
+    except:
+        return {'error': 'invalid time format'}, 400
 
     target_listing=Listing.query.filter_by(id=listing_id).first()
 
@@ -53,14 +70,16 @@ def makeBookingRequest(listing_id):
         big_lock.release()
         return {'error':'cannot find this listing'},400
 
-
     for eachBooking in target_listing.bookings:
         if eachBooking.Status==Status.Accepted_Payment_Required:
             big_lock.release()
             return {'error':'this listing is already booked by other people'},400
 
-    new_booking=Booking(listing=target_listing,customer=curr_user,\
-        status=Status.Accepted_Payment_Required)
+    new_booking=Booking(listing=target_listing,
+                        customer=curr_user,
+                        start_date=start_date,
+                        end_date=end_date,
+                        status=Status.Accepted_Payment_Required)
 
     try:
         db.session.add(new_booking)
@@ -97,11 +116,19 @@ def fetchBookingsOfMyListings():
     
     result=[]
     for eachRequest in myBookingRequests:
+        target_listing = Listing.query.filter_by(id=eachRequest.listing_id).first()
+        target_parking_space = Parking_space.query.filter_by(id=target_listing.parking_space_id).first()
+        address = 'Address: %s %s %s %s.' % (target_parking_space.street, target_parking_space.suburb,
+                                             target_parking_space.state, target_parking_space.postcode)
         result.append({
             'booking_id':eachRequest.id,
             'customer_id':eachRequest.customer_id,
+            'start_date':eachRequest.start_date.strftime('%Y-%m-%d'),
+            'end_date':eachRequest.end_date.strftime('%Y-%m-%d'),
             'booking_time':eachRequest.booking_time.strftime('%Y-%m-%d,%H-%M-%S'),
-            'status':parseStatusCode(eachRequest.status)
+            'status':parseStatusCode(eachRequest.status),
+            'address': address,
+            'price':target_parking_space.price
         })
     
     return {'myRequests':result},200

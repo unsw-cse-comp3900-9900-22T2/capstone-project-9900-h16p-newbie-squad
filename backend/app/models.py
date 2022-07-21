@@ -186,7 +186,10 @@ class Booking(db.Model):
     listing_id=db.Column(db.Integer,db.ForeignKey('listings.id'))
     customer_id=db.Column(db.Integer,db.ForeignKey('users.id'))
     status=db.Column(db.Integer)
+    start_date=db.Column(db.Date)
+    end_date=db.Column(db.Date)
     booking_time=db.Column(db.DateTime,default=datetime.now)
+
     #snapshot?
     
     def __repr__(self):
