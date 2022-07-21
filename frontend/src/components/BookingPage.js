@@ -27,13 +27,29 @@ export default function BookingPage() {
         alert('You should login first')
         return
       }
+      
+      var start_date = document.getElementById('booking_start_date').value
+      var end_date = document.getElementById('booking_end_date').value
+      
+      if(start_date <startTime || end_date>endTime || start_date==='' ||end_date==='' ||start_date>end_date)
+      {
+        alert('Invalid book time')
+        return
+      }
+      const data = {
+        start_date: start_date,
+        end_date: end_date
+      }
+      
       const headers = new Headers({
         'Content-Type': 'application/json',
         'token': localStorage.getItem("token")
         });
+        console.log(JSON.stringify(data))
         fetch('http://localhost:5000/bookings/new/'+listing_id,
         {
-            method: 'POST',
+            method: 'PUT',
+            body: JSON.stringify(data),
             headers: headers,
         })
         .then(res => res.json())
@@ -179,9 +195,9 @@ export default function BookingPage() {
                 <div><br /></div>
                   <div id='book-container'>
                     from
-                    <input type='date'></input>
+                    <input type='date' id='booking_start_date'></input>
                     to
-                    <input type='date'></input>
+                    <input type='date' id='booking_end_date'></input>
                     <button onClick={()=>MakeBooking()} className='book-button' id='book_button'>
                       book
                     </button>
