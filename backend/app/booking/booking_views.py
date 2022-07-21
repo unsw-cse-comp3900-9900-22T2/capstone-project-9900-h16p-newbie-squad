@@ -30,27 +30,40 @@ def getMyBookings():
     mybookings=[]
     for eachOfMyBooking in Booking.query.filter_by(customer=curr_user).all():
         target_listing = Listing.query.filter_by(id=eachOfMyBooking.listing_id).first()
-        target_parking_space = Parking_space.query.filter_by(id=target_listing.parking_space_id).first()
-        address = 'Address: %s %s %s %s.' % (target_parking_space.street, target_parking_space.suburb,
-                                             target_parking_space.state, target_parking_space.postcode)
-        mybookings.append({
-            'booking_id':eachOfMyBooking.id,
-            'listing_id':eachOfMyBooking.listing_id,
-            'booking_time':eachOfMyBooking.booking_time.strftime('%Y-%m-%d,%H-%M-%S'),
-            'status':parseStatusCode(eachOfMyBooking.status),
-            'address': address,
-            'price':target_parking_space.price
-        })
+        
+        if target_listing!=None:
+            target_parking_space=target_listing.parking_space
+            address = 'Address: %s %s %s %s.' % (target_parking_space.street, target_parking_space.suburb,
+                                                target_parking_space.state, target_parking_space.postcode)
+            price=target_parking_space.price
+            mybookings.append({
+                'booking_id':eachOfMyBooking.id,
+                'listing_id':eachOfMyBooking.listing_id,
+                'booking_time':eachOfMyBooking.booking_time.strftime('%Y-%m-%d,%H-%M-%S'),
+                'status':parseStatusCode(eachOfMyBooking.status),
+                'address': address,
+                'price':target_parking_space.price
+            })
+            
+        else:             
+            mybookings.append({
+                'booking_id':eachOfMyBooking.id,
+                'listing_id':eachOfMyBooking.listing_id,
+                'booking_time':eachOfMyBooking.booking_time.strftime('%Y-%m-%d,%H-%M-%S'),
+                'status':parseStatusCode(eachOfMyBooking.status),
+                'address': "This listing has been removed.",
+                'price':0
+            })
     
     return {'mybookings':mybookings},200
         
 
 
 #make a new booking request towards listing: listing_id
-big_lock=Lock()
+#big_lock=Lock()
 @booking_bp.route("/bookings/new/<int:listing_id>",methods=['PUT'])
 def makeBookingRequest(listing_id):
-    big_lock.acquire()
+    #big_lock.acquire()
     curr_user=g.curr_user
     request_data = request.get_json()
     try:
@@ -63,12 +76,12 @@ def makeBookingRequest(listing_id):
     target_listing=Listing.query.filter_by(id=listing_id).first()
 
     if target_listing==None:
-        big_lock.release()
+        #big_lock.release()
         return {'error':'cannot find this listing'},400
 
     for eachBooking in target_listing.bookings:
         if eachBooking.status==Status.Accepted_Payment_Required:
-            big_lock.release()
+            #big_lock.release()
             return {'error':'this listing is already booked by other people'},400
 
     new_booking=Booking(listing=target_listing,
@@ -81,12 +94,12 @@ def makeBookingRequest(listing_id):
         db.session.add(new_booking)
         db.session.commit()
     except:
-        big_lock.release()
+        #big_lock.release()
         return {'error':'internal error'},400
     
     new_booking_id=Booking.query.all()[-1].id
 
-    big_lock.release()
+    #big_lock.release()
     return {'new_booking_id':new_booking_id},200
 
 
