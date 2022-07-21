@@ -7,17 +7,13 @@ from time import sleep
 from datetime import datetime
 
 def parseStatusCode(status_code):
-    # match status_code:
-    #     case Status.Pending: return 'Pending'
-    #     case Status.Accepted_Payment_Required: return 'Accepted_Payment_Required'
-    #     case Status.Rejected: return 'Rejected'
-    #     case Status.Successful: return 'Successful'
-    #     case Status.Cancelled: return 'Cancelled'
-    if status_code.Pending: return 'Pending'
-    if status_code.Accepted_Payment_Required: return 'Accepted_Payment_Required'
-    if status_code.Rejected: return 'Rejected'
-    if status_code.Successful: return 'Successful'
-    if status_code.Cancelled: return 'Cancelled'
+    match status_code:
+        case Status.Pending: return 'Pending'
+        case Status.Accepted_Payment_Required: return 'Accepted_Payment_Required'
+        case Status.Rejected: return 'Rejected'
+        case Status.Successful: return 'Successful'
+        case Status.Cancelled: return 'Cancelled'
+
 
 #     while True:
 #         print("hello,world!")
@@ -71,7 +67,7 @@ def makeBookingRequest(listing_id):
         return {'error':'cannot find this listing'},400
 
     for eachBooking in target_listing.bookings:
-        if eachBooking.Status==Status.Accepted_Payment_Required:
+        if eachBooking.status==Status.Accepted_Payment_Required:
             big_lock.release()
             return {'error':'this listing is already booked by other people'},400
 
