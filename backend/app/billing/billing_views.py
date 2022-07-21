@@ -105,7 +105,8 @@ def myBankAccount():
     curr_user=g.curr_user
     curr_bank_account = Bank_account.query.filter_by(owner=curr_user).first()
     if not curr_bank_account:
-        return {'error': 'No bank account found'}, 400
+        # return {'error': 'No bank account found'}, 400
+        return {'message': 'No bank account found'}, 200
     if request.method == 'GET':
 
         # return_dict = {
@@ -135,7 +136,8 @@ def myCreditCard():
     curr_user=g.curr_user
     curr_credit_card = Credit_card.query.filter_by(owner=curr_user).first()
     if not curr_credit_card:
-        return {'error': 'No credit card found'}, 400
+        # return {'error': 'No credit card found'}, 400
+        return {'message': 'No credit card found'}, 200
     if request.method == 'GET':
         # return_dict = {
         #     "card_number": curr_credit_card.card_number,
