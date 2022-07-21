@@ -97,27 +97,54 @@ def getSpecificBilling(billing_id):
     billing = Billing.query.filter_by(id=billing_id).first()
     if not billing:
         return {'error': 'Billing not found'}, 400
-    return billing.to_dict(), 200
+    return_dict = {
+        "id": billing.id,
+        "provider_id": billing.provider_id,
+        "customer_id": billing.customer_id,
+        "provider_name": billing.provider_name,
+        "customer_name": billing.customer_name,
+        "address": billing.address,
+        "start_date": billing.start_date,
+        "end_date": billing.end_date,
+        "unit_price": billing.unit_price,
+        "total_price": billing.total_price,
+        "payment_time": billing.payment_time,
+        "customer_card_number": billing.customer_card_number,
+        "provider_bank_account": billing.provider_bank_account
+    }
+    return return_dict, 200
 
 @billing_bp.route('/profile/bank_account',methods=["GET", "POST"])
 def myBankAccount():
 
     curr_user=g.curr_user
     curr_bank_account = Bank_account.query.filter_by(owner=curr_user).first()
-    if not curr_bank_account:
-        # return {'error': 'No bank account found'}, 400
-        return {'message': 'No bank account found'}, 200
     if request.method == 'GET':
-
-        # return_dict = {
-        #     "account_id": curr_bank_account.account_id,
-        #     "account_name": curr_bank_account.account_name,
-        #     "bsb": curr_bank_account.bsb
-        # }
-        return curr_bank_account.to_dict(), 200
+        if not curr_bank_account:
+            return {}, 200
+        return_dict = {
+            "account_id": curr_bank_account.account_id,
+            "owner_id": curr_bank_account.owner_id,
+            "account_name": curr_bank_account.account_name,
+            "bsb": curr_bank_account.bsb
+        }
+        return return_dict, 200
 
     elif request.method == 'POST':
         info_to_update = request.get_json()
+        if not curr_bank_account:
+            try:
+                new_bank_account = Bank_account(
+                    account_id=info_to_update['account_id'],
+                    owner_id=curr_user.id,
+                    account_name=info_to_update['account_name'],
+                    bsb=info_to_update['bsb']
+                )
+                db.session.add(new_bank_account)
+                db.session.commit()
+                return {'message': 'update success'}, 200
+            except:
+                return {'error': 'Invalid input'}, 400
 
         if info_to_update.get('account_id'):
             curr_bank_account.account_id = info_to_update.get('account_id')
@@ -128,26 +155,43 @@ def myBankAccount():
 
         db.session.add(curr_bank_account)
         db.session.commit()
-        return {}, 200
+        return {'message': 'update success'}, 200
 
 
 @billing_bp.route('/profile/credit_card',methods=["GET", "POST"])
 def myCreditCard():
     curr_user=g.curr_user
     curr_credit_card = Credit_card.query.filter_by(owner=curr_user).first()
-    if not curr_credit_card:
-        # return {'error': 'No credit card found'}, 400
-        return {'message': 'No credit card found'}, 200
+
     if request.method == 'GET':
-        # return_dict = {
-        #     "card_number": curr_credit_card.card_number,
-        #     "card_name": curr_credit_card.card_name,
-        #     "expiry_date": curr_credit_card.expiry_date,
-        #     "cvv": curr_credit_card.cvv
-        # }
-        return curr_credit_card.to_dict(), 200
+        if not curr_credit_card:
+            return {}, 200
+        return_dict = {
+            "owner_id": curr_credit_card.owner_id,
+            "card_number": curr_credit_card.card_number,
+            "card_name": curr_credit_card.card_name,
+            "expiry_date": curr_credit_card.expiry_date,
+            "cvv": curr_credit_card.cvv
+        }
+        return return_dict, 200
     elif request.method == 'POST':
         info_to_update = request.get_json()
+        if not curr_credit_card:
+            # add new credit card manually
+            try:
+                new_credit_card = Credit_card(
+                    owner_id=curr_user.id,
+                    card_number=info_to_update.get('card_number'),
+                    card_name=info_to_update.get('card_name'),
+                    expiry_date=info_to_update.get('expiry_date'),
+                    cvv=info_to_update.get('cvv')
+                )
+                db.session.add(new_credit_card)
+                db.session.commit()
+                return {'message': 'update success'}, 200
+            except:
+                return {'error': 'Invalid input'}, 400
+
         if info_to_update.get('card_number'):
             curr_credit_card.card_number = info_to_update.get('card_number')
         if info_to_update.get('card_name'):
@@ -158,4 +202,4 @@ def myCreditCard():
             curr_credit_card.cvv = info_to_update.get('cvv')
         db.session.add(curr_credit_card)
         db.session.commit()
-        return {}, 200
+        return {'message': 'update success'}, 200

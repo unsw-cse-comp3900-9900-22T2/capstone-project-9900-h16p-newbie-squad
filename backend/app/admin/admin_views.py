@@ -20,8 +20,25 @@ def adminGetParkingSpaces():
 def adminGetParkingSpaceDetail(parkingspace_id):
     # 此时输入应为有效的parkingspace_id，故不做验证
     parkingspace = Parking_space.query.filter_by(id=parkingspace_id).first()
-
-    return parkingspace.to_dict(), 200
+    return_dict = {
+                    "id": parkingspace.id,
+                    "owner_id": parkingspace.owner_id,
+                    "street" : parkingspace.street,
+                    "suburb": parkingspace.suburb,
+                    "state": parkingspace.state,
+                    "postcode": parkingspace.postcode,
+                    "latitude": parkingspace.latitude,
+                    "longitude": parkingspace.longitude,
+                    "width": parkingspace.width,
+                    "length": parkingspace.length,
+                    "price": parkingspace.price,
+                    "is_active": parkingspace.is_active,
+                    "average_rating": parkingspace.average_rating,
+                    "picture_1": parkingspace.picture_1,
+                    "picture_2": parkingspace.picture_2,
+                    "picture_3": parkingspace.picture_3
+    }
+    return return_dict, 200
 
 
 @admin_bp.route('/admin/delete/<int:parkingspace_id>', methods=['DELETE'])
