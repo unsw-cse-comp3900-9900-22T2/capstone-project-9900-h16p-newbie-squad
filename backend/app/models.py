@@ -1,3 +1,4 @@
+from zoneinfo import available_timezones
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
 from itsdangerous.serializer import Serializer
@@ -72,20 +73,6 @@ class User(db.Model):
     def __repr__(self):
         return '<User %r>' % self.username
 
-'''class Vehicle_type(db.Model):
-    __tablename__ = 'vehicle_types'
-
-    # id = db.Column('id', db.String(36), default=lambda: str(uuid.uuid4()), primary_key=True)
-    id = db.Column(db.Integer, primary_key=True)
-    vehicle_typename = db.Column(db.String(36), unique=True)
-
-    # 从vehicle_type到vehicle表（一对多）
-    vehicles = db.relationship('Vehicle', backref='vehicle_type', lazy='dynamic')
-
-    def __repr__(self):
-        return '<Vehicle_type %r>' % self.vehicle_typename'''
-#车辆类型暂时从需求中移除，没必要
-
 
 class Vehicle(db.Model):
     __tablename__ = 'vehicles'
@@ -96,37 +83,17 @@ class Vehicle(db.Model):
     brand=db.Column(db.String(32))
     width = db.Column(db.Float, nullable=True)
     length = db.Column(db.Float, nullable=True)
-    #height = db.Column(db.Float, nullable=True)
 
     def __repr__(self):
         return '<Vehicle %r>' % self.plate_number
 
 
-'''
-class Parking_space_type(db.Model):
-    __tablename__ = 'Parking_space_types'
-    # id = db.Column('id', db.String(36), default=lambda: str(uuid.uuid4()), primary_key=True)
-    id = db.Column(db.Integer, primary_key=True)
-    parking_space_typename = db.Column(db.String(36), unique=True)
-    # 从Parking_space_type到Parking_space表（一对多）
-    parking_spaces = db.relationship('Parking_space', backref='parking_space_type', lazy='dynamic')
-
-    def __repr__(self):
-        return '<Parking_space_type %r>' % self.parking_space_typename
-'''
-
-
-
 class Parking_space(db.Model):
     __tablename__ = 'parking_spaces'
-    # id, parking_space_owner_id, parking_space_type_id,  parking_space_width, parking_space_length, parking_space_height, parking_space_address, parking_space_price, parking_space_is_available, parking_space_is_booked, parking_space_available_date
-    # id = db.Column('id', db.String(36), default=lambda: str(uuid.uuid4()), primary_key=True)
     id = db.Column(db.Integer, primary_key=True)
 
     #一对多，多的那一侧
     owner_id = db.Column(db.String(32), db.ForeignKey('users.id'))
-    # owner = db.Column(db.String(32), db.ForeignKey('users.id'))
-    #parking_space_type_id = db.Column(db.String(36), db.ForeignKey('Parking_space_types.id'))
 
     street = db.Column(db.String(32), nullable=False)
     suburb=db.Column(db.String(32), nullable=False)
@@ -138,41 +105,42 @@ class Parking_space(db.Model):
 
     width = db.Column(db.Float, nullable=True)
     length = db.Column(db.Float, nullable=True)
-    #parking_space_height = db.Column(db.Float, nullable=True)
     price = db.Column(db.Float, nullable=True)
 
+    #如果is_active为假，则代表此parking_space已经被用户删除
+    is_active=db.Column(db.Boolean,nullable=False)
+
+    #is_published=db.Column(db.Boolean,nullable=False)
+    #published_time=db.Column(db.DateTime,nullable=True)
+
     #一对多，一的那一侧
-    #车位下架，listing自动也下架
-    listings = db.relationship('Listing', backref='parking_space', lazy='dynamic'\
-        ,cascade='all,delete-orphan')
+    bookings=db.relationship('Booking', backref='parking_space', lazy='dynamic')
+    available_periods=db.relationship('Available_Period', backref='parking_space', lazy='dynamic',\
+        cascade='all,delete-orphan')
 
     def __repr__(self):
         return '<Parking_space %r>' % self.id
 
 
-class Listing(db.Model):
-    __tablename__='listings'
+class Available_Period(db.Model):
+    __tablename__='available_periods'
     id = db.Column(db.Integer, primary_key=True)
-
     #一对多，多的那一侧
     parking_space_id=db.Column(db.Integer, db.ForeignKey('parking_spaces.id'))
-    start_date = db.Column(db.Date)
-    end_date = db.Column(db.Date)
-    published_time=db.Column(db.DateTime,default=datetime.now)
+    start_date=db.Column(db.Date)
+    end_date=db.Column(db.Date)
 
-    #一对多，一的那一侧
-    bookings=db.relationship('Booking', backref='listing', lazy='dynamic')
+    #published_time=db.Column(db.DateTime,default=datetime.now)
 
     def __repr__(self):
-        return '<listings %r>' % self.id
+        return '<available_periods %r>' % self.id
 
 
 class Status:
-    Pending=1
-    Accepted_Payment_Required=2
-    Rejected=3
-    Successful=4
-    Cancelled=5
+    Accepted_Payment_Required=1
+    Successful=2
+    Cancelled=3
+    Must_Pay_Within=60
 
 
 #The default
@@ -182,8 +150,8 @@ class Status:
 class Booking(db.Model):
     __tablename__='bookings'
     id = db.Column(db.Integer, primary_key=True)
-    #一对多，多的那一侧，如果listing已经下架了，那么listing字段为null
-    listing_id=db.Column(db.Integer,db.ForeignKey('listings.id'))
+    #一对多，多的那一侧
+    parking_space_id=db.Column(db.Integer,db.ForeignKey('parking_spaces.id'))
     customer_id=db.Column(db.Integer,db.ForeignKey('users.id'))
     status=db.Column(db.Integer)
     start_date=db.Column(db.Date)
@@ -191,9 +159,10 @@ class Booking(db.Model):
     booking_time=db.Column(db.DateTime,default=datetime.now)
 
     #snapshot?
-    
     def __repr__(self):
         return '<bookings %r>' % self.id
+
+
 
 
 #所有的订单记录都保存在这张表中
@@ -225,6 +194,7 @@ class Billing(db.Model):
 
     # #永久保存provider收款时用的银行卡号
     # provider_card_number=db.Column(db.String(32))
+
 
 class Bank_account(db.Model):
     __tablename__ = 'bank_account'

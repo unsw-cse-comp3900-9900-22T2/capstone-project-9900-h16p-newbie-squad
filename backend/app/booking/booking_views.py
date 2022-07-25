@@ -1,26 +1,15 @@
-from ..models import Billing, Listing, Booking, Status, Parking_space, Credit_card, Bank_account
+from ..models import Available_Period, Billing, Booking, Status, Parking_space, Credit_card, Bank_account
 from . import booking_bp
-from flask import g, request
+from flask import g, request, app
 from .. import db
-from threading import Thread, Lock
-from time import sleep
-from datetime import datetime
+
+from datetime import datetime, timedelta
 
 def parseStatusCode(status_code):
     match status_code:
-        case Status.Pending: return 'Pending'
         case Status.Accepted_Payment_Required: return 'Accepted_Payment_Required'
-        case Status.Rejected: return 'Rejected'
         case Status.Successful: return 'Successful'
         case Status.Cancelled: return 'Cancelled'
-
-
-#     while True:
-#         print("hello,world!")
-#         sleep(3)
-    
-# test=Thread(target=hello)
-# test.run()
 
 
 @booking_bp.route("/bookings/mybookings",methods=['GET'])
@@ -29,211 +18,153 @@ def getMyBookings():
 
     mybookings=[]
     for eachOfMyBooking in Booking.query.filter_by(customer=curr_user).all():
-        target_listing = Listing.query.filter_by(id=eachOfMyBooking.listing_id).first()
-        
-        if target_listing!=None:
-            target_parking_space=target_listing.parking_space
-            address = 'Address: %s %s %s %s.' % (target_parking_space.street, target_parking_space.suburb,
-                                                target_parking_space.state, target_parking_space.postcode)
-            price=target_parking_space.price
-            start_date=eachOfMyBooking.start_date.strftime('%Y-%m-%d')
-            end_date=eachOfMyBooking.end_date.strftime('%Y-%m-%d')
-            mybookings.append({
-                'booking_id':eachOfMyBooking.id,
-                'listing_id':eachOfMyBooking.listing_id,
-                #'booking_time':eachOfMyBooking.booking_time.strftime('%Y-%m-%d,%H-%M-%S'),
-                'start_date':eachOfMyBooking.start_date.strftime('%Y-%m-%d'),
-                'end_date':eachOfMyBooking.end_date.strftime('%Y-%m-%d'),
-                'status':parseStatusCode(eachOfMyBooking.status),
-                'address': address,
-                'price':target_parking_space.price
-            })
-            
-        else:             
-            mybookings.append({
-                'booking_id':eachOfMyBooking.id,
-                'listing_id':eachOfMyBooking.listing_id,
-                'booking_time':eachOfMyBooking.booking_time.strftime('%Y-%m-%d,%H-%M-%S'),
-                'status':parseStatusCode(eachOfMyBooking.status),
-                'start_date':eachOfMyBooking.start_date.strftime('%Y-%m-%d'),
-                'end_date':eachOfMyBooking.end_date.strftime('%Y-%m-%d'),
-                'address': "This listing has been removed.",
-                'price':0
-            })
+        target_parking_space=eachOfMyBooking.parking_space
+
+        address = 'Address: %s %s %s %s.' % (target_parking_space.street, target_parking_space.suburb,
+                                            target_parking_space.state, target_parking_space.postcode)
+        price=target_parking_space.price
+        start_date=eachOfMyBooking.start_date.strftime('%Y-%m-%d')
+        end_date=eachOfMyBooking.end_date.strftime('%Y-%m-%d')
+
+        mybookings.append({
+            'booking_id':eachOfMyBooking.id,
+            'booking_time':eachOfMyBooking.booking_time.strftime('%Y-%m-%d,%H-%M-%S'),
+            'start_date':eachOfMyBooking.start_date.strftime('%Y-%m-%d'),
+            'end_date':eachOfMyBooking.end_date.strftime('%Y-%m-%d'),
+            'status':parseStatusCode(eachOfMyBooking.status),
+            'address': address,
+            'price':target_parking_space.price,
+            "time_remaining":None if eachOfMyBooking.status!=Status.Accepted_Payment_Required \
+                else Status.Must_Pay_Within-(datetime.now()-eachOfMyBooking.booking_time).total_seconds()
+        })
     
     return {'mybookings':mybookings},200
         
 
 
-#make a new booking request towards listing: listing_id
-#big_lock=Lock()
-@booking_bp.route("/bookings/new/<int:listing_id>",methods=['PUT'])
-def makeBookingRequest(listing_id):
-    #big_lock.acquire()
+#2022.7.25修改：接收的参数现在是parkingspace_id
+@booking_bp.route("/bookings/new/<int:parkingspace_id>",methods=['PUT'])
+def makeBookingRequest(parkingspace_id):
     curr_user=g.curr_user
     request_data = request.get_json()
+
     try:
-        # start_date,end_date是一个Date类型的对象
         start_date = datetime.strptime(request_data.get('start_date'), '%Y-%m-%d').date()
         end_date = datetime.strptime(request_data.get('end_date'), '%Y-%m-%d').date()
     except:
         return {'error': 'invalid time format'}, 400
 
-    target_listing=Listing.query.filter_by(id=listing_id).first()
+    target_parking_space=Parking_space.query.filter_by(id=parkingspace_id).first()
 
-    if target_listing==None:
-        #big_lock.release()
-        return {'error':'cannot find this listing'},400
+    if target_parking_space==None: return {'error':'cannot find this parking space'},400
 
-    for eachBooking in target_listing.bookings:
-        if eachBooking.status==Status.Accepted_Payment_Required:
-            #big_lock.release()
-            return {'error':'this listing is already booked by other people'},400
+    available_slot=None
+    for each_available_period in target_parking_space.available_periods:
+        #找到一个可用时间段
+        if each_available_period.start_date<=start_date and each_available_period.end_date>=end_date:
+            available_slot=each_available_period
+            break
 
-    new_booking=Booking(listing=target_listing,
+    if available_slot==None:
+        return {'error':'period is not available'},400
+    
+    #切割之后的新时间段
+    new_slot_1=Available_Period(start_date=available_slot.start_date,end_date=start_date-timedelta(1),\
+        parking_space=target_parking_space) if available_slot.start_date<start_date else None
+    new_slot_2=Available_Period(start_date=end_date+timedelta(1),end_date=available_slot.end_date,\
+        parking_space=target_parking_space) if available_slot.end_date>end_date else None
+
+    new_booking=Booking(parking_space=target_parking_space,
                         customer=curr_user,
                         start_date=start_date,
                         end_date=end_date,
                         status=Status.Accepted_Payment_Required)
 
     try:
+        if new_slot_1!=None: db.session.add(new_slot_1) 
+        if new_slot_2!=None: db.session.add(new_slot_2)
         db.session.add(new_booking)
+        db.session.delete(available_slot)
         db.session.commit()
-    except:
-        #big_lock.release()
-        return {'error':'internal error'},400
-    
+    except: 
+        return {'error':'db internal error'},400
+
     new_booking_id=Booking.query.all()[-1].id
 
-    #big_lock.release()
     return {'new_booking_id':new_booking_id},200
 
 
 
-#返回所有我publish的listing的booking request
-@booking_bp.route("/bookings/mylistings",methods=['GET'])
-def fetchBookingsOfMyListings():
+@booking_bp.route("/bookings/cancel/<int:booking_id>",methods=['POST'])
+def cancelBooking(booking_id):
+    target_booking=Booking.query.filter_by(id=booking_id).first()
+    if target_booking==None:
+        return {'error':'cannot find this booking'},400
+    if target_booking.status!=Status.Accepted_Payment_Required:
+        return {'error':'this booking is not in Accepted_Payment_Required state,\
+                you cannot cancel it'},400
+
+    old_slot_1=Available_Period.query.filter_by(end_date=(target_booking.start_date-timedelta(1))).first()
+    old_slot_2=Available_Period.query.filter_by(start_date=(target_booking.end_date+timedelta(1))).first()
+
+    if old_slot_1!=None and old_slot_2!=None:
+        new_slot=Available_Period(parking_space=target_booking.parking_space,
+                                start_date=old_slot_1.start_date,
+                                end_date=old_slot_2.end_date)
+    elif old_slot_2==None:
+        new_slot=Available_Period(parking_space=target_booking.parking_space,
+                                start_date=old_slot_1.start_date,
+                                end_date=target_booking.end_date)
+    elif old_slot_1==None:
+        new_slot=Available_Period(parking_space=target_booking.parking_space,
+                                start_date=target_booking.start_date,
+                                end_date=old_slot_2.end_date)
+
+    target_booking.status=Status.Cancelled
+    try:
+        db.session.add(target_booking)
+        db.session.add(new_slot)
+        if old_slot_1!=None: db.session.delete(old_slot_1)
+        if old_slot_2!=None: db.session.delete(old_slot_2)
+        db.session.commit()
+    except:
+        return {'error':'db internal error'},400
+    return {},200
+
+
+
+#返回所有我旗下所有parking_space的所有booking
+@booking_bp.route("/bookings/my_received_bookings",methods=['GET'])
+def myReceivedBookings():
     curr_user=g.curr_user
     
-    #先遍历当前用户的所有parking space，如果这个parking space已经publish了
-    #则这个parking space的所有listing加入listing的列表
-    #再遍历这个listing列表，找出对应的booking
-    myListings=[]
+    myReceivedBookings=[]
     for each_parkingspace in Parking_space.query.filter_by(owner=curr_user).all():
-        if each_parkingspace.listings:
-            myListings.extend(each_parkingspace.listings)
-    if len(myListings)==0:
-        return {'myListings':myListings},200
-    
-    #here myBookingRequests means those booking requests towards my listing
-    myBookingRequests=[]
-    for eachListing in myListings:
-        if eachListing.bookings:
-            myBookingRequests.extend(eachListing.bookings)
-    if len(myBookingRequests)==0:
-        return {'myBookingRequests':myBookingRequests},200
+        if each_parkingspace.bookings:
+            myReceivedBookings.extend(each_parkingspace.bookings)
 
     result=[]
-    for eachRequest in myBookingRequests:
-        target_listing = Listing.query.filter_by(id=eachRequest.listing_id).first()
-        target_parking_space = Parking_space.query.filter_by(id=target_listing.parking_space_id).first()
+    for eachBooking in myReceivedBookings:
+        target_parking_space = eachBooking.parking_space
         address = 'Address: %s %s %s %s.' % (target_parking_space.street, target_parking_space.suburb,
                                              target_parking_space.state, target_parking_space.postcode)
         result.append({
-            'booking_id':eachRequest.id,
-            'customer_id':eachRequest.customer_id,
-            'start_date':eachRequest.start_date.strftime('%Y-%m-%d'),
-            'end_date':eachRequest.end_date.strftime('%Y-%m-%d'),
-            'booking_time':eachRequest.booking_time.strftime('%Y-%m-%d,%H-%M-%S'),
-            'status':parseStatusCode(eachRequest.status),
+            'booking_id':eachBooking.id,
+            'customer_id':eachBooking.customer_id,
+            'start_date':eachBooking.start_date.strftime('%Y-%m-%d'),
+            'end_date':eachBooking.end_date.strftime('%Y-%m-%d'),
+            'booking_made_time':eachBooking.booking_time.strftime('%Y-%m-%d,%H-%M-%S'),
+            'status':parseStatusCode(eachBooking.status),
             'address': address,
             'price':target_parking_space.price
         })
     
-    return {'myRequests':result},200
-
-
-'''
-big_lock=Lock()
-@booking_bp.route("/bookings/accept/<int:booking_id>",methods=['POST'])
-def acceptBooking(booking_id):
-    #先从当前booking找出属于当前booking的listing
-    #再检查这个listing的所有的booking，确保这个listing所有的booking request都还没有被accept
-    #确保原子性
-    try:
-        big_lock.acquire()
-        target_booking=Booking.query.filter_by(id=booking_id).first()
-    
-        if target_booking==None:
-            big_lock.release()
-            return {'error':'cannot find this booking'},400
-        if target_booking.status!=Status.Pending:
-            big_lock.release()
-            return {'error':'this booking is not in Pending state, you cannot accept it'},400
-
-        #确保provider只能接受一个booking
-        target_listing=target_booking.listing
-        for eachBookingRequest in Booking.query.filter_by(listing=target_listing).all():
-            if eachBookingRequest.status==Status.Accepted_Payment_Required:
-                big_lock.release()
-                return {'error':'already booked'},400
-
-        target_booking.status=Status.Accepted_Payment_Required
-        db.session.add(target_booking)
-        db.session.commit()
-        big_lock.release()
-    except:
-        big_lock.release()
-        return {'error':'internal error'},400
-
-    return {},200
-'''
-
-
-'''
-@booking_bp.route("/bookings/reject/<int:booking_id>",methods=['POST'])
-def rejectBooking(booking_id):
-    try:
-        target_booking=Booking.query.filter_by(id=booking_id).first()
-
-        if target_booking==None:
-            return {'error':'cannot find this booking'},400
-        if target_booking.status!=Status.Pending:
-            return {'error':'this booking is not in Pending state, you cannot reject it'},400
-
-        target_booking.status=Status.Rejected
-        db.session.add(target_booking)
-        db.session.commit()
-    except:
-        return {'error':'internal error'},400
-    return {},200
-'''
-
-
-@booking_bp.route("/bookings/cancel/<int:booking_id>",methods=['POST'])
-def cancelBooking(booking_id):
-    try:
-        target_booking=Booking.query.filter_by(id=booking_id).first()
-        if target_booking==None:
-            return {'error':'cannot find this booking'},400
-        if target_booking.status!=Status.Accepted_Payment_Required:
-            return {'error':'this booking is not in Accepted_Payment_Required state,\
-                 you cannot cancel it'},400
-
-        target_booking.status=Status.Cancelled
-        db.session.add(target_booking)
-        db.session.commit()
-    except:
-        return {'error':'internal error'},400
-    return {},200
+    return {'my_received_bookings':result},200
 
 
 
 @booking_bp.route("/bookings/pay/<int:booking_id>",methods=['POST'])
 def payForBooking(booking_id):
-    #这里应该加入支付逻辑，这里不管
-    #可增加功能：从用户预留的信用卡信息中扣款
-
     target_booking=Booking.query.filter_by(id=booking_id).first()
 
     if target_booking==None:
@@ -241,8 +172,7 @@ def payForBooking(booking_id):
     if target_booking.status!=Status.Accepted_Payment_Required:
         return {'error':'this booking hasn\'t been accepted yet'},400
 
-    target_listing=target_booking.listing
-    target_parking_space=target_listing.parking_space
+    target_parking_space=target_booking.parking_space
 
     provider=target_parking_space.owner
     customer=target_booking.customer
@@ -252,8 +182,10 @@ def payForBooking(booking_id):
 
     address='Address: %s %s %s %s.'%(target_parking_space.street,target_parking_space.suburb,\
         target_parking_space.state,target_parking_space.postcode)
-    start_date=target_listing.start_date
-    end_date=target_listing.end_date
+
+    start_date=target_booking.start_date
+    end_date=target_booking.end_date
+
     unit_price=target_parking_space.price
     total_price=unit_price*((end_date-start_date).total_seconds()/86400)
 
@@ -282,15 +214,6 @@ def payForBooking(booking_id):
     #更新成功支付的这个booking的状态为Successful
     target_booking.status=Status.Successful
     db.session.add(target_booking)
-
-    '''#所有处于其他状态的booking自动转为rejected
-    for eachBooking in target_listing.bookings:
-        if eachBooking.status==Status.Pending:
-            eachBooking.status=Status.Rejected
-            db.session.add(eachBooking)'''
-    
-    #原listing自动下架
-    db.session.delete(target_listing)
 
     try:
         db.session.commit()

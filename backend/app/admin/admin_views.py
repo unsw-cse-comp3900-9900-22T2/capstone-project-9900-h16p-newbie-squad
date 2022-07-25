@@ -1,7 +1,7 @@
 from . import admin_bp
 from flask import Blueprint, request, session,url_for,jsonify
 from .. import db
-from ..models import Role, User, Parking_space, Listing
+from ..models import Role, User, Parking_space
 
 
 

@@ -1,5 +1,6 @@
 cd capstone-project-9900-h16p-newbie-squad/backend
 venv\Scripts\activate
+$env:FLASK_ENV = "development"
 $env:FLASK_APP = "project.py"
 
 

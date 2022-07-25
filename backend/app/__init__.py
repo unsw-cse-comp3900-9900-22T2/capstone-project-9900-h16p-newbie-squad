@@ -1,3 +1,4 @@
+from datetime import datetime
 import os
 from flask import Flask
 from config import config
@@ -33,8 +34,8 @@ def create_app(name):
     from .parkingspace import parkingspace_bp
     app.register_blueprint(parkingspace_bp)
 
-    from .listing import listing_bp
-    app.register_blueprint(listing_bp)
+    from .available_parking_space import available_parking_space_bp
+    app.register_blueprint(available_parking_space_bp)
 
     from .booking import booking_bp
     app.register_blueprint(booking_bp)
@@ -44,6 +45,28 @@ def create_app(name):
 
     from .admin import admin_bp
     app.register_blueprint(admin_bp)
+
+
+    from threading import Thread
+    from time import sleep
+    from .models import Booking,Status
+    from app.booking.booking_views import cancelBooking
+    def scan_unpaid_booking():
+        with app.app_context():
+            while True:
+                #i=0
+                for eachBooking in Booking.query.filter_by(status=Status.Accepted_Payment_Required).all():
+                    interval=(datetime.now()-eachBooking.booking_time).total_seconds()
+                    #一分钟之内必须付款，否则被系统取消
+                    if interval>=Status.Must_Pay_Within:
+                        cancelBooking(eachBooking.id)
+                    print(interval)
+                    #print(i)
+                    #i+=1
+                sleep(5)
+
+    test=Thread(target=scan_unpaid_booking,daemon=True)
+    test.start()
 
     return app
 

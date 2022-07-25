@@ -1,17 +1,18 @@
 from . import parkingspace_bp
 from flask import request,g
 from .. import db
-from ..models import Parking_space, Listing
+from ..models import Available_Period, Parking_space, Status
 from datetime import datetime
 
 
 @parkingspace_bp.route('/myparkingspace',methods=['GET'])
-def myparkingspacelisting():
+def myparkingspaces():
     curr_user=g.curr_user
 
     all_parking_spaces=[]
 
-    for each_parking_space in Parking_space.query.filter_by(owner=curr_user).all():
+    #2022.7.25修改：只返回状态为active的parking_space
+    for each_parking_space in Parking_space.query.filter_by(owner=curr_user,is_active=True).all():
         result={
             "id":each_parking_space.id,
             "owner":curr_user.username,
@@ -26,26 +27,24 @@ def myparkingspacelisting():
             "longitude":each_parking_space.longitude
         }
 
-        date_range=[]
-        for each_listing in Listing.query.filter_by(parking_space=each_parking_space):
-            duration=(each_listing.end_date-each_listing.start_date).total_seconds()/86400
-            date_range.append({
-                "listing_id":each_listing.id,
-                "start_date":each_listing.start_date.strftime('%Y-%m-%d'),
-                "end_date":each_listing.end_date.strftime('%Y-%m-%d'),
-                "duration":duration,
-                "total_price":each_parking_space.price*duration,
-                "published_time":each_listing.published_time.strftime('%Y-%m-%d,%H-%M-%S')
+        available_periods=[]
+        for each_available_period in each_parking_space.available_periods:
+            #duration=(each_listing.end_date-each_listing.start_date).total_seconds()/86400
+            available_periods.append({
+                #"listing_id":each_listing.id,
+                "start_date":each_available_period.start_date.strftime('%Y-%m-%d'),
+                "end_date":each_available_period.end_date.strftime('%Y-%m-%d'),
+                #"duration":duration,
+                #"total_price":each_parking_space.price*duration,
+                #"published_time":each_available_period.published_time.strftime('%Y-%m-%d,%H-%M-%S')
             })
 
-        result["current_listings"]=date_range
+        result["available_periods"]=available_periods
         print(result)
 
         all_parking_spaces.append(result)
 
-    
     return {"all_parkingspaces":all_parking_spaces},200
-
 
 
 
@@ -60,7 +59,7 @@ def myparkingspaceNew():
             state=request_data.get('state'),postcode=request_data.get('postcode'),\
             width=request_data.get('width'),length=request_data.get('length'),\
             price=request_data.get('price'),latitude=request_data.get('latitude'),\
-            longitude=request_data.get('longitude')
+            longitude=request_data.get('longitude'),is_active=True
         )
         db.session.add(new_parking_space)
         db.session.commit()
@@ -74,94 +73,37 @@ def myparkingspaceNew():
 
 
 
-@parkingspace_bp.route('/myparkingspace/publish/<int:parkingspace_id>',methods=['PUT'])
-def publishParkingSpace(parkingspace_id):
-    request_data=request.get_json()
-    target_parking_space=Parking_space.query.filter_by(id=parkingspace_id).first()
-
-    if target_parking_space==None:
-        return {'error':'parkingspace not found'},400
-
-    try:
-        try:
-            #start_date,end_date是一个Date类型的对象
-            start_date=datetime.strptime(request_data.get('start_date'),'%Y-%m-%d').date()
-            end_date=datetime.strptime(request_data.get('end_date'),'%Y-%m-%d').date()
-        except:
-            return {'error':'invalid time format'},400
-
-        new_listing=Listing(start_date=start_date,end_date=end_date,\
-            parking_space=target_parking_space)
-        #后台会自动生成当前时间的published time字段
-
-        db.session.add(new_listing)
-        db.session.commit()
-    except:
-        return {'error':'internal error'},400
-
-    new_listing_id=Listing.query.all()[-1].id
-
-    return {'new_listing_id':new_listing_id},200
-
-
-
-
-@parkingspace_bp.route('/myparkingspace/unpublish/<int:parkingspace_id>',methods=['PUT'])
-def unpublishParkingSpace(parkingspace_id):
-    all_listings=Listing.query.filter_by(parking_space_id=parkingspace_id).all()
-
-    try:
-        for each_listing in all_listings:
-            db.session.delete(each_listing)
-    except:
-        return {'error':'internal error'},400
-
-    db.session.commit()
-    return {},200
-
-
-
 @parkingspace_bp.route('/myparkingspace/<int:parkingspace_id>',methods=['GET'])
 def getParkingSpace(parkingspace_id):
     curr_user=g.curr_user
     target_parking_space=Parking_space.query.filter_by(id=parkingspace_id).first()
-    if target_parking_space==None:
-        return {'error':'invalid parking space'},400
+    if target_parking_space==None: return {'error':'invalid parking space'},400
 
-    detail={
-                "id":target_parking_space.id,
-                "owner":curr_user.username,
-                "street":target_parking_space.street,
-                "suburb":target_parking_space.suburb,
-                "state":target_parking_space.state,
-                "postcode":target_parking_space.postcode,
-                "latitude":target_parking_space.latitude,
-                "longitude":target_parking_space.longitude,
-                "width":target_parking_space.width,
-                "length":target_parking_space.length,
-                "price":target_parking_space.price,
-                "published":False,
-                "current_listings":[]
-            }
+    detail={"id":target_parking_space.id,
+            "owner":curr_user.username,
+            "street":target_parking_space.street,
+            "suburb":target_parking_space.suburb,
+            "state":target_parking_space.state,
+            "postcode":target_parking_space.postcode,
+            "latitude":target_parking_space.latitude,
+            "longitude":target_parking_space.longitude,
+            "width":target_parking_space.width,
+            "length":target_parking_space.length,
+            "price":target_parking_space.price,
+            #"published":False,
+            "available_periods":[]}
 
-    all_listings=Listing.query.filter_by(parking_space=target_parking_space).all()
-    print(all_listings)
-
-    if all_listings:
-        detail["published"]=True
-        for each_listing in all_listings:
-            #duration in days
-            duration=(each_listing.end_date-each_listing.start_date).total_seconds()/86400
-            listing={"listing_id":each_listing.id,
-                "start_date:":each_listing.start_date.strftime('%Y-%m-%d'),
-                "end_date":each_listing.end_date.strftime('%Y-%m-%d'),
-                "duration":duration,
-                "total_price":target_parking_space.price*duration,
-                "published_time":each_listing.published_time.strftime('%Y-%m-%d,%H-%M-%S')
-                }
-            detail["current_listings"].append(listing)        
+   
+    for each_available_period in target_parking_space.available_periods:
+        #detail["published"]=True
+        available_period={
+            "start_date:":each_available_period.start_date.strftime('%Y-%m-%d'),
+            "end_date":each_available_period.end_date.strftime('%Y-%m-%d'),
+        }
+        detail["available_periods"].append(available_period)        
         
     #TODO:reviews
+    #TODO:pictures
     
     return detail,200
 
@@ -169,20 +111,31 @@ def getParkingSpace(parkingspace_id):
 @parkingspace_bp.route('/myparkingspace/<int:parkingspace_id>',methods=['DELETE'])
 def deleteParkingSpace(parkingspace_id):
     target_parking_space=Parking_space.query.filter_by(id=parkingspace_id).first()
-    if target_parking_space==None:
-        return {'error':'invalid parking space'},400
+    if target_parking_space==None: return {'error':'invalid parking space'},400
     
-    db.session.delete(target_parking_space)
-    db.session.commit()
+    try:
+        for each_available_period in target_parking_space.available_periods:
+            db.session.delete(each_available_period)
+
+        for each_booking in target_parking_space.bookings:
+            if each_booking.status==Status.Accepted_Payment_Required:
+                each_booking.status=Status.Cancelled
+                db.session.add(each_booking)
+
+        target_parking_space.is_active=False
+        db.session.add(target_parking_space)
+        db.session.commit()
+    except:
+        return {'error':'db internal error'}
 
     return {},200
+
 
 
 @parkingspace_bp.route('/myparkingspace/<int:parkingspace_id>',methods=['PUT'])
 def updateParkingSpace(parkingspace_id):
     target_parking_space=Parking_space.query.filter_by(id=parkingspace_id).first()
-    if target_parking_space==None:
-        return {'error':'invalid parking space'},400
+    if target_parking_space==None: return {'error':'invalid parking space'},400
 
     info_to_update = request.get_json()
 
@@ -209,5 +162,55 @@ def updateParkingSpace(parkingspace_id):
     db.session.commit()
 
     return {},200
+
+
+
+@parkingspace_bp.route('/myparkingspace/publish/<int:parkingspace_id>',methods=['PUT'])
+def publishParkingSpace(parkingspace_id):
+    request_data=request.get_json()
+    target_parking_space=Parking_space.query.filter_by(id=parkingspace_id).first()
+    if target_parking_space==None: return {'error':'parkingspace not found'},400
+
+    try:
+        start_date=datetime.strptime(request_data.get('start_date'),'%Y-%m-%d').date()
+        end_date=datetime.strptime(request_data.get('end_date'),'%Y-%m-%d').date()
+    except:
+        return {'error':'invalid time format'},400
+
+    try:
+        new_available_period=Available_Period(start_date=start_date,end_date=end_date,\
+            parking_space=target_parking_space)
+        db.session.add(new_available_period)
+        db.session.commit()
+    except:
+        return {'error':'internal error'},400
+
+    return {},200
+
+
+
+@parkingspace_bp.route('/myparkingspace/unpublish/<int:parkingspace_id>',methods=['PUT'])
+def unpublishParkingSpace(parkingspace_id):
+    try:
+        target_parking_space=Parking_space.query.filter_by(id=parkingspace_id).first()
+        if target_parking_space==None: return {'error':'invalid parking space'},400
+
+        for each_available_period in target_parking_space.available_periods:
+            db.session.delete(each_available_period)
+
+        for each_booking in target_parking_space.bookings:
+            if each_booking.status==Status.Accepted_Payment_Required:
+                each_booking.status=Status.Cancelled
+                db.session.add(each_booking)
+
+        db.session.commit()
+    except:
+        return {'error':'internal error'},400
+
+    return {},200
+
+
+
+
 
 

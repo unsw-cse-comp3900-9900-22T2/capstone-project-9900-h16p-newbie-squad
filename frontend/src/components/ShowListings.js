@@ -11,7 +11,7 @@ export default function ShowListings({ listings, searchedAddress, setPriceMode, 
     // console.log(searchedAddress);
     // const [priceRange, setPriceRange] = useState([0,100])
     // const [dateRange, setDateRange] = useState(["2099-12-31", "2000-01-01"])
-    const currentSuburb = searchedAddress.split(", ")[1]?.split(' ')[0]
+    const currentSuburb = searchedAddress.split(",")[1]
     const newListings = listings.filter(listing => {
         // if (priceMode === 'day') {
         //     return listing.suburb.toUpperCase() === currentSuburb?.toUpperCase()
@@ -20,7 +20,7 @@ export default function ShowListings({ listings, searchedAddress, setPriceMode, 
         // return listing.suburb.toUpperCase() === currentSuburb?.toUpperCase()
         // && (listing.price * 28 >= priceRange[0] && listing.price * 28 <= priceRange[1])
         // console.log("current date: ", dateRange);
-        return listing.suburb.toUpperCase() === currentSuburb?.toUpperCase()
+        return currentSuburb?.toUpperCase().includes(listing.suburb.toUpperCase())
             && (listing.price >= priceRange[0] && listing.price <= priceRange[1])
             && (listing.start_date <= dateRange[0] && listing.end_date >= dateRange[1])
     })
