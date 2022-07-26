@@ -11,6 +11,7 @@ import MapAndListingPage from './components/MapAndListingPage';
 import BookingPage from './components/BookingPage';
 import PayPage from './components/PayPage';
 import BillingDetail  from './components/BillingDetail'
+import 'antd/dist/antd.css'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

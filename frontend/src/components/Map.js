@@ -45,7 +45,7 @@ export default function Map({ listings, address, setListings, setSearchedAddress
     const newListings = listings.filter(listing => {
       // return listing.suburb.toUpperCase() === currentSuburb?.toUpperCase()
           return (listing.price >= priceRange[0] && listing.price <= priceRange[1])
-          && (listing.start_date <= dateRange[0] && listing.end_date >= dateRange[1])
+          && (listing.availibility[0].start_date <= dateRange[0] && listing.availibility[0].end_date >= dateRange[1])
     })
 
     const mapRef = useRef()

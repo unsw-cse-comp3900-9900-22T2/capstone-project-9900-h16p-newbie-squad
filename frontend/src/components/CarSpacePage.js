@@ -3,6 +3,8 @@ import CarSpaceForm from './CarSpaceForm'
 import PublishForm from './PublishForm'
 import CarSpaceEditForm from './CarSpaceEditForm'
 import usePlacesAutocomplete, { getGeocode, getLatLng } from 'use-places-autocomplete';
+import ParkingPopup from './ParkingPopup';
+import ParkingSpaceDisplay from './ParkingSpaceDisplay';
 
 
 
@@ -97,34 +99,15 @@ export default function CarSpacePage() {
     .catch(error => console.log(error))
   }
 
-  // const getLocation = async (address) => {
-  //   try {
-  //       const results = await getGeocode({address: address})
-  //       console.log(results);
-  //       // const {lat, lng} = await getLatLng(results[0])
-  //       // return {lat, lng}
-  //   } catch(error) {
-  //       console.log(error);
-  //   }  
-  // }
-  // const [test, setTest] = useState("")
-
   return (
     <div>
-      <button onClick={leaseCarSpace}>Lease my car space</button>
-      {/* <input placeholder='address' onChange={(e) => setTest(e.target.value)}/>
-      <button onClick={() => getLocation(test)}>test</button> */}
-      {carSpaceSelected && <CarSpaceForm 
-        setCarSpaceSelected={setCarSpaceSelected}
-        setCarSpaceInformation={setCarSpaceInformation}
-        getAllListings={getAllListings}
-      />}
+      <ParkingPopup getAllListings={getAllListings}/>
 
-      {publishFormSelected && <PublishForm 
+      {/* {publishFormSelected && <PublishForm 
         setPublishFormSelected={setPublishFormSelected}
         carSpaceId={carSpaceId}
         getAllListings={getAllListings}
-      />}
+      />} */}
 
       {editFormSelected && 
         <CarSpaceEditForm 
@@ -135,26 +118,32 @@ export default function CarSpacePage() {
         />
       }
 
+      <ParkingSpaceDisplay 
+        carSpaceInformation={carSpaceInformation}
+        setPublishFormSelected={setPublishFormSelected}
+        getAllListings={getAllListings}
+      />
+
       {carSpaceInformation.map((space, index) => (
         <div key={index}>
           Address at: {space.street},  {space.suburb}, {space.state}, {space.postcode}
           <br></br>
           Price: {space.price}, 
-          start: {space.current_listings.length !== 0 ? space.current_listings[0].start_date : "Not published yet"},
-          end: {space.current_listings.length !== 0 ? space.current_listings[0].end_date : "Not published yet"}
+          start: {space.available_periods.length !== 0 ? space.available_periods[0].start_date : "Not published yet"},
+          end: {space.available_periods.length !== 0 ? space.available_periods[0].end_date : "Not published yet"}
           <br></br>
           Length: {space.length}
           <br></br>
           Width: {space.width}
           <br></br>
-          {space.current_listings.length === 0 && <button onClick={() => {
+          {space.available_periods.length === 0 && <button onClick={() => {
             setPublishFormSelected(true)
             setCarSpaceId(space.id)
           }}>
             publish
           </button>}
 
-          {space.current_listings.length !== 0 && 
+          {space.available_periods.length !== 0 && 
             <button onClick={() => unpublish(space.id)}>unpublish</button>
           }
 

@@ -24,7 +24,7 @@ export default function MapAndListingPage() {
                 'Content-Type': 'application/json',
             },
         }
-        fetch("http://127.0.0.1:5000/listings", requestOption)
+        fetch("http://127.0.0.1:5000//available_parking_spaces", requestOption)
         .then(res => {
             if (res.status === 200) {
                 return res.json()
@@ -33,8 +33,8 @@ export default function MapAndListingPage() {
             }
         })
         .then(data => {
-            // console.log(data.all_listings)
-            setListings(data.all_listings)
+            console.log(data.available_parking_spaces)
+            setListings(data.available_parking_spaces)
         })
         .catch(error => console.log(error))
     }

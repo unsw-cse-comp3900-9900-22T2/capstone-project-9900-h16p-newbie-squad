@@ -6,7 +6,7 @@ import Header from './components/Header';
 import './components/HomePage.css'
 import { useLoadScript } from "@react-google-maps/api"
 import HomeSearch from './components/HomeSearch';
-
+// import 'antd/dist/antd.css'
 
 function App() {
   const API_KEY = "AIzaSyCBM5x-xql7TePUP3oHu73CQXJaMmB80fw"

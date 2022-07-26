@@ -52,9 +52,9 @@
 }
 
 .listing-card {
-    height: 50px;
+    height: 65px;
     width: 97%;
-    padding: 3px;
+    padding: 5px;
     position: relative;
 }
 .listing-card-container {
@@ -65,8 +65,8 @@
 } */
 
 .listing-img {
-    height: 50px;
-    width: 50px;
+    height: 55px;
+    width: 55px;
     background-color: #c8d7d4;
     display: inline-block;
     padding-right: 5px;
@@ -74,11 +74,11 @@
 .listing-info {
     display: inline-block;
     position: absolute;
-    left: 60px;
+    left: 65px;
     /* padding-left: 5px; */
     top: 3px;
     font-size: 9px;
-    width: 180px;
+    width: 190px;
     font-weight: bold;
 }
 
@@ -88,14 +88,14 @@
 .price-book {
     /* background-color: #c8d7d4; */
     position: absolute;
-    right: 3px;
+    right: 5px;
     top: 3px;
     height: 50px;
     width: 50px;
     text-align: center;
 }
 .per-day {
-    font-size: 5px;
+    font-size: 6px;
 }
 .price {
     /* align-items: center; */
