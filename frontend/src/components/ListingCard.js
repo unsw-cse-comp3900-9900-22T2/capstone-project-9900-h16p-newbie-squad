@@ -19,8 +19,8 @@ export default function ListingCard({listing, priceMode, setSelected}) {
         <div className='listing-info' onClick={() => setSelected(listing)}>
             {listing.street}, {listing.suburb} {listing.state}, {listing.postcode}
             <div className='date-style'>
-                {/* <div>From: {listing.start_date}</div>
-                <div>To: {listing.end_date}</div> */}
+                <div>From: {listing.availibility[0].start_date}</div>
+                <div>To: {listing.availibility[0].end_date}</div>
             </div>
         </div>
         <div className='price-book'>

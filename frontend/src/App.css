@@ -83,7 +83,7 @@
 
 .container {
   position: fixed;
-  border: #282c34 solid 1px;
+  border: #f2f2f2 solid 1px;
   height: 80%;
   width: 95%;
   top: 70px;
@@ -115,6 +115,8 @@
   max-width: 150px;
   display: flex;
   flex-direction: column;
+  /* align-items: center;
+  justify-content: center; */
 }
 
 .right-nav {
@@ -127,10 +129,14 @@
 .pernal-item {
   width: 100%;
   flex-grow: 1;
-  border-bottom: #282c34 solid 1px;
+  border-bottom: #f2f2f2 solid 1px;
   text-align: center;  
   color: whitesmoke;
   size: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
 }
 
 .pernal-item:hover {

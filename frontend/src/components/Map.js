@@ -30,7 +30,7 @@ const mapContainerStyle = {
     },
   }
 
-export default function Map({ listings, address, setListings, setSearchedAddress, priceMode, priceRange, dateRange, selected, setSelected }) {
+export default function Map({ listings, address, setListings, setSearchedAddress, priceMode, priceRange, dateRange, selected, setSelected, AllListings }) {
     // console.log("first address: ", address);
     const [ libraries ] = useState(['places']);
     const {isLoaded, loadError} = useLoadScript({
@@ -120,6 +120,7 @@ export default function Map({ listings, address, setListings, setSearchedAddress
         setListings={setListings}
         listings={listings}
         setSearchedAddress={setSearchedAddress}
+        AllListings={AllListings}
       />
       <Locate 
         panTo={panTo} 

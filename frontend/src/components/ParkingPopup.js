@@ -19,7 +19,7 @@ export default function ParkingPopup({getAllListings}) {
   
     return (
       <>
-        <Button type="primary" onClick={showModal}>
+        <Button type="primary" onClick={showModal} >
           Lease my parking space
         </Button>
         <Modal title="Register a new parking space" visible={isModalVisible}  onCancel={handleCancel} footer={null}>

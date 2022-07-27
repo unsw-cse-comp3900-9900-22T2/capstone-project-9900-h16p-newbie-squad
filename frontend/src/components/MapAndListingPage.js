@@ -57,6 +57,8 @@ export default function MapAndListingPage() {
                         setDateRange={setDateRange}
                         dateRange={dateRange}
                         setSelected={setSelected}
+                        setListings={setListings}
+                        AllListings={AllListings}
                     />
                 </div>
                 <div className='flex-item right-map'>
@@ -70,6 +72,7 @@ export default function MapAndListingPage() {
                         dateRange={dateRange}
                         selected={selected}
                         setSelected={setSelected}
+                        AllListings={AllListings}
                     />
                 </div>
             </div>

@@ -13,7 +13,7 @@ import "@reach/combobox/styles.css";
 import "./HomePage.css"
 import './MapAndListingPage.css'
 
-export default function Search({ panTo, setTempMarker, setDestination, address, setListings, listings, setSearchedAddress }) {
+export default function Search({ panTo, setTempMarker, setDestination, address, setListings, listings, setSearchedAddress, AllListings }) {
     const API_KEY = "AIzaSyCBM5x-xql7TePUP3oHu73CQXJaMmB80fw"
     const [ libraries ] = useState(['places']);
     const {isLoaded, loadError} = useLoadScript({
@@ -53,6 +53,7 @@ export default function Search({ panTo, setTempMarker, setDestination, address, 
                     // filterListingBySearch(address)
                     panTo({lat: lat, lng: lng})
                     setTempMarker({lat, lng})
+                    AllListings()
                 } catch(error) {
                     console.log(error);
                 }
