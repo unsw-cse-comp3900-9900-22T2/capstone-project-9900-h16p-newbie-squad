@@ -8,3 +8,20 @@ Our team made an initial division of work for the project based on the each team
 
 ## week3
 Discussed all the details of the proposal with team members, and started to complete the user flow and System Architecture after making sure that the user stroy in the proposal was OK. In Thursday's lab, accepted tutor's suggestions, made changes to user flow and system architecture, and assisted the team members in revising the proposal.
+
+
+week4
+
+Meet with group members to determine the functions needed and coding
+
+week5
+
+Modify back-end functions according to front-end requirements and keep communication with team members
+
+week7
+
+Meet with the team members to determine the division of labor, determine the required functions and coding
+
+week8
+
+Modify the back-end functions according to the front-end developers' requirements and test the effect. Finally in demoB, there is a good result
