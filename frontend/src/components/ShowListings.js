@@ -18,10 +18,20 @@ export default function ShowListings({ listings, searchedAddress, setPriceMode, 
     //     }))
     // }, [listings])
 
+    //这里需要对每一个date range都检查
+    const checkAvailability = (listing) => {
+        for (const period of listing.availibility) {
+            if (period.start_date <= dateRange[0] && period.end_date >= dateRange[1]) {
+                return true
+            }
+        }
+        return false
+    }
     const newListings = listings.filter(listing => {
         return currentSuburb?.toUpperCase().includes(listing.suburb.toUpperCase())
             && (listing.price >= priceRange[0] && listing.price <= priceRange[1])
-            && (listing.availibility[0].start_date <= dateRange[0] && listing.availibility[0].end_date >= dateRange[1])
+            // && (listing.availibility[0].start_date <= dateRange[0] && listing.availibility[0].end_date >= dateRange[1])
+            && checkAvailability(listing)
     })
 
     const [showPriceRangePage, setShowPriceRangePage] = useState(false)

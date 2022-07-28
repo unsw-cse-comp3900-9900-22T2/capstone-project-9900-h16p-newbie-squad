@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import VehicleForm from './VehicleForm';
+import { Button, Divider, Popconfirm } from 'antd';
+import './CarManagementPage.css'
+import CarPopup from './CarPopup';
+import CarDisplay from './CarDisplay';
 
 // const token = "4.UJsETXTotkCToYT7_SdxwOMYBMo"
 
 export default function CarManagementPage() {
   const token = localStorage.getItem("token")
-  const [addVehicleSelected, setAddVehicleSelected] = useState(false)
   const [vehicleInformation, setVehicleInformation] = useState([])
-
-  const addVehicle = () => {
-    // console.log("add cars");
-    setAddVehicleSelected(true)
-  }
 
   const getAllCars = () => {
     const requestOption = {
@@ -63,21 +61,13 @@ export default function CarManagementPage() {
 
   return (
     <div>
-      <button onClick={addVehicle}>Add Vehicle</button>
+      <div className='add-car-container'>
+        <CarPopup getAllCars={getAllCars}/>
+      </div>
+
+      <Divider>All my cars</Divider>
       
-      {addVehicleSelected && <VehicleForm 
-        setAddVehicleSelected={setAddVehicleSelected}
-        setVehicleInformation={setVehicleInformation}
-        getAllCars={getAllCars}
-      />}
-
-
-      {vehicleInformation.map((vehicle, index) => (
-        <div key={index}>
-          Brand: {vehicle.brand}, Plate number: {vehicle.plate_number} 
-          <button onClick={() => deleteCar(vehicle.plate_number)}>delete</button>
-        </div>
-      ))}
+      <CarDisplay vehicleInformation={vehicleInformation} deleteCar={deleteCar}/>
     </div>
   )
 }
