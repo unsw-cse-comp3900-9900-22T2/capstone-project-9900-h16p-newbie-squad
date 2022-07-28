@@ -14,3 +14,29 @@ a meeting to allocate different tasks for the project proposal to each member, o
 the user stories and Sprints and the rest of two will do the technical depth and scale part.
 
 Week 3
+Each team member delivered their part of the proposal and I merge all the work into a proposal report. In this week, we also set the user stories
+and divide them into three sprints, which means, we will use the three sprint structure. We discusss the details of the sprint 1 work and each team
+members have their assigned user stories to implement.
+
+Week 4
+In this week, we start our sprint 1 work, and we find out there are some issue when doing the development, such as the connection issues between the
+frontend and backend, lack of coding experience, poor UI/UX design. There are also some details that we haven't considered during the last week meeting,
+so we held some meetings this week in order to solve the problem during the development and discuss some further details of the fuctionalities.
+
+Week 5
+We have to finalize our work in sprint 1 and show them to the tutors during the tutorial. Beacuse of the lack of experience and poor time management,
+some team members are not able to deliver their assigned tasks on time, so we have to work together to sort it out. Moreover, there are some code conflicts
+happened during the integration of the code, some bugs appeared ans we tried hard to fix them. Luckily, we complete our sprint 1 on time, we show the demo
+get feedback from Mr Hamadi and we had our retrospective meeting after the demo.
+
+Week 7
+From the retrospective meeting last week, we find out there are a lot thing we have to improve not only the product also the team management and so on.
+So in sprint 2, we assigned some to try list and assgined it to some team members to follow up. We decide to improve some functionalities we developed
+from last sprint and add more objectives to implement in this sprint.
+
+Week 8
+From the previous lessons we learned from Demo A, we set a deadline for each team member assigned tasks. Each person in the team delivered their work on time.
+So I have enough time to do the integration and test the system to see any bugs exsit. If I find out any bug or not satisfiec with any modules, I will ask the
+team mates to debug or improve the modules. We did well in Demo B and we had our retrospective B meeting immediately after the demo.
+
+Week 9
