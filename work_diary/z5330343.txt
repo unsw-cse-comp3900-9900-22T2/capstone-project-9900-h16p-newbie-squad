@@ -18,3 +18,18 @@ week 3:
 In this week, I worked together with Yindi Ruan to come up with all user stories. Then in the following meeting, we confirmed all the 
 user stories and picked 12 user stories to be completed in sprint 1. Based on that, I finished the part 2 of the proposal together with 
 Yindi Ruan.
+
+week 4:
+build the basic ui framework for sprint 1
+
+week 5:
+Implemented functionalities in sprint 1
+
+week 7:
+Did research on how to research on google map, and built ui for sprint 2
+
+week 8:
+Implemented functionalities assigned to me in sprint 2
+
+week 9:
+Implementd some of the functionalities assigned to me in sprint 3
