@@ -23,3 +23,14 @@ week 6:
 • Held retrospective meeting of demoA
 • Chosed user stories of sprint 2
 • Fixed several issues in demoA
+
+week 7:
+• developed booking page UI design
+
+week 8:
+• Connect booking page with backend
+• developed booking history page
+• Complete booking history page with backend
+
+week 9:
+• developed review page UI design
