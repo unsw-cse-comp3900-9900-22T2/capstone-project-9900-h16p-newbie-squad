@@ -157,9 +157,9 @@ def updateParkingSpace(parkingspace_id):
     if info_to_update.get('price'):
         target_parking_space.price = info_to_update['price']
     if info_to_update.get('latitude'):
-        target_parking_space.price = info_to_update['latitude']
+        target_parking_space.latitude = info_to_update['latitude']
     if info_to_update.get('longitude'):
-        target_parking_space.price = info_to_update['longitude']
+        target_parking_space.longitude = info_to_update['longitude']
 
     #2022.7.29修改：车位可以添加三张图片
     if info_to_update.get('picture_1'):
