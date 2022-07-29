@@ -3,6 +3,8 @@ venv\Scripts\activate
 $env:FLASK_ENV = "development"
 $env:FLASK_APP = "project.py"
 
+解决本地数据库文件和远程的冲突
+git checkout --ours data-dev.sqlite
 
 flask shell命令：
 数据库初始化，重置：

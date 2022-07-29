@@ -38,6 +38,10 @@ class User(db.Model):
     vehicles = db.relationship('Vehicle', backref='owner', lazy='dynamic')
     #从user到parking_space表（一对多，一的那一侧）
     parking_spaces = db.relationship('Parking_space', backref='owner', lazy='dynamic')
+
+    #从user到reviews表（一对多，一的那一侧）
+    reviews = db.relationship('Review', backref='author', lazy='dynamic')
+
     # 从user到bank_account表（一对一）
     bank_account = db.relationship('Bank_account', backref='owner', uselist=False)
     # 从user 到 credit_card表（一对一）
@@ -110,13 +114,17 @@ class Parking_space(db.Model):
     #如果is_active为假，则代表此parking_space已经被用户删除
     is_active=db.Column(db.Boolean,nullable=False)
 
-    #is_published=db.Column(db.Boolean,nullable=False)
-    #published_time=db.Column(db.DateTime,nullable=True)
-
     #一对多，一的那一侧
     bookings=db.relationship('Booking', backref='parking_space', lazy='dynamic')
     available_periods=db.relationship('Available_Period', backref='parking_space', lazy='dynamic',\
         cascade='all,delete-orphan')
+    
+    reviews=db.relationship('Review', backref='parking_space', lazy='dynamic')
+    average_rating=db.Column(db.Float, nullable=True)
+
+    picture_1=db.Column(db.LargeBinary,nullable=True)
+    picture_2=db.Column(db.LargeBinary,nullable=True)
+    picture_3=db.Column(db.LargeBinary,nullable=True)
 
     def __repr__(self):
         return '<Parking_space %r>' % self.id
@@ -129,8 +137,6 @@ class Available_Period(db.Model):
     parking_space_id=db.Column(db.Integer, db.ForeignKey('parking_spaces.id'))
     start_date=db.Column(db.Date)
     end_date=db.Column(db.Date)
-
-    #published_time=db.Column(db.DateTime,default=datetime.now)
 
     def __repr__(self):
         return '<available_periods %r>' % self.id
@@ -157,12 +163,26 @@ class Booking(db.Model):
     start_date=db.Column(db.Date)
     end_date=db.Column(db.Date)
     booking_time=db.Column(db.DateTime,default=datetime.now)
+    
+    review=db.relationship('Review', backref='booking', lazy='dynamic')
 
-    #snapshot?
     def __repr__(self):
         return '<bookings %r>' % self.id
 
 
+class Review(db.Model):
+    __tablename__='reviews'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id=db.Column(db.Integer,db.ForeignKey('users.id'))
+    parking_space_id=db.Column(db.Integer,db.ForeignKey('parking_spaces.id'))
+    booking_id=db.Column(db.Integer,db.ForeignKey('bookings.id'))
+    review_text=db.Column(db.String(256), nullable=False)
+    #评分可以从1到5
+    review_rating=db.Column(db.Integer, nullable=False)
+    review_made_time=db.Column(db.DateTime,default=datetime.now)
+
+    def __repr__(self):
+        return '<reviews %r>' % self.id
 
 
 #所有的订单记录都保存在这张表中

@@ -9,7 +9,6 @@ def get_available_parking_spaces():
     for each_available_parking_space in Parking_space.query.filter_by(is_active=True).all():
         available_parking_space={
             "parking_space_id":each_available_parking_space.id,
-            #"published_time":each_listing.published_time.strftime('%Y-%m-%d,%H-%M-%S'),
             "street":each_available_parking_space.street,
             "suburb":each_available_parking_space.suburb,
             "state":each_available_parking_space.state,
@@ -19,6 +18,8 @@ def get_available_parking_spaces():
             "width":each_available_parking_space.width,
             "length":each_available_parking_space.length,
             "price":each_available_parking_space.price,
+            "average_rating":each_available_parking_space.average_rating,
+            "avatar":each_available_parking_space.picture_1
         }
 
         availibility=[]
@@ -38,14 +39,10 @@ def get_available_parking_spaces():
 @available_parking_space_bp.route("/available_parking_spaces/<int:parkingspace_id>",methods=['GET'])
 def getSpecificParkingSpace(parkingspace_id):
     target_parking_space=Parking_space.query.filter_by(id=parkingspace_id).first()
-    if not target_parking_space:
-        return {"message":"parking space not found"},400
-    #parking_space = listing.parking_space
+    if not target_parking_space: return {"message":"parking space not found"},400
+    
     result = {
         "parking_space_id": target_parking_space.id,
-        #"start_date": listing.start_date.strftime('%Y-%m-%d'),
-        #"end_date": listing.end_date.strftime('%Y-%m-%d'),
-        #"published_time": listing.published_time.strftime('%Y-%m-%d,%H-%M-%S'),
         "street": target_parking_space.street,
         "suburb": target_parking_space.suburb,
         "state": target_parking_space.state,
@@ -54,7 +51,11 @@ def getSpecificParkingSpace(parkingspace_id):
         "longitude": target_parking_space.longitude,
         "width": target_parking_space.width,
         "length": target_parking_space.length,
-        "price": target_parking_space.price
+        "price": target_parking_space.price,
+        "average_rating":target_parking_space.average_rating,
+        "picture_1":target_parking_space.picture_1,
+        "picture_2":target_parking_space.picture_2,
+        "picture_3":target_parking_space.picture_3,
     }
 
     availibility=[]
@@ -65,8 +66,5 @@ def getSpecificParkingSpace(parkingspace_id):
         })
     
     result["availibility"]=availibility
-
-    #TODO: reviews, pictures
-
 
     return result, 200

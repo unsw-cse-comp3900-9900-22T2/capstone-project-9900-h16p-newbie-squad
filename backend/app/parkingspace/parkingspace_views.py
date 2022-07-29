@@ -24,19 +24,18 @@ def myparkingspaces():
             "length":each_parking_space.length,
             "price":each_parking_space.price,
             "latitude":each_parking_space.latitude,
-            "longitude":each_parking_space.longitude
+            "longitude":each_parking_space.longitude,
+
+            #2022.7.29新增：返回值中增加average_rating和avatar
+            "average_rating":each_parking_space.average_rating,
+            "avatar":each_parking_space.picture_1
         }
 
         available_periods=[]
         for each_available_period in each_parking_space.available_periods:
-            #duration=(each_listing.end_date-each_listing.start_date).total_seconds()/86400
             available_periods.append({
-                #"listing_id":each_listing.id,
                 "start_date":each_available_period.start_date.strftime('%Y-%m-%d'),
                 "end_date":each_available_period.end_date.strftime('%Y-%m-%d'),
-                #"duration":duration,
-                #"total_price":each_parking_space.price*duration,
-                #"published_time":each_available_period.published_time.strftime('%Y-%m-%d,%H-%M-%S')
             })
 
         result["available_periods"]=available_periods
@@ -59,7 +58,10 @@ def myparkingspaceNew():
             state=request_data.get('state'),postcode=request_data.get('postcode'),\
             width=request_data.get('width'),length=request_data.get('length'),\
             price=request_data.get('price'),latitude=request_data.get('latitude'),\
-            longitude=request_data.get('longitude'),is_active=True
+            longitude=request_data.get('longitude'),is_active=True,\
+            picture_1=request_data.get('picture_1'),
+            picture_2=request_data.get('picture_2'),
+            picture_3=request_data.get('picture_3'),
         )
         db.session.add(new_parking_space)
         db.session.commit()
@@ -90,20 +92,21 @@ def getParkingSpace(parkingspace_id):
             "width":target_parking_space.width,
             "length":target_parking_space.length,
             "price":target_parking_space.price,
-            #"published":False,
+            "average_rating":target_parking_space.average_rating,
+            "picture_1":target_parking_space.picture_1,
+            "picture_2":target_parking_space.picture_2,
+            "picture_3":target_parking_space.picture_3,
             "available_periods":[]}
 
    
     for each_available_period in target_parking_space.available_periods:
-        #detail["published"]=True
         available_period={
             "start_date:":each_available_period.start_date.strftime('%Y-%m-%d'),
             "end_date":each_available_period.end_date.strftime('%Y-%m-%d'),
         }
         detail["available_periods"].append(available_period)        
         
-    #TODO:reviews
-    #TODO:pictures
+    #reviews由另外的API执行
     
     return detail,200
 
@@ -156,6 +159,14 @@ def updateParkingSpace(parkingspace_id):
     if info_to_update.get('latitude'):
         target_parking_space.price = info_to_update['latitude']
     if info_to_update.get('longitude'):
+        target_parking_space.price = info_to_update['longitude']
+
+    #2022.7.29修改：车位可以添加三张图片
+    if info_to_update.get('picture_1'):
+        target_parking_space.price = info_to_update['longitude']
+    if info_to_update.get('picture_2'):
+        target_parking_space.price = info_to_update['longitude']
+    if info_to_update.get('picture_3'):
         target_parking_space.price = info_to_update['longitude']
 
     db.session.add(target_parking_space)

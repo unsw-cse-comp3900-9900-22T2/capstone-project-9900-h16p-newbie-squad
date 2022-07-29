@@ -6,7 +6,8 @@ def before_request_check_token():
 
     if request.blueprint=='profile' or request.blueprint=='car' \
         or request.blueprint=='parkingspace' or request.blueprint=='booking' \
-        or request.blueprint=='billing' or request.blueprint=='admin':
+        or request.blueprint=='billing' or request.blueprint=='admin' \
+        or request.blueprint=='review':
     
         print('verifying token...')
         request_token=request.headers.get('token')
