@@ -61,9 +61,9 @@ def adminUpdateParkingSpace(parkingspace_id):
     if info_to_update.get('price'):
         target_parking_space.price = info_to_update['price']
     if info_to_update.get('latitude'):
-        target_parking_space.price = info_to_update['latitude']
+        target_parking_space.latitude = info_to_update['latitude']
     if info_to_update.get('longitude'):
-        target_parking_space.price = info_to_update['longitude']
+        target_parking_space.longitude = info_to_update['longitude']
 
     db.session.add(target_parking_space)
     db.session.commit()
