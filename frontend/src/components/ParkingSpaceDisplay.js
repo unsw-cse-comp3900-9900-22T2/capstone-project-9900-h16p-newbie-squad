@@ -2,29 +2,9 @@ import { Space, Table, Tag, Button, Popconfirm } from 'antd';
 import React, {useEffect} from 'react';
 import PublishButton from './PublishButton';
 import EditParkingPopup from './EditParkingPopup';
-const data = [
-  {
-    key: '1',
-    name: 'John Brown',
-    age: 32,
-    address: 'New York No. 1 Lake Park',
-    tags: ['nice', 'developer'],
-  },
-  {
-    key: '2',
-    name: 'Jim Green',
-    age: 42,
-    address: 'London No. 1 Lake Park',
-    tags: ['loser'],
-  },
-  {
-    key: '3',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sidney No. 1 Lake Park',
-    tags: ['cool', 'teacher'],
-  },
-];
+import ParkingSpaceDetail from "./ParkingSpaceDetail"
+import ImageUpload from './ImageUpload';
+
 
 const ParkingSpaceDisplay = ({carSpaceInformation, setPublishFormSelected, getAllListings}) => {
     // console.log(carSpaceInformation);
@@ -43,7 +23,9 @@ const ParkingSpaceDisplay = ({carSpaceInformation, setPublishFormSelected, getAl
             price: space.price,
             length: space.length,
             width: space.width,
-            availability: space.available_periods
+            availability: space.available_periods,
+            avatar: space.avatar
+            
         })
     })
     console.log(dataList);
@@ -95,9 +77,25 @@ const ParkingSpaceDisplay = ({carSpaceInformation, setPublishFormSelected, getAl
 
     const columns = [
         {
+            title: 'Avatar',
+            key: 'avatar',
+            render: (_, record) => (
+                <>
+                    <img src={record.avatar} height="150px"/>
+                    <ImageUpload getAllListings={getAllListings} space_id={record.id}/>
+                </>
+            ),
+        },
+        {
           title: 'Address',
-          dataIndex: 'address',
           key: 'address',
+          render: (_, record) => (
+            <Space size="small">
+                {record.address}
+                <ParkingSpaceDetail record={record}/>
+                {/* <ImageUpload/> */}
+            </Space>
+            ),
         },
         {
             title: 'Price',
@@ -108,36 +106,18 @@ const ParkingSpaceDisplay = ({carSpaceInformation, setPublishFormSelected, getAl
             </Space>
             ),
         },
-        {
-            title: 'Length',
-            key: "length",
-            render: (_, record) => (
-            <Space size="small">
-                {record.length}m
-            </Space>
-            ),
-        },
-        {
-            title: 'Width',
-            key: "width",
-            render: (_, record) => (
-            <Space size="small">
-                {record.width}m
-            </Space>
-            ),
-        },
-        {
-            title: 'Availability',
-            key: "availability",
-            render: (_, record) => (
-                record.availability.length === 0 ? 
-                "Not published yet"
-                :
-                <Space size="small">
-                    From {record.availability[0].start_date} to {record.availability[0].end_date}
-                </Space>
-            ),
-        },
+        // {
+        //     title: 'Availability',
+        //     key: "availability",
+        //     render: (_, record) => (
+        //         record.availability.length === 0 ? 
+        //         "Not published yet"
+        //         :
+        //         <Space size="small">
+        //             From {record.availability[0].start_date} to {record.availability[0].end_date}
+        //         </Space>
+        //     ),
+        // },
         {
             title: 'Action',
             key: 'action',
