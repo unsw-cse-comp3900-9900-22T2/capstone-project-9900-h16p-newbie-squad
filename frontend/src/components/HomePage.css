@@ -3,15 +3,34 @@
     display: flex;
 	justify-content: center;
 	align-items: center;
+    /* flex-direction: column; */
 }
 
 .search_input{
-    float:left;
+    /* float:left; */
     width: 60%;
-    height: 40px;
+    /* height: 40px; */
     font-size: 1rem;
+    margin: 5px;
 }
 
 .button_40px{
     height: 40px;
+}
+
+.admin-home-page{
+    width:95vw;
+    height: 80vh;
+    /* display: block; */
+    /* display: flex;
+	justify-content: center;
+	align-items: center;
+    flex-direction: column; */
+    overflow: scroll;
+}
+
+.sample {
+    width: 500px;
+    height: 500px;
+    border: 1px solid black;
 }

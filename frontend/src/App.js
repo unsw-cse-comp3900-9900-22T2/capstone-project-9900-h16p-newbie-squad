@@ -20,7 +20,7 @@ function App() {
     <>
       <Header/>
       <div className='information-box'>
-          <div className='container-noborder'>
+          <div className='container-home-page'>
             <HomeSearch/>
           </div>
       </div>

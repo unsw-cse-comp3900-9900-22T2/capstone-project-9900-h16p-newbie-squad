@@ -37,6 +37,7 @@ export default function LoginPage() {
                 else 
                 {
                     var token=response.token
+                    localStorage.setItem("username", username)
                     navigate('/',{state:{token:response.token,username:username},replace:true})
                 }
             })
