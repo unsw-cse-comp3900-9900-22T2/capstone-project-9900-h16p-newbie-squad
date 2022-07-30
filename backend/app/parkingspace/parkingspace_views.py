@@ -3,6 +3,7 @@ from flask import request,g
 from .. import db
 from ..models import Available_Period, Parking_space, Status
 from datetime import datetime
+import base64
 
 
 @parkingspace_bp.route('/myparkingspace',methods=['GET'])
@@ -52,6 +53,10 @@ def myparkingspaceNew():
     curr_user=g.curr_user
     request_data=request.get_json()
 
+    picture_1=base64.b64decode(request_data.get('picture_1')) if request_data.get('picture_1') else None
+    picture_2=base64.b64decode(request_data.get('picture_2')) if request_data.get('picture_2') else None
+    picture_3=base64.b64decode(request_data.get('picture_3')) if request_data.get('picture_3') else None
+
     try:
         new_parking_space=Parking_space(
             owner=curr_user,street=request_data.get('street'),suburb=request_data.get('suburb'),\
@@ -59,9 +64,9 @@ def myparkingspaceNew():
             width=request_data.get('width'),length=request_data.get('length'),\
             price=request_data.get('price'),latitude=request_data.get('latitude'),\
             longitude=request_data.get('longitude'),is_active=True,\
-            picture_1=request_data.get('picture_1'),
-            picture_2=request_data.get('picture_2'),
-            picture_3=request_data.get('picture_3'),
+            picture_1=picture_1,
+            picture_2=picture_2,
+            picture_3=picture_3,
         )
         db.session.add(new_parking_space)
         db.session.commit()
@@ -163,11 +168,11 @@ def updateParkingSpace(parkingspace_id):
 
     #2022.7.29修改：车位可以添加三张图片
     if info_to_update.get('picture_1'):
-        target_parking_space.picture_1 = info_to_update['picture_1']
+        target_parking_space.picture_1 = base64.b64decode(info_to_update['picture_1'])
     if info_to_update.get('picture_2'):
-        target_parking_space.picture_2 = info_to_update['picture_2']
+        target_parking_space.picture_2 = base64.b64decode(info_to_update['picture_2'])
     if info_to_update.get('picture_3'):
-        target_parking_space.picture_3 = info_to_update['picture_3']
+        target_parking_space.picture_3 = base64.b64decode(info_to_update['picture_3'])
 
     db.session.add(target_parking_space)
     db.session.commit()
