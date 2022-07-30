@@ -4,7 +4,6 @@ from .. import db
 from ..models import Role, User, Parking_space
 
 
-
 @admin_bp.route("/admin/parkingspaces", methods=['GET'])
 def adminGetParkingSpaces():
 
@@ -12,7 +11,6 @@ def adminGetParkingSpaces():
     # 管理员可以查看所有已经注册的parking_space，不论车位是否可见
     for parkingspace in Parking_space.query.all():
         parking_space_dict = {
-            {
                 "id": parkingspace.id,
                 "owner_id": parkingspace.owner_id,
                 "street": parkingspace.street,
@@ -29,7 +27,6 @@ def adminGetParkingSpaces():
                 "picture_1": parkingspace.picture_1,
                 "picture_2": parkingspace.picture_2,
                 "picture_3": parkingspace.picture_3
-            }
         }
         all_parking_spaces.append(parking_space_dict)
 
