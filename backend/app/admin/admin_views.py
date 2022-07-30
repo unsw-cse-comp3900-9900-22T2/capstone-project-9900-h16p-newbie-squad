@@ -9,7 +9,7 @@ def adminGetParkingSpaces():
 
     all_parking_spaces = []
     # 管理员可以查看所有已经注册的parking_space，不论车位是否可见
-    for parking_space in Parking_space.query.all():
+    for parking_space in Parking_space.query.filter_by(is_active=True).all():
         all_parking_spaces.append({
                 "id": parking_space.id,
                 "owner_id": parking_space.owner_id,
