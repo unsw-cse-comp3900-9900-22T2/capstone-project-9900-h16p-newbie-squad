@@ -163,11 +163,11 @@ def updateParkingSpace(parkingspace_id):
 
     #2022.7.29修改：车位可以添加三张图片
     if info_to_update.get('picture_1'):
-        target_parking_space.price = info_to_update['longitude']
+        target_parking_space.picture_1 = info_to_update['picture_1']
     if info_to_update.get('picture_2'):
-        target_parking_space.price = info_to_update['longitude']
+        target_parking_space.picture_2 = info_to_update['picture_2']
     if info_to_update.get('picture_3'):
-        target_parking_space.price = info_to_update['longitude']
+        target_parking_space.picture_3 = info_to_update['picture_3']
 
     db.session.add(target_parking_space)
     db.session.commit()
