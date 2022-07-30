@@ -24,6 +24,7 @@ const ParkingSpaceDetail = ({record}) => {
         View
       </Button>
       <Modal title="Parking space details" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel} footer={null}> 
+        <img src={record.avatar} height="150px"/>
         <p>Address: {record.address}</p>
         <p>Price: {record.price} AUD/per day</p>
         <p>Length: {record.length}m</p>

@@ -4,10 +4,11 @@ import PublishButton from './PublishButton';
 import EditParkingPopup from './EditParkingPopup';
 import ParkingSpaceDetail from "./ParkingSpaceDetail"
 import ImageUpload from './ImageUpload';
+import base_64 from "./ba64_sample"
 
 
 const ParkingSpaceDisplay = ({carSpaceInformation, setPublishFormSelected, getAllListings}) => {
-    // console.log(carSpaceInformation);
+    console.log(base_64);
     const token = localStorage.getItem("token")
     const dataList = []
     carSpaceInformation.map((space, index) => {
@@ -28,7 +29,7 @@ const ParkingSpaceDisplay = ({carSpaceInformation, setPublishFormSelected, getAl
             
         })
     })
-    console.log(dataList);
+    console.log("数据： ",dataList);
 
     const unpublish = (space_id) => {
         const requestOption = {
@@ -81,7 +82,8 @@ const ParkingSpaceDisplay = ({carSpaceInformation, setPublishFormSelected, getAl
             key: 'avatar',
             render: (_, record) => (
                 <>
-                    <img src={record.avatar} height="150px"/>
+                    {/* <img src={record.avatar} height="150px"/> */}
+                    <img src={base_64} height="150px"/>
                     <ImageUpload getAllListings={getAllListings} space_id={record.id}/>
                 </>
             ),

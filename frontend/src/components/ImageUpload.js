@@ -30,9 +30,9 @@ const ImageUpload = ({getAllListings, space_id}) => {
     }
 
     const updateImage = () => {
-        console.log(baseImage);
+        // console.log(baseImage);
         const data = {
-            picture_1: "aaaa"
+            picture_1: baseImage
         }
         const requestOption = {
             method: "PUT",
@@ -68,6 +68,7 @@ const ImageUpload = ({getAllListings, space_id}) => {
       </Button>
       <Modal title="Upload image for your parking space" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
         <input type="file" onChange={upLoadImage}></input>
+        <img src={baseImage} height="150px"/>
       </Modal>
     </>
   )
