@@ -1,9 +1,24 @@
-import { Button, Checkbox, Form, Input, InputNumber } from 'antd';
-import React from 'react';
+import { Button, Checkbox, Form, Input, InputNumber, Upload } from 'antd';
+import { UploadOutlined } from '@ant-design/icons';
+import React, {useState} from 'react';
 import usePlacesAutocomplete, { getGeocode, getLatLng } from 'use-places-autocomplete';
+import { convertBase64 } from '../util/function';
 
 export default function ParkingSpaceForm({setIsModalVisible, getAllListings}) {
   const token = localStorage.getItem("token")
+  const [baseImage, setBaseImage] = useState("")
+
+  // const upLoadImage = async(e) => {
+  //   const file = e.target.files[0]
+  //   const base64 = await convertBase64(file)
+  //   console.log(base64);
+  //   setBaseImage(base64)
+  // }
+  const props = {
+    onChange: (info) => {
+      console.log(info.fileList);
+    },
+  };
 
   const getLocation = async (address) => {
     try {
@@ -172,6 +187,16 @@ export default function ParkingSpaceForm({setIsModalVisible, getAllListings}) {
       >
         <InputNumber />
       </Form.Item>
+
+      {/* <Form.Item
+        label="Image"
+        name="image"
+      >
+        <Upload {...props}>
+          <Button icon={<UploadOutlined />}>Upload</Button>
+        </Upload>
+      </Form.Item> */}
+
 
       <Form.Item
         wrapperCol={{
