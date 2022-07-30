@@ -20,7 +20,7 @@ export default function EditParkingForm({setIsModalVisible, getAllListings, reco
     const address = values.street + ", " + values.suburb + " " + values.state + ", " + values.postcode
     console.log(address);
     const {lat, lng} = await getLocation(address)
-    console.log(lat, lng);
+    console.log("坐标： ",lat, lng);
   
     const data = {
         "street": values.street,
@@ -30,8 +30,8 @@ export default function EditParkingForm({setIsModalVisible, getAllListings, reco
         "length": values.length,
         "width": values.width,
         "price": values.price,
-        // "latitude": lat,
-        // "longitude": lng
+        "latitude": lat,
+        "longitude": lng
     }
     const requestOption = {
         method: "PUT",
