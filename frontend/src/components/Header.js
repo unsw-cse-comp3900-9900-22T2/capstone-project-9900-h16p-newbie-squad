@@ -70,10 +70,13 @@ export default function Header() {
       <div className='welcome'>
         {'welcome,' + localStorage.getItem("username")}
       </div>
-      <div className='my-account'>
-        <Link to="/personal-info"> <AccountCircleRoundedIcon sx={{ color: 'white' }}/> </Link>
-        <Outlet />
-      </div>
+      
+      {localStorage.getItem("username") !== "Admin" &&
+        <div className='my-account'>
+          <Link to="/personal-info"> <AccountCircleRoundedIcon sx={{ color: 'white' }}/> </Link>
+          <Outlet />
+        </div>
+      }
     </div>
     )
 }
