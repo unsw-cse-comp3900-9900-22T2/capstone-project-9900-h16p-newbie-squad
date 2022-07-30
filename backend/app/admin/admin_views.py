@@ -9,26 +9,25 @@ def adminGetParkingSpaces():
 
     all_parking_spaces = []
     # 管理员可以查看所有已经注册的parking_space，不论车位是否可见
-    for parkingspace in Parking_space.query.all():
-        parking_space_dict = {
-                "id": parkingspace.id,
-                "owner_id": parkingspace.owner_id,
-                "street": parkingspace.street,
-                "suburb": parkingspace.suburb,
-                "state": parkingspace.state,
-                "postcode": parkingspace.postcode,
-                "latitude": parkingspace.latitude,
-                "longitude": parkingspace.longitude,
-                "width": parkingspace.width,
-                "length": parkingspace.length,
-                "price": parkingspace.price,
-                "is_active": parkingspace.is_active,
-                "average_rating": parkingspace.average_rating,
-                "picture_1": parkingspace.picture_1,
-                "picture_2": parkingspace.picture_2,
-                "picture_3": parkingspace.picture_3
-        }
-        all_parking_spaces.append(parking_space_dict)
+    for parking_space in Parking_space.query.all():
+        all_parking_spaces.append({
+                "id": parking_space.id,
+                "owner_id": parking_space.owner_id,
+                "street": parking_space.street,
+                "suburb": parking_space.suburb,
+                "state": parking_space.state,
+                "postcode": parking_space.postcode,
+                "latitude": parking_space.latitude,
+                "longitude": parking_space.longitude,
+                "width": parking_space.width,
+                "length": parking_space.length,
+                "price": parking_space.price,
+                "is_active": parking_space.is_active,
+                "average_rating": parking_space.average_rating,
+                "picture_1": parking_space.picture_1,
+                "picture_2": parking_space.picture_2,
+                "picture_3": parking_space.picture_3
+        })
 
     return {'admin_all_parking_spaces': all_parking_spaces}, 200
 
