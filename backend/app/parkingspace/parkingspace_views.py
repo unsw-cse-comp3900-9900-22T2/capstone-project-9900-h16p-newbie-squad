@@ -29,8 +29,9 @@ def myparkingspaces():
 
             #2022.7.29新增：返回值中增加average_rating和avatar
             "average_rating":each_parking_space.average_rating,
-            "avatar":each_parking_space.picture_1
+            #"avatar":base64.b64encode(each_parking_space.picture_1) if each_parking_space.picture_1 else None
         }
+        result["avatar"]=(base64.b64encode(each_parking_space.picture_1)).decode() if each_parking_space.picture_1 else None
 
         available_periods=[]
         for each_available_period in each_parking_space.available_periods:
@@ -98,10 +99,14 @@ def getParkingSpace(parkingspace_id):
             "length":target_parking_space.length,
             "price":target_parking_space.price,
             "average_rating":target_parking_space.average_rating,
-            "picture_1":target_parking_space.picture_1,
-            "picture_2":target_parking_space.picture_2,
-            "picture_3":target_parking_space.picture_3,
+            #"picture_1":
+            #"picture_2":base64.b64encode(target_parking_space.picture_2) if target_parking_space.picture_2 else '',
+            #"picture_3":base64.b64encode(target_parking_space.picture_3) if target_parking_space.picture_3 else '',
             "available_periods":[]}
+
+    detail["picture_1"]=(base64.b64encode(target_parking_space.picture_1)).decode() if target_parking_space.picture_1 else None,
+    detail["picture_2"]=(base64.b64encode(target_parking_space.picture_2)).decode() if target_parking_space.picture_2 else None,
+    detail["picture_3"]=(base64.b64encode(target_parking_space.picture_3)).decode() if target_parking_space.picture_3 else None,
 
    
     for each_available_period in target_parking_space.available_periods:
