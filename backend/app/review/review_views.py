@@ -13,6 +13,7 @@ def get_reviews_of_a_parking_space(parking_space_id):
     result=[]
     for each_review in target_parking_space.reviews:
         result.append({
+            'review_id':each_review.id,
             'reviewer':each_review.author.username,
             'review_text':each_review.review_text,
             'review_rating':each_review.review_rating,
