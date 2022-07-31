@@ -38,6 +38,12 @@ class User(db.Model):
     #从user到parking_space表（一对多，一的那一侧）
     parking_spaces = db.relationship('Parking_space', backref='owner', lazy='dynamic')
 
+    # 从user到request表（一对多，一的那一侧）
+    requests = db.relationship('Request', backref='owner', lazy='dynamic')
+
+    # 从user到offer表（一对多，一的那一侧）
+    offers = db.relationship('Offer', backref='owner', lazy='dynamic')
+
     #从user到reviews表（一对多，一的那一侧）
     reviews = db.relationship('Review', backref='author', lazy='dynamic')
 
@@ -239,6 +245,52 @@ class Credit_card(db.Model):
 
     def __repr__(self):
         return '<Vehicle %r>' % self.card_number
+
+
+class Request(db.Model):
+    __tablename__ = 'requests'
+    id = db.Column(db.Integer, primary_key=True)
+    # 一对多，多的那一侧
+    owner_id = db.Column(db.String(32), db.ForeignKey('users.id'))
+    street = db.Column(db.String(32), nullable=False)
+    suburb = db.Column(db.String(32), nullable=False)
+    state = db.Column(db.String(32), nullable=False)
+    postcode = db.Column(db.Integer, nullable=False)
+    latitude = db.Column(db.String(32), nullable=True)
+    longitude = db.Column(db.String(32), nullable=True)
+    budget = db.Column(db.Float, nullable=True)
+    start_date = db.Column(db.Date)
+    end_date = db.Column(db.Date)
+    others = db.Column(db.Text)
+    complete = db.Column(db.Boolean, nullable=False)
+    #如果is_active为假，则代表此offer已经被用户删除
+    is_active=db.Column(db.Boolean,nullable=False)
+    # 一对多，一的那一侧
+    offers = db.relationship('Offer', backref='request', lazy='dynamic')
+
+    def __repr__(self):
+        return '<Request %r>' % self.id
+
+
+class Offer(db.Model):
+    __tablename__ = 'offers'
+    id = db.Column(db.Integer, primary_key=True)
+    # 一对多，多的那一侧
+    request_id = db.Column(db.Integer, db.ForeignKey('requests.id'))
+    # 一对多，多的那一侧
+    owner_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    street = db.Column(db.String(32), nullable=False)
+    suburb = db.Column(db.String(32), nullable=False)
+    state = db.Column(db.String(32), nullable=False)
+    postcode = db.Column(db.Integer, nullable=False)
+    price = db.Column(db.Float, nullable=True)
+    comments = db.Column(db.Text)
+    #如果is_active为假，则代表此offer已经被用户删除
+    is_active=db.Column(db.Boolean,nullable=False)
+    accept = db.Column(db.Boolean, nullable=False)
+
+    def __repr__(self):
+        return '<Offer %r>' % self.id
 
 
 
