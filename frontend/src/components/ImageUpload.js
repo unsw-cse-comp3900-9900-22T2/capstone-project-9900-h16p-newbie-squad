@@ -2,6 +2,7 @@ import { UploadOutlined } from '@ant-design/icons';
 import { Button, message, Upload, Modal } from 'antd';
 import React, {useState} from 'react';
 import { convertBase64 } from '../util/function';
+import base_64_header from "./ba64_sample"
 
 const ImageUpload = ({getAllListings, space_id}) => {
 
@@ -26,13 +27,14 @@ const ImageUpload = ({getAllListings, space_id}) => {
     const upLoadImage = async(e) => {
         const file = e.target.files[0]
         const base64 = await convertBase64(file)
+        console.log(base_64_header, base64.substr(base_64_header.length))
         setBaseImage(base64)
     }
 
     const updateImage = () => {
         // console.log(baseImage);
         const data = {
-            picture_1: baseImage
+            "picture_1": baseImage.substr(base_64_header.length)
         }
         const requestOption = {
             method: "PUT",
@@ -52,6 +54,7 @@ const ImageUpload = ({getAllListings, space_id}) => {
         })
         .then(data => {
             console.log("image uploaded");
+            console.log(baseImage)
             getAllListings()
         })
         .catch(error => {
@@ -67,7 +70,7 @@ const ImageUpload = ({getAllListings, space_id}) => {
         Upload image
       </Button>
       <Modal title="Upload image for your parking space" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
-        <input type="file" onChange={upLoadImage}></input>
+        <input type="file" accept="image/jpeg" onChange={upLoadImage}></input>
         <img src={baseImage} height="150px"/>
       </Modal>
     </>

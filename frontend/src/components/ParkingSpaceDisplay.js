@@ -8,7 +8,7 @@ import base_64 from "./ba64_sample"
 
 
 const ParkingSpaceDisplay = ({carSpaceInformation, setPublishFormSelected, getAllListings}) => {
-    // console.log(base_64);
+    //console.log(base_64);
     const token = localStorage.getItem("token")
     const dataList = []
     carSpaceInformation.map((space, index) => {
@@ -83,7 +83,7 @@ const ParkingSpaceDisplay = ({carSpaceInformation, setPublishFormSelected, getAl
             render: (_, record) => (
                 <>
                     {/* <img src={record.avatar} height="150px"/> */}
-                    {/* <img src={base_64} height="150px"/> */}
+                    <img src={base_64+record.avatar} height="150px"/>
                     <ImageUpload getAllListings={getAllListings} space_id={record.id}/>
                 </>
             ),
