@@ -3,12 +3,27 @@ import React, { useState, useEffect }from 'react'
 import {useLocation, useParams, Link} from 'react-router-dom';
 import Header from './Header';
 import './BookingPage.css'
-
+import { Button, Divider } from 'antd';
+import "./CarSpacePage.css"
+import BookingHistoryDisplay from './BookingHistoryDisplay';
 
 export default function BookingHistoryPage(){
     const token = localStorage.getItem("token")
+    const [displayHistory,setDisplayHistory] = useState(true)
+    const [displayRecieved,setDisplayRecieved] = useState(false)
     const [bookingInformation, setbookingInformation] = useState([])
     const [bookingToMeInformation, setbookingToMeInformation] = useState([])
+    
+    const DisplayhistoryButton = () =>{
+      setDisplayHistory(true)
+      setDisplayRecieved(false)
+    }
+
+    const DisplayRecievedButton = () =>{
+      setDisplayHistory(false)
+      setDisplayRecieved(true)
+    }
+    
     const GetMyBookings = () => {
         const requestOption = {
           method: "GET",
@@ -40,7 +55,7 @@ export default function BookingHistoryPage(){
             'token': token
           },
         }
-        fetch("http://127.0.0.1:5000//bookings/mylistings", requestOption)
+        fetch("http://127.0.0.1:5000//bookings/my_received_bookings", requestOption)
         .then(res => {
           if (res.status === 200) {
             return res.json()
@@ -50,7 +65,7 @@ export default function BookingHistoryPage(){
         })
         .then(response => {
           console.log(response)
-          setbookingToMeInformation([...response.myRequests])
+          setbookingToMeInformation([...response.my_received_bookings])
           console.log(bookingToMeInformation)
         })
         .catch(error => console.log(error))
@@ -60,34 +75,33 @@ export default function BookingHistoryPage(){
         GetToMeBookings()
       }, [])
     return(
-        <div className='booking-history-container'>
-            <div className='scrollable-container'>
-                <div>Booking to others</div>
-                <div><br /></div>
-                {bookingInformation.map((booking, index) => (
-                    <div key={index} className='bottom-border'>
-                        <div>Address: {booking.address}</div>
-                        <div>Booked time: {booking.start_date} to {booking.end_date} </div>
-                        <div>Price: {booking.price}</div>
-                        <div>Statu: {booking.status}</div>
-                        <Link to={`/booking-page/${booking.listing_id}`}>
-                            <button className='book-button'>Detail</button>
-                        </Link>
-                    </div>
-                ))}
-            </div>
-            <div className='scrollable-container'>
-                <div>Booking to me</div>
-                <div><br /></div>
-                {bookingToMeInformation.map((booking, index) => (
-                    <div key={index} className='bottom-border'>
-                        <div>Address: {booking.address}</div>
-                        <div>Booked time: {booking.start_date} to {booking.end_date} </div>
-                        <div>Price: {booking.price}/day</div>
-                        <div>Statu: {booking.status}</div>
-                    </div>
-                ))}
-            </div>
-        </div>
+      <div>
+        {displayHistory &&
+          <div>
+          <div className='release-button'>
+          <Button type="primary" onClick={DisplayRecievedButton}>
+            Go to recieved bookings
+          </Button>
+          </div>
+          <Divider>Booking history</Divider>
+          <BookingHistoryDisplay 
+            bookingInformation={bookingInformation}
+          />
+          </div>
+        }
+        {displayRecieved &&
+          <div>
+          <div className='release-button'>
+          <Button type="primary" onClick={DisplayhistoryButton}>
+            Go to booking history
+          </Button>
+          </div>
+          <Divider>Recieved bookings</Divider>
+          <BookingHistoryDisplay 
+            bookingInformation={bookingToMeInformation}
+          />
+          </div>
+        }
+    </div>
     )
 }

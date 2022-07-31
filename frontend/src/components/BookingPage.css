@@ -3,6 +3,10 @@
     border-bottom-width: 1px;
     border-bottom-style: solid;
 }
+.address-title{
+    font-size: 32px;
+    font-weight: 700;
+}
 .book-button {
     /* background-color: #c8d7d4; */
     background-color: #27b688;
@@ -34,8 +38,8 @@
 .booking-container{
   position: fixed;
   height: 80%;
-  width: 80%;
-  top: 70px;
+  width: 65%;
+  top: 100px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -52,11 +56,12 @@
     display: flex;
     flex-direction: row;
   }
+.preview-container{
+    display: flex;
+}
 .car-space-preview{
-    height: 200px;
-    width: 200px;
-    color: #999999;
-    background-color: #c8d7d4;
+    height: 256px;
+    width: 256px;
     display: flex;
     padding-right: 5px;
     justify-content: center;
@@ -74,6 +79,6 @@
 	align-items: center;
 }
 .scrollable-container{
-    width:70%;
+    width:100%;
     overflow-y: scroll;
 }
