@@ -1,4 +1,3 @@
-from zoneinfo import available_timezones
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
 from itsdangerous.serializer import Serializer

@@ -11,8 +11,9 @@ def profile():
         'username':curr_user.username,
         'email':curr_user.email,
         'phone_num':curr_user.phone_num,
-        'bank_account':curr_user.bank_account,
-        'credit_card':curr_user.credit_card,
+        #2021.7.31: 使用另外专门的API来查看bank_account和credit_card
+        #'bank_account':curr_user.bank_account,
+        #'credit_card':curr_user.credit_card,
         'avatar':curr_user.avatar,
         'bio':curr_user.bio,
         'role':curr_user.role.role_name
