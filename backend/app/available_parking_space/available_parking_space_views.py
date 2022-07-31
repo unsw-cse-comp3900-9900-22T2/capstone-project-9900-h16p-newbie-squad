@@ -21,6 +21,7 @@ def get_available_parking_spaces():
             "average_rating":each_available_parking_space.average_rating,
             # "avatar":each_available_parking_space.picture_1
         }
+        # base64 could not decode an empty value
         available_parking_space["avatar"]=(base64.b64encode(each_available_parking_space.picture_1)).decode() if each_available_parking_space.picture_1 else None
 
         availibility=[]
