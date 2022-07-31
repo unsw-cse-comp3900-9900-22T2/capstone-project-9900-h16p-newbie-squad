@@ -1,5 +1,6 @@
 from . import available_parking_space_bp
 from ..models import Parking_space
+import base64
 
 
 @available_parking_space_bp.route("/available_parking_spaces",methods=['GET'])
@@ -55,9 +56,9 @@ def getSpecificParkingSpace(parkingspace_id):
         "length": target_parking_space.length,
         "price": target_parking_space.price,
         "average_rating":target_parking_space.average_rating,
-        # "picture_1":target_parking_space.picture_1,
-        # "picture_2":target_parking_space.picture_2,
-        # "picture_3":target_parking_space.picture_3,
+        #"picture_1":target_parking_space.picture_1,
+        #"picture_2":target_parking_space.picture_2,
+        #"picture_3":target_parking_space.picture_3,
     }
     result["picture_1"]=(base64.b64encode(target_parking_space.picture_1)).decode() if target_parking_space.picture_1 else None
     result["picture_2"]=(base64.b64encode(target_parking_space.picture_2)).decode() if target_parking_space.picture_2 else None

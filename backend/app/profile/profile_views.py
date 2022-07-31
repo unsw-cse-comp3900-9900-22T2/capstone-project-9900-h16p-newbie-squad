@@ -6,7 +6,6 @@ from .. import db
 @profile_bp.route('/profile',methods=["GET", "POST"])
 def profile():
     curr_user=g.curr_user
-    curr_user_role=g.curr_user_role
 
     curr_user_dict={
         'username':curr_user.username,
@@ -16,7 +15,7 @@ def profile():
         'credit_card':curr_user.credit_card,
         'avatar':curr_user.avatar,
         'bio':curr_user.bio,
-        'role':curr_user_role
+        'role':curr_user.role.role_name
     }
 
     if request.method == 'GET':
@@ -34,10 +33,10 @@ def profile():
             curr_user.email = info_to_update['email']
         if info_to_update.get('phone_num'):
             curr_user.phone_num = info_to_update['phone_num']
-        if info_to_update.get('bank_account'):
-            curr_user.bank_account = info_to_update['bank_account']
-        if info_to_update.get('credit_card'):
-            curr_user.credit_card = info_to_update['credit_card']
+        #if info_to_update.get('bank_account'):
+        #    curr_user.bank_account = info_to_update['bank_account']
+        #if info_to_update.get('credit_card'):
+        #    curr_user.credit_card = info_to_update['credit_card']
         if info_to_update.get('avatar'):
             curr_user.avatar = info_to_update['avatar']
         if info_to_update.get('bio'):
@@ -45,6 +44,10 @@ def profile():
         if info_to_update.get('password'):
             curr_user.password = info_to_update['password']
 
-        db.session.add(curr_user)
-        db.session.commit()
+        try:
+            db.session.add(curr_user)
+            db.session.commit()
+        except:
+            return {'error':'db internal error'},400
+
         return {}, 200

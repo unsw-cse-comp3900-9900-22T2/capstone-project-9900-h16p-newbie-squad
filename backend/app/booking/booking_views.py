@@ -25,9 +25,11 @@ def getMyBookings():
         price=target_parking_space.price
         start_date=eachOfMyBooking.start_date.strftime('%Y-%m-%d')
         end_date=eachOfMyBooking.end_date.strftime('%Y-%m-%d')
+        print(eachOfMyBooking.parking_space)
 
         mybookings.append({
             'booking_id':eachOfMyBooking.id,
+            'parking_space_id':eachOfMyBooking.parking_space_id,
             'booking_time':eachOfMyBooking.booking_time.strftime('%Y-%m-%d,%H-%M-%S'),
             'start_date':eachOfMyBooking.start_date.strftime('%Y-%m-%d'),
             'end_date':eachOfMyBooking.end_date.strftime('%Y-%m-%d'),

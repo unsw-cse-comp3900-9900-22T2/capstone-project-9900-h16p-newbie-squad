@@ -19,8 +19,8 @@ def create_app(name):
 
     from .commons import before_request_check_token
     @app.before_request
-    def before_request():
-        before_request_check_token()
+    def check_token():
+        if before_request_check_token()==False: return {'error':'token verification failed'},400
 
     from .auth import auth_bp
     app.register_blueprint(auth_bp)
