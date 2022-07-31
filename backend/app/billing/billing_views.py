@@ -8,7 +8,7 @@ from ..models import Role, User, Vehicle, Bank_account, Credit_card
 
 @billing_bp.route('/billing/mybillings', methods=["GET"])
 def myBillings():
-    curr_user = g.curr_user
+    curr_user=g.curr_user
 
     customer_billings = []
     # 自己作为消费者的订单
@@ -59,7 +59,7 @@ def myBillings():
             provider_id=curr_user.id,
             provider_name=curr_user.username,
             customer_id=curr_user.id,
-            customer_name=curr_user.ueername,
+            customer_name=curr_user.username,
             address="16 eden street, north sydney, NSW",
             start_date="2022-07-17",
             end_date="2022-07-19",
@@ -97,6 +97,8 @@ def myBillings():
 
 @billing_bp.route('/billing/<int:billing_id>', methods=["GET"])
 def getSpecificBilling(billing_id):
+    curr_user=g.curr_user
+
     billing = Billing.query.filter_by(id=billing_id).first()
     if not billing:
         return {'error': 'Billing not found'}, 400
@@ -121,8 +123,8 @@ def getSpecificBilling(billing_id):
 
 @billing_bp.route('/profile/bank_account',methods=["GET", "POST"])
 def myBankAccount():
-
     curr_user=g.curr_user
+
     curr_bank_account = Bank_account.query.filter_by(owner=curr_user).first()
     if request.method == 'GET':
         if not curr_bank_account:
@@ -166,6 +168,7 @@ def myBankAccount():
 @billing_bp.route('/profile/credit_card',methods=["GET", "POST"])
 def myCreditCard():
     curr_user=g.curr_user
+
     curr_credit_card = Credit_card.query.filter_by(owner=curr_user).first()
 
     if request.method == 'GET':
