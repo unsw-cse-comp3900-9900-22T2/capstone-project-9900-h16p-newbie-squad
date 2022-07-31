@@ -19,7 +19,7 @@ def get_available_parking_spaces():
             "length":each_available_parking_space.length,
             "price":each_available_parking_space.price,
             "average_rating":each_available_parking_space.average_rating,
-            "avatar":each_available_parking_space.picture_1
+            # "avatar":each_available_parking_space.picture_1
         }
 
         availibility=[]

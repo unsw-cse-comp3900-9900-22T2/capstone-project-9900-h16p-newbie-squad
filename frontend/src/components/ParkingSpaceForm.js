@@ -81,6 +81,27 @@ export default function ParkingSpaceForm({setIsModalVisible, getAllListings}) {
     setIsModalVisible(false)
   }
 
+  const validPrice = (_, value) => {
+    if (value > 0 && value <= 100) {
+        return Promise.resolve()
+    }
+    return Promise.reject(new Error("Please input valid price from 0 to 100"));
+  }
+
+  const validLength = (_, value) => {
+    if (value >= 3 && value <= 5) {
+        return Promise.resolve()
+    }
+    return Promise.reject(new Error("Please input valid length from 3 to 5 meters"));
+  }
+
+  const validWidth = (_, value) => {
+    if (value >= 2 && value <= 4) {
+        return Promise.resolve()
+    }
+    return Promise.reject(new Error("Please input valid width from 2 to 4 meters"));
+  }
+
   return (
     <Form
       name="basic"
@@ -155,11 +176,12 @@ export default function ParkingSpaceForm({setIsModalVisible, getAllListings}) {
         rules={[
           {
             required: true,
-            message: 'Please enter length',
+            // message: 'Please enter length',
+            validator: validLength
           },
         ]}
       >
-        <InputNumber min={3} max={8} />
+        <InputNumber />
       </Form.Item>
 
       <Form.Item
@@ -168,11 +190,12 @@ export default function ParkingSpaceForm({setIsModalVisible, getAllListings}) {
         rules={[
           {
             required: true,
-            message: 'Please enter width',
+            // message: 'Please enter width',
+            validator: validWidth
           },
         ]}
       >
-        <InputNumber min={2} max={5} />
+        <InputNumber />
       </Form.Item>
 
       <Form.Item
@@ -181,7 +204,7 @@ export default function ParkingSpaceForm({setIsModalVisible, getAllListings}) {
         rules={[
           {
             required: true,
-            message: 'Please enter daily price',
+            validator: validPrice
           },
         ]}
       >
