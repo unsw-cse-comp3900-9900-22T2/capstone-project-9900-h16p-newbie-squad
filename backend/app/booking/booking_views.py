@@ -152,6 +152,7 @@ def myReceivedBookings():
                                              target_parking_space.state, target_parking_space.postcode)
         result.append({
             'booking_id':eachBooking.id,
+            'parking_space_id':eachBooking.parking_space_id,
             'customer_id':eachBooking.customer_id,
             'start_date':eachBooking.start_date.strftime('%Y-%m-%d'),
             'end_date':eachBooking.end_date.strftime('%Y-%m-%d'),
