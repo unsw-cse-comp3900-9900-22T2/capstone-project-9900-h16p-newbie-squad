@@ -21,6 +21,7 @@ def get_available_parking_spaces():
             "average_rating":each_available_parking_space.average_rating,
             # "avatar":each_available_parking_space.picture_1
         }
+        available_parking_space["avatar"]=(base64.b64encode(each_available_parking_space.picture_1)).decode() if each_available_parking_space.picture_1 else None
 
         availibility=[]
         for each_available_period in each_available_parking_space.available_periods:
@@ -53,10 +54,13 @@ def getSpecificParkingSpace(parkingspace_id):
         "length": target_parking_space.length,
         "price": target_parking_space.price,
         "average_rating":target_parking_space.average_rating,
-        "picture_1":target_parking_space.picture_1,
-        "picture_2":target_parking_space.picture_2,
-        "picture_3":target_parking_space.picture_3,
+        # "picture_1":target_parking_space.picture_1,
+        # "picture_2":target_parking_space.picture_2,
+        # "picture_3":target_parking_space.picture_3,
     }
+    result["picture_1"]=(base64.b64encode(target_parking_space.picture_1)).decode() if target_parking_space.picture_1 else None
+    result["picture_2"]=(base64.b64encode(target_parking_space.picture_2)).decode() if target_parking_space.picture_2 else None
+    result["picture_3"]=(base64.b64encode(target_parking_space.picture_3)).decode() if target_parking_space.picture_3 else None
 
     availibility=[]
     for each_available_period in target_parking_space.available_periods:
