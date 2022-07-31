@@ -67,20 +67,7 @@ export default function BookingPage() {
             {
               console.log(response)
               setBookingRatingInformation(response.reviews)
-              let ratingSUM = 0
-              for(let i = 0; i < response.reviews.length; i++)
-                ratingSUM += response.reviews[i].review_rating
-              
-                ratingSUM /= response.reviews.length
                 //console.log(ratingSUM)
-                setTotalRating(ratingSUM)
-              let stars = '★'
-              for(let i=2;i<=5;i++)
-                if(ratingSUM>=i)
-                  stars+='★'
-                else
-                  stars+='☆'
-              setStarSting(stars)
             }
         })
     }
@@ -268,6 +255,18 @@ export default function BookingPage() {
               setlength(listingData.length)
               setAvailability(listingData.availibility)
               setpicture_1(listingData.picture_1)
+              setpicture_2(listingData.picture_2)
+              setpicture_3(listingData.picture_3)
+
+              
+              setTotalRating(listingData.average_rating)
+              let stars = '★'
+              for(let i=2;i<=5;i++)
+                if(listingData.average_rating>=i)
+                  stars+='★'
+                else
+                  stars+='☆'
+              setStarSting(stars)
               //catch{}
               //listingAddress=listing.street//, listing.suburb, listing.state, listing.postcode.toString()
                  

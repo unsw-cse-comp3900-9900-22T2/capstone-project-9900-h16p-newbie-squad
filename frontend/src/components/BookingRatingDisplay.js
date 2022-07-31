@@ -4,6 +4,34 @@ import {useLocation, useParams, Link} from 'react-router-dom';
 import './BookingPage.css'
 
 const BookingRatingDisplay = ({BookingRating}) => {
+    
+    const token = localStorage.getItem("token")
+    const username = localStorage.getItem("username")
+    const DeleteReview = (review_id) => {
+        console.log(review_id)
+        console.log(token)
+        console.log(username)
+        const requestOption = {
+            method: "DELETE",
+            headers: {
+                'Content-Type': 'application/json',
+                'token': token
+            },
+          }
+          fetch(`http://127.0.0.1:5000/reviews/my_reviews/${review_id}`, requestOption)
+          .then(res => {
+              if (res.status === 200) {
+                location.reload(true)
+                  return
+              } else {
+                  throw(res)
+              }
+          })
+          .then(data => {
+              console.log(data)
+          })
+          .catch(error => console.log(error))
+    }
     const IntToStar = (e) => {
         let stars = '★'
         for(let i=2;i<=5;i++)
@@ -18,6 +46,7 @@ const BookingRatingDisplay = ({BookingRating}) => {
     {
         dataList.push({
             reviewer: BookingRating[index].reviewer,
+            review_id: BookingRating[index].review_id,
             review_rating: BookingRating[index].review_rating,
             review_made_time: BookingRating[index].review_made_time,
             review_text: BookingRating[index].review_text,
@@ -34,7 +63,9 @@ const BookingRatingDisplay = ({BookingRating}) => {
                 <div>Posted at: {review.review_made_time}</div>
                 <div>Comment:</div>
                 <div>{review.review_text}</div>
-                <Button>Delete</Button>
+                {username == review.reviewer && 
+                <Button onClick={()=>DeleteReview(review.review_id)}>Delete</Button>
+                }
                 <Divider></Divider>
             </div>
         ))}
