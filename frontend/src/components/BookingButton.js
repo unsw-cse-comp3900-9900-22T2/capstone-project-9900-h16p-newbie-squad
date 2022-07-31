@@ -8,7 +8,7 @@ export default function BookingButton({listing}) {
         localStorage.setItem("listing-book", JSON.stringify(listing))
     }
   return (
-    <Link to={`/booking-page/${listing.listing_id}`}>
+    <Link to={`/booking-page/${listing.parking_space_id}`}>
         <button className='book-button' onClick={bookOnclick}>Detail</button>
     </Link>
   )
