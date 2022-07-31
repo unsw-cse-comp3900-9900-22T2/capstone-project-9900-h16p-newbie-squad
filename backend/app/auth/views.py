@@ -8,10 +8,10 @@ from ..models import Role, User
 
 @auth_bp.route('/register',methods=['POST'])
 def register():
-    print('Postman request: ',end='')
-    print(request)
+    #print('Postman request: ',end='')
+    #print(request)
     new_user_info=request.get_json()
-    print(new_user_info)
+    #print(new_user_info)
 
     #注册时必须提供username, email, password，别的可以暂时不提供
     if new_user_info.get('username')==None or new_user_info.get('email')==None \
@@ -55,10 +55,10 @@ def register():
 
 @auth_bp.route('/login',methods=["POST"])
 def login():
-    print('Postman request: ',end='')
-    print(request)
+    #print('Postman request: ',end='')
+    #print(request)
     user_info=request.get_json()
-    print(user_info)
+    #print(user_info)
 
     #登录时必须提供username和password
     #这个东西应该是前端去验证，后端不管，但是为了代码健壮性……

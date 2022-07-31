@@ -1,6 +1,7 @@
 from datetime import datetime
 import os
-from flask import Flask
+from urllib import response
+from flask import Flask, request, make_response
 from config import config
 from flask_sqlalchemy import SQLAlchemy
 
@@ -20,7 +21,7 @@ def create_app(name):
     from .commons import before_request_check_token
     @app.before_request
     def check_token():
-        if before_request_check_token()==False: return {'error':'token verification failed'},400
+        before_request_check_token()
 
     from .auth import auth_bp
     app.register_blueprint(auth_bp)

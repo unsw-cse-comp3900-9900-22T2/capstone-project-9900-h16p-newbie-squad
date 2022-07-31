@@ -2,8 +2,9 @@ from ..models import Available_Period, Billing, Booking, Status, Parking_space, 
 from . import booking_bp
 from flask import g, request, app
 from .. import db
-
 from datetime import datetime, timedelta
+
+
 
 def parseStatusCode(status_code):
     match status_code:

@@ -5,6 +5,7 @@ from ..models import Billing
 import copy
 from ..models import Role, User, Vehicle, Bank_account, Credit_card
 
+
 @billing_bp.route('/billing/mybillings', methods=["GET"])
 def myBillings():
     curr_user = g.curr_user
@@ -92,6 +93,8 @@ def myBillings():
 
     return {'customer_billings': customer_billings, 'provider_billings': provider_billings}, 200
 
+
+
 @billing_bp.route('/billing/<int:billing_id>', methods=["GET"])
 def getSpecificBilling(billing_id):
     billing = Billing.query.filter_by(id=billing_id).first()
@@ -113,6 +116,8 @@ def getSpecificBilling(billing_id):
         "provider_bank_account": billing.provider_bank_account
     }
     return return_dict, 200
+
+
 
 @billing_bp.route('/profile/bank_account',methods=["GET", "POST"])
 def myBankAccount():

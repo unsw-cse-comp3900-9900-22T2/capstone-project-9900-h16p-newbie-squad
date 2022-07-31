@@ -4,6 +4,7 @@ from .. import db
 import base64
 
 
+
 @profile_bp.route('/profile',methods=["GET", "POST"])
 def profile():
     curr_user=g.curr_user

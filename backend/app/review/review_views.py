@@ -4,6 +4,8 @@ from .. import db
 from ..models import Booking, Status, Review, Parking_space
 
 
+
+
 @review_bp.route("/reviews/parking_space_review/<int:parking_space_id>",methods=['GET'])
 def get_reviews_of_a_parking_space(parking_space_id):
     target_parking_space=Parking_space.query.filter_by(id=parking_space_id).first()
