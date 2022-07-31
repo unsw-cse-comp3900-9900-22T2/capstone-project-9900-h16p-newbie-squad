@@ -1,13 +1,15 @@
 import { Space, Table, Tag, Button, Popconfirm } from 'antd';
 import React, {useEffect} from 'react';
 import {useLocation, useParams, Link} from 'react-router-dom';
+import BookingRaing from './BookingRating';
 
-const BookingHistoryDisplay = ({bookingInformation}) => {
+const BookingHistoryDisplay = ({bookingInformation, isHistory}) => {
     const dataList = []
     
     for(let index = bookingInformation.length - 1; index >= 0; index--)
         dataList.push({
             key: index,
+            booking_id: bookingInformation[index].booking_id,
             parking_space_id: bookingInformation[index].parking_space_id,
             address: bookingInformation[index].address,
             start_date: bookingInformation[index].start_date,
@@ -27,6 +29,8 @@ const BookingHistoryDisplay = ({bookingInformation}) => {
                 <Link to={`/booking-page/${record.parking_space_id}`}>
                     <Button>Detail</Button>
                 </Link>
+                {isHistory && <BookingRaing record={record.booking_id}/>}
+               
                 </Space>
             ),
         },

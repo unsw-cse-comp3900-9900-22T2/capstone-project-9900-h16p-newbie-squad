@@ -49,6 +49,7 @@ def getMyBookings():
 @booking_bp.route("/bookings/new/<int:parkingspace_id>",methods=['PUT'])
 def makeBookingRequest(parkingspace_id):
     curr_user=g.curr_user
+
     request_data = request.get_json()
 
     try:
@@ -100,6 +101,8 @@ def makeBookingRequest(parkingspace_id):
 
 @booking_bp.route("/bookings/cancel/<int:booking_id>",methods=['POST'])
 def cancelBooking(booking_id):
+    curr_user=g.curr_user
+
     target_booking=Booking.query.filter_by(id=booking_id).first()
     if target_booking==None:
         return {'error':'cannot find this booking'},400
@@ -169,6 +172,8 @@ def myReceivedBookings():
 
 @booking_bp.route("/bookings/pay/<int:booking_id>",methods=['POST'])
 def payForBooking(booking_id):
+    curr_user=g.curr_user
+
     target_booking=Booking.query.filter_by(id=booking_id).first()
 
     if target_booking==None:

@@ -52,6 +52,7 @@ def myparkingspaces():
 @parkingspace_bp.route('/myparkingspace/new',methods=['POST'])
 def myparkingspaceNew():
     curr_user=g.curr_user
+
     request_data=request.get_json()
 
     picture_1=base64.b64decode(request_data.get('picture_1')) if request_data.get('picture_1') else None
@@ -84,6 +85,7 @@ def myparkingspaceNew():
 @parkingspace_bp.route('/myparkingspace/<int:parkingspace_id>',methods=['GET'])
 def getParkingSpace(parkingspace_id):
     curr_user=g.curr_user
+
     target_parking_space=Parking_space.query.filter_by(id=parkingspace_id).first()
     if target_parking_space==None: return {'error':'invalid parking space'},400
 
@@ -123,6 +125,8 @@ def getParkingSpace(parkingspace_id):
 
 @parkingspace_bp.route('/myparkingspace/<int:parkingspace_id>',methods=['DELETE'])
 def deleteParkingSpace(parkingspace_id):
+    curr_user=g.curr_user
+
     target_parking_space=Parking_space.query.filter_by(id=parkingspace_id).first()
     if target_parking_space==None: return {'error':'invalid parking space'},400
     
@@ -147,6 +151,8 @@ def deleteParkingSpace(parkingspace_id):
 
 @parkingspace_bp.route('/myparkingspace/<int:parkingspace_id>',methods=['PUT'])
 def updateParkingSpace(parkingspace_id):
+    curr_user=g.curr_user
+
     target_parking_space=Parking_space.query.filter_by(id=parkingspace_id).first()
     if target_parking_space==None: return {'error':'invalid parking space'},400
 
@@ -188,6 +194,8 @@ def updateParkingSpace(parkingspace_id):
 
 @parkingspace_bp.route('/myparkingspace/publish/<int:parkingspace_id>',methods=['PUT'])
 def publishParkingSpace(parkingspace_id):
+    curr_user=g.curr_user
+
     request_data=request.get_json()
     target_parking_space=Parking_space.query.filter_by(id=parkingspace_id).first()
     if target_parking_space==None or target_parking_space.is_active==False:
@@ -213,6 +221,8 @@ def publishParkingSpace(parkingspace_id):
 
 @parkingspace_bp.route('/myparkingspace/unpublish/<int:parkingspace_id>',methods=['PUT'])
 def unpublishParkingSpace(parkingspace_id):
+    curr_user=g.curr_user
+
     try:
         target_parking_space=Parking_space.query.filter_by(id=parkingspace_id).first()
         if target_parking_space==None or target_parking_space.is_active==False:

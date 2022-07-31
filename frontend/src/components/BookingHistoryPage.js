@@ -86,6 +86,7 @@ export default function BookingHistoryPage(){
           <Divider>Booking history</Divider>
           <BookingHistoryDisplay 
             bookingInformation={bookingInformation}
+            isHistory={true}
           />
           </div>
         }
@@ -99,6 +100,7 @@ export default function BookingHistoryPage(){
           <Divider>Recieved bookings</Divider>
           <BookingHistoryDisplay 
             bookingInformation={bookingToMeInformation}
+            isHistory={false}
           />
           </div>
         }

@@ -13,6 +13,7 @@ def get_reviews_of_a_parking_space(parking_space_id):
     result=[]
     for each_review in target_parking_space.reviews:
         result.append({
+            'review_id':each_review.id,
             'reviewer':each_review.author.username,
             'review_text':each_review.review_text,
             'review_rating':each_review.review_rating,
@@ -26,7 +27,6 @@ def get_reviews_of_a_parking_space(parking_space_id):
 @review_bp.route("/reviews/my_reviews/new/<int:booking_id>",methods=['POST'])
 def create_new_review(booking_id):
     curr_user=g.curr_user
-    print(curr_user)
 
     target_booking=Booking.query.filter_by(id=booking_id).first()
     if target_booking==None:
@@ -87,7 +87,7 @@ def get_my_review_of_a_booking(booking_id):
 @review_bp.route("/reviews/my_reviews",methods=['GET'])
 def get_my_reviews():
     curr_user=g.curr_user
-    print(curr_user)
+
     my_reviews=Review.query.filter_by(author=curr_user).all()
     result=[]
     for each_review in my_reviews:
@@ -106,6 +106,7 @@ def get_my_reviews():
 @review_bp.route("/reviews/my_reviews/<int:review_id>",methods=['DELETE'])
 def delete_my_review(review_id):
     curr_user=g.curr_user
+    
     my_review=Review.query.filter_by(author=curr_user,id=review_id).first()
     if my_review==None: return {'error':'invalid input'},400
 
