@@ -1,9 +1,11 @@
 import { jsx } from '@emotion/react';
 import React, { useState, useEffect }from 'react'
 import {useLocation, useParams, Link} from 'react-router-dom';
+import { Button, Divider } from 'antd';
 import Header from './Header';
 import './BookingPage.css'
 import base_64_header from "./ba64_sample"
+import BookingRatingDisplay from './BookingRatingDisplay';
 
 export default function BookingPage() {
     // const listing = JSON.parse(localStorage.getItem("listing-book"))
@@ -11,6 +13,7 @@ export default function BookingPage() {
     // 此处的listing是object，里面有所有关于该车位的信息的信息
     let timerSec = 0
     let auth_timer = null
+    
     const {carspace_id} = useParams()
     console.log(carspace_id);
     console.log(localStorage.getItem("token"))
@@ -34,7 +37,53 @@ export default function BookingPage() {
     const [picture_2,setpicture_2]=useState("")
     const [picture_3,setpicture_3]=useState("")
 
-    
+    const [totalRating,setTotalRating]=useState(3)
+    const [starString,setStarSting] = useState("★")
+    const [bookingRatingInformation, setBookingRatingInformation] = useState([])
+
+    const GetAllComment = () =>{
+
+      const headers = new Headers({
+        'Content-Type': 'application/json',
+        'token': localStorage.getItem("token")
+        });
+
+        fetch('http://localhost:5000/reviews/parking_space_review/'+carspace_id,
+        {
+            method: 'GET',
+            headers: headers,
+        })
+        .then(res => res.json())
+        .catch(error => {
+            console.error('Error:', error)
+        })
+        .then(response => {
+            if(response.error !== undefined)
+            {
+                alert(response.error)
+                console.log(response.error)
+            }
+            else 
+            {
+              console.log(response)
+              setBookingRatingInformation(response.reviews)
+              let ratingSUM = 0
+              for(let i = 0; i < response.reviews.length; i++)
+                ratingSUM += response.reviews[i].review_rating
+              
+                ratingSUM /= response.reviews.length
+                //console.log(ratingSUM)
+                setTotalRating(ratingSUM)
+              let stars = '★'
+              for(let i=2;i<=5;i++)
+                if(ratingSUM>=i)
+                  stars+='★'
+                else
+                  stars+='☆'
+              setStarSting(stars)
+            }
+        })
+    }
     const ResetTimer = (e) =>{
       timerSec = e
       setTimeRemain(e)
@@ -51,6 +100,8 @@ export default function BookingPage() {
       setSelectDateIndex(e)
       setAvailableStartTime(availability[e].start_date)
       setAvailableEndTime(availability[e].end_date)
+      document.getElementById('booking_start_date').value = availability[e].start_date
+      document.getElementById('booking_end_date').value = availability[e].end_date
     }
     const MakeBooking = () =>{
       if(localStorage.getItem("token")==='')
@@ -227,6 +278,7 @@ export default function BookingPage() {
     useEffect(() => {
       GetCarSpace(carspace_id)
       CheckMyBooking()
+      GetAllComment()
     },[])
     return (
       <div>
@@ -234,8 +286,9 @@ export default function BookingPage() {
         <div className='information-box'>
           <div className='booking-container'>
             <div className='scrollable-container'>
-              <div className='bottom-border'>
+              <div>
                 <div className='address-title'>Address: {street}, {suburb} {state}, {postcode}</div>
+                <div>Total rating: {totalRating} {starString}</div>
                 <div>Price: {price} AUD/day</div>
                 <div>Width: {width}m</div>
                 <div>Length: {length}m</div>
@@ -291,8 +344,8 @@ export default function BookingPage() {
                   </div>
                 }
               </div>
-              <div className='bottom-border'>
-                <div>Previews</div>
+              <div>
+                <Divider>Car space previews</Divider>
                 <div className='preview-container'>
                   {picture_1 && <img className='car-space-preview' src={base_64_header+picture_1}/>}
                   {picture_2 && <img className='car-space-preview' src={base_64_header+picture_2}/>}
@@ -300,8 +353,11 @@ export default function BookingPage() {
                 </div>
                 <br/>
               </div>
-              <div>
-                <div>some reviews here(sprint3 work)</div>
+              <div >
+                <Divider>Reviews</Divider>
+                <BookingRatingDisplay 
+                  BookingRating={bookingRatingInformation}
+                />
               </div>
             </div>
           </div>
