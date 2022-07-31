@@ -1,14 +1,20 @@
 from flask import request,g
-from .models import User, Role
+from .models import User
+#from .review.review_views  import *
 
 def before_request_check_token():
     print('For current request, handler blueprint is:',request.blueprint)
+    print('Endpoint is: ',end='')
+    print(request.endpoint)
 
     if request.blueprint=='profile' or request.blueprint=='car' \
         or request.blueprint=='parkingspace' or request.blueprint=='booking' \
         or request.blueprint=='billing' or request.blueprint=='admin' \
-        or request.blueprint=='review':
-    
+        or request.endpoint=='review.create_new_review'\
+        or request.endpoint=='review.get_my_review_of_a_booking'\
+        or request.endpoint=='review.get_my_reviews'\
+        or request.endpoint=='delete_my_review':
+
         try:
             request_token=request.headers.get('token')
             print('Verifying token: ',request_token)

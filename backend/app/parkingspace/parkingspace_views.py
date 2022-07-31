@@ -29,9 +29,9 @@ def myparkingspaces():
 
             #2022.7.29新增：返回值中增加average_rating和avatar
             "average_rating":each_parking_space.average_rating,
-            #"avatar":base64.b64encode(each_parking_space.picture_1) if each_parking_space.picture_1 else None
+            "avatar":base64.b64encode(each_parking_space.picture_1).decode() if each_parking_space.picture_1 else None
         }
-        result["avatar"]=(base64.b64encode(each_parking_space.picture_1)).decode() if each_parking_space.picture_1 else None
+        #result["avatar"]=base64.b64encode(each_parking_space.picture_1).decode() if each_parking_space.picture_1 else None
 
         available_periods=[]
         for each_available_period in each_parking_space.available_periods:
@@ -190,7 +190,8 @@ def updateParkingSpace(parkingspace_id):
 def publishParkingSpace(parkingspace_id):
     request_data=request.get_json()
     target_parking_space=Parking_space.query.filter_by(id=parkingspace_id).first()
-    if target_parking_space==None: return {'error':'parkingspace not found'},400
+    if target_parking_space==None or target_parking_space.is_active==False:
+        return {'error':'active parkingspace not found'},400
 
     try:
         start_date=datetime.strptime(request_data.get('start_date'),'%Y-%m-%d').date()
@@ -214,7 +215,8 @@ def publishParkingSpace(parkingspace_id):
 def unpublishParkingSpace(parkingspace_id):
     try:
         target_parking_space=Parking_space.query.filter_by(id=parkingspace_id).first()
-        if target_parking_space==None: return {'error':'invalid parking space'},400
+        if target_parking_space==None or target_parking_space.is_active==False:
+            return {'error':'active parkingspace not found'},400
 
         for each_available_period in target_parking_space.available_periods:
             db.session.delete(each_available_period)

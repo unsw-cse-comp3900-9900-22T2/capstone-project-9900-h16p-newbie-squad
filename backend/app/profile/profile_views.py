@@ -1,6 +1,7 @@
 from . import profile_bp
 from flask import request,g
 from .. import db
+import base64
 
 
 @profile_bp.route('/profile',methods=["GET", "POST"])
@@ -14,7 +15,7 @@ def profile():
         #2021.7.31: 使用另外专门的API来查看bank_account和credit_card
         #'bank_account':curr_user.bank_account,
         #'credit_card':curr_user.credit_card,
-        'avatar':curr_user.avatar,
+        "avatar":base64.b64encode(curr_user.avatar).decode() if curr_user.avatar else None,
         'bio':curr_user.bio,
         'role':curr_user.role.role_name
     }
@@ -23,7 +24,6 @@ def profile():
         return curr_user_dict, 200
 
     elif request.method == 'POST':
-        #暂时不用判断是否是admin
         info_to_update = request.get_json()
 
         if info_to_update.get('username'):
@@ -39,7 +39,7 @@ def profile():
         #if info_to_update.get('credit_card'):
         #    curr_user.credit_card = info_to_update['credit_card']
         if info_to_update.get('avatar'):
-            curr_user.avatar = info_to_update['avatar']
+            curr_user.avatar = base64.b64decode(info_to_update['avatar'])
         if info_to_update.get('bio'):
             curr_user.bio = info_to_update['bio']
         if info_to_update.get('password'):

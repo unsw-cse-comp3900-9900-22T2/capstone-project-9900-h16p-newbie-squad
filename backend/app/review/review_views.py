@@ -4,7 +4,6 @@ from .. import db
 from ..models import Booking, Status, Review, Parking_space
 
 
-
 @review_bp.route("/reviews/parking_space_review/<int:parking_space_id>",methods=['GET'])
 def get_reviews_of_a_parking_space(parking_space_id):
     target_parking_space=Parking_space.query.filter_by(id=parking_space_id).first()
@@ -25,12 +24,13 @@ def get_reviews_of_a_parking_space(parking_space_id):
 @review_bp.route("/reviews/my_reviews/new/<int:booking_id>",methods=['POST'])
 def create_new_review(booking_id):
     curr_user=g.curr_user
+    print(curr_user)
 
     target_booking=Booking.query.filter_by(id=booking_id).first()
     if target_booking==None:
         return {'error':'invalid input'},400
     if target_booking.customer!=curr_user:
-        return {'error':'invalid input'},400
+        return {'error':'not your booking'},400
     if target_booking.status!=Status.Successful:
         return {'error':'this booking is not in Successful state, you cannot review it'},400
     target_parking_space=target_booking.parking_space
@@ -85,6 +85,7 @@ def get_my_review_of_a_booking(booking_id):
 @review_bp.route("/reviews/my_reviews",methods=['GET'])
 def get_my_reviews():
     curr_user=g.curr_user
+    print(curr_user)
     my_reviews=Review.query.filter_by(author=curr_user).all()
     result=[]
     for each_review in my_reviews:
