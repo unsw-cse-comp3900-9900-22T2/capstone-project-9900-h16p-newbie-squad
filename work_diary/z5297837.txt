@@ -34,3 +34,11 @@ week 8:
 
 week 9:
 • developed review page UI design
+• Complete jpg image upload function
+• Remake booking page UI design
+• Remake booking history page UI design
+• Remake pay page 
+
+week 10:
+• Complete review function
+• My works all done, waiting for code merging
