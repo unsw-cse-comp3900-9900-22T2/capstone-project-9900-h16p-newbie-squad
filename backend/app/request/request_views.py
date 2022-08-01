@@ -99,7 +99,7 @@ def getRequest(request_id):
     return detail, 200
 
 # 根据request id 删除一条request
-@request_bp.route('/myrequest/<int:request_id>', methods=['DELETE'])
+@request_bp.route('/myrequest/delete/<int:request_id>', methods=['DELETE'])
 def deleteRequest(request_id):
     target_request = Request.query.filter_by(id=request_id).first()
     if target_request == None or target_request.is_active == False:
@@ -111,12 +111,12 @@ def deleteRequest(request_id):
         db.session.add(target_request)
         db.session.commit()
     except:
-        return {'error': 'db internal error'}
+        return {'error': 'db internal error'},400
 
     return {}, 200
 
 # 根据request id 更新一条request
-@request_bp.route('/myrequest/<int:request_id>', methods=['PUT'])
+@request_bp.route('/myrequest/update/<int:request_id>', methods=['PUT'])
 def updateRequest(request_id):
     target_request = Request.query.filter_by(id=request_id).first()
     if target_request == None or target_request.is_active == False:
@@ -256,7 +256,7 @@ def getRequest(request_id):
     return detail, 200
 
 # offer part ---------------------------------------------------------------
-# 返回所有我发布的关于某个request_id 的offer
+# 返回所有当前用户发布的关于某个request_id 的offer
 @request_bp.route('/myrequest/myoffer/<int:request_id>', methods=['GET'])
 def getMyOffer(request_id):
     curr_user = g.curr_user
@@ -338,16 +338,16 @@ def myOfferNew(request_id):
 @request_bp.route('/myrequest/myoffer/delete/<int:offer_id>', methods=['DELETE'])
 def deleteOffer(offer_id):
     curr_user = g.curr_user
-    for each_offer in Offer.query.filter_by(owner=curr_user, id=offer_id).all():
+    target_offer = Offer.query.filter_by(owner=curr_user, id=offer_id).first()
         # target_request = Request.query.filter_by(id=request_id).first()
-        if each_offer == None or each_offer.is_active == False:
-            return {'error': 'invalid request'}, 400
-        try:
-            each_offer.is_active = False
-            db.session.add(each_offer)
-            db.session.commit()
-        except:
-            return {'error': 'db internal error'},400
+    if target_offer == None or target_offer.is_active == False:
+        return {'error': 'invalid offer'}, 400
+    try:
+        target_offer.is_active = False
+        db.session.add(target_offer)
+        db.session.commit()
+    except:
+        return {'error': 'db internal error'},400
 
     return {}, 200
 
@@ -361,7 +361,7 @@ def getOffers(request_id):
     target_request = Request.query.filter_by(id=request_id, is_active=True).first()
     if target_request == None :
         return {'error': 'request not found'}, 400
-    for eachOfMyOffer in Offer.query.filter_by(owner=curr_user, request=request_id, is_active=True).all():
+    for eachOfMyOffer in Offer.query.filter_by(request=request_id, is_active=True).all():
         myoffers.append({
             'id': eachOfMyOffer.id,
             'request_id': eachOfMyOffer.request.id,
@@ -384,11 +384,10 @@ def getOffers(request_id):
 def acceptOffer(offer_id):
 
     curr_user = g.curr_user
-    myoffers = []
     target_offer = Offer.query.filter_by(id=offer_id, is_active=True).first()
     if target_offer == None:
         return {'error': 'offer not found'}, 400
-    target_request = Request.query.filter_by(id=target_offer.request_id, is_active=True).first()
+    target_request = Request.query.filter_by(owner=curr_user, id=target_offer.request_id, is_active=True).first()
     if target_request == None :
         return {'error': 'request not found'}, 400
     try:
@@ -403,8 +402,8 @@ def acceptOffer(offer_id):
     # target_parking_space = ParkingSpace.query.filter_by(id=target_request.parking_space_id, is_active=True).first()
     provider = User.queryy.filter_by(id=target_offer.owner_id).first().username
     customer = User.queryy.filter_by(id=target_request.owner_id).first().username
-    address='Address: %s %s %s %s.'%(target_request.street,target_request.suburb,\
-                                     target_request.state,target_request.postcode)
+    address='Address: %s %s %s %s.'%(target_offer.street,target_offer.suburb,\
+                                     target_offer.state,target_offer.postcode)
 
     customer_card = Credit_card.query.filter_by(owner=target_request.owner_id).first().id
     provider_bank = Bank_account.query.filter_by(owner=target_offer.owner_id).first().id
