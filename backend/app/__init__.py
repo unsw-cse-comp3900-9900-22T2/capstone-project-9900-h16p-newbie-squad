@@ -50,6 +50,8 @@ def create_app(name):
     from .review import review_bp
     app.register_blueprint(review_bp)
 
+    from .request import request_bp
+    app.register_blueprint(request_bp)
 
     from threading import Thread
     from time import sleep
