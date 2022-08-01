@@ -43,6 +43,11 @@ def myRequests():
 def myRequestNew():
     curr_user = g.curr_user
     request_data = request.get_json()
+    try:
+        _start_date = datetime.strptime(request_data.get('start_date'), '%Y-%m-%d').date()
+        _end_date = datetime.strptime(request_data.get('end_date'), '%Y-%m-%d').date()
+    except:
+        return {'error': 'invalid time format'}, 400
 
     try:
         new_request = Request(
@@ -54,8 +59,8 @@ def myRequestNew():
             latitude=request_data.get('latitude'),
             longitude=request_data.get('longitude'),
             budget=request_data.get('budget'),
-            start_date=request_data.get('start_date'),
-            end_date=request_data.get('end_date'),
+            start_date=_start_date,
+            end_date=_end_date,
             others=request_data.get('others'),
             complete=False,
             is_active=True,
@@ -88,8 +93,8 @@ def getRequest(request_id):
             "latitude": target_request.latitude,
             "longitude": target_request.longitude,
             "budget": target_request.budget,
-            "start_date": target_request.start_date,
-            "end_date": target_request.end_date,
+            "start_date": target_request.start_date.strftime('%Y-%m-%d'),
+            "end_date": target_request.end_date.strftime('%Y-%m-%d'),
             "others": target_request.others,
             "complete": target_request.complete,
             "is_active": target_request.is_active,
@@ -152,9 +157,19 @@ def updateRequest(request_id):
     if info_to_update.get('budget'):
         target_request.budget = info_to_update['budget']
     if info_to_update.get('start_date'):
-        target_request.start_date = info_to_update['start_date']
+        try:
+            _start_date = datetime.strptime(info_to_update.get('start_date'), '%Y-%m-%d').date()
+            # _start_date = datetime.strptime(info_to_update['start_date'], '%Y-%m-%d').date()
+            target_request.start_date = _start_date
+        except:
+            return {'error': 'invalid time format'}, 400
     if info_to_update.get('end_date'):
-        target_request.end_date = info_to_update['end_date']
+        try:
+            _end_date = datetime.strptime(info_to_update.get('end_date'), '%Y-%m-%d').date()
+            # _end_date = datetime.strptime(info_to_update['end_date'], '%Y-%m-%d').date()
+            target_request.end_date = _end_date
+        except:
+            return {'error': 'invalid time format'}, 400
     if info_to_update.get('others'):
         target_request.others = info_to_update['others']
 
@@ -215,8 +230,8 @@ def publishedRequests():
             "latitude": each_request.request.latitude,
             "longitude": each_request.request.longitude,
             "budget": each_request.budget,
-            "start_date": each_request.start_date,
-            "end_date": each_request.end_date,
+            "start_date": each_request.start_date.strftime('%Y-%m-%d'),
+            "end_date": each_request.end_date.strftime('%Y-%m-%d'),
             "others": each_request.others,
             "complete": each_request.complete,
             "is_active": each_request.is_active,
@@ -245,8 +260,8 @@ def getRequest(request_id):
             "latitude": target_request.latitude,
             "longitude": target_request.longitude,
             "budget": target_request.budget,
-            "start_date": target_request.start_date,
-            "end_date": target_request.end_date,
+            "start_date": target_request.start_date.strftime('%Y-%m-%d'),
+            "end_date": target_request.end_date.strftime('%Y-%m-%d'),
             "others": target_request.others,
             "complete": target_request.complete,
             "is_active": target_request.is_active,
@@ -416,8 +431,8 @@ def acceptOffer(offer_id):
         customer_name=customer,
         #这张表只是存储历史记录，因此address不再分开了，生成历史记录的时候把street，suburb等合成一个字符串
         address=address,
-        start_date=target_request.start_date,
-        end_date=target_request.end_date,
+        start_date=target_request.start_date.strftime('%Y-%m-%d'),
+        end_date=target_request.end_date.strftime('%Y-%m-%d'),
         unit_price=target_offer.price,
         total_price=target_offer.price,
         #永久保存customer付款时用的银行卡号
