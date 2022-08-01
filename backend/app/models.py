@@ -262,9 +262,13 @@ class Request(db.Model):
     start_date = db.Column(db.Date)
     end_date = db.Column(db.Date)
     others = db.Column(db.Text)
+    # 如果是complete == True，则表示该请求已经被处理
     complete = db.Column(db.Boolean, nullable=False)
-    #如果is_active为假，则代表此offer已经被用户删除
-    is_active=db.Column(db.Boolean,nullable=False)
+    # 如果is_active == False，则代表该请求已经被用户删除
+    is_active = db.Column(db.Boolean,nullable=False)
+    # 如果publish == False，则代表该请求仅用户自己可见
+    publish = db.Column(db.Boolean, nullable=False)
+
     # 一对多，一的那一侧
     offers = db.relationship('Offer', backref='request', lazy='dynamic')
 
@@ -285,8 +289,9 @@ class Offer(db.Model):
     postcode = db.Column(db.Integer, nullable=False)
     price = db.Column(db.Float, nullable=True)
     comments = db.Column(db.Text)
-    #如果is_active为假，则代表此offer已经被用户删除
-    is_active=db.Column(db.Boolean,nullable=False)
+    # 如果is_active == False，则代表此offer已经被offer提供方删除
+    is_active = db.Column(db.Boolean, nullable=False)
+    # 如果accept == True，则代表此offer已经被请求发起方接受
     accept = db.Column(db.Boolean, nullable=False)
 
     def __repr__(self):
