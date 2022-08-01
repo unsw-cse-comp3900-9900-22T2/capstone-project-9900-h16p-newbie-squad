@@ -244,7 +244,7 @@ def publishedRequests():
 
 # 根据request id 返回确定的一条publish == True, is_active == True 的request,
 @request_bp.route('/myrequest/published_requests/<int:request_id>', methods=['GET'])
-def getRequest(request_id):
+def getPublishedRequest(request_id):
     curr_user = g.curr_user
     target_request = Request.query.filter_by(id=request_id, publish = True).first()
     if target_request == None or target_request.is_active == False:
