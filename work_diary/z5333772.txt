@@ -1,5 +1,48 @@
-week1: learning flask
-week2: learning flask
-week3: writing user stories
-week4: keep on learning flask, wrote some codes
-week5-9: spend one million years developing backend
+week 1:
+Found four buddies to work on the project.
+Determined which project we should do by discussing with my teammates.
+We also determined which developer role should each of us play, I decided to work on backend.
+We also decided that we are going to use Flask as the backend framework,
+since at least all of us knows how to use Python.
+So I have officially begin learning Flask. 
+
+week 2:
+Keep on learning Flask.
+We held a meeting discussing the functionalities we should accomplish,
+especially the two novel ones. We've also sliced the first-phase report to each member.
+Jiaxin and I are responsible for writing user stories.
+Learnt how to write user stories and wrote some.
+
+
+week 3:
+Keep on learning Flask.
+Keep on writing user stories.
+Started writing some code. I established the project's backend side's basic structure and layout.
+Wrote the basic data models to work with Flask-SQLalchemy.
+Wrote some basic business logic regarding user registration and log in/log out.
+
+week 4:
+Keep on developing codes for sprint 1.
+
+week 5:
+Spent another one million years developing codes for sprint 1.
+
+week 6:
+We held the first retrospective meeting of demoA.
+We decided what didn't go so well in sprint 1 and decided what we should do in sprint 2.
+We also arranged responsibilites for each member in sprint 2.
+
+week 7:
+Developed parking spaces listing and booking subsystem. 
+We went through some twists and turns, leading us have to redesign some models and business logics
+by the infinite lack of vision.
+
+week 8:
+Keep on developing backend.
+
+week 9:
+
+
+
+
+
