@@ -252,6 +252,7 @@ class Request(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     # 一对多，多的那一侧
     owner_id = db.Column(db.String(32), db.ForeignKey('users.id'))
+    title = db.Column(db.String(32), nullable=False)
     street = db.Column(db.String(32), nullable=False)
     suburb = db.Column(db.String(32), nullable=False)
     state = db.Column(db.String(32), nullable=False)
