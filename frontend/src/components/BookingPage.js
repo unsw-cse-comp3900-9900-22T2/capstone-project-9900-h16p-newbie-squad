@@ -1,7 +1,7 @@
 import { jsx } from '@emotion/react';
 import React, { useState, useEffect }from 'react'
-import {useLocation, useParams, Link} from 'react-router-dom';
-import { Button, Divider } from 'antd';
+import {useLocation, useParams, Link, useNavigate} from 'react-router-dom';
+import { Button, Divider, message } from 'antd';
 import Header from './Header';
 import './BookingPage.css'
 import base_64_header from "./ba64_sample"
@@ -13,6 +13,7 @@ export default function BookingPage() {
     // 此处的listing是object，里面有所有关于该车位的信息的信息
     let timerSec = 0
     let auth_timer = null
+    const navigate = useNavigate()
     
     const {carspace_id} = useParams()
     console.log(carspace_id);
@@ -93,7 +94,9 @@ export default function BookingPage() {
     const MakeBooking = () =>{
       if(localStorage.getItem("token")==='')
       {
-        alert('You should login first')
+        // alert('You should login first')
+        message.warning("Please login first")
+        navigate(`/login-page`)
         return
       }
       

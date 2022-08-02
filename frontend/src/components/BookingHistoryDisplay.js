@@ -5,7 +5,6 @@ import BookingRaing from './BookingRating';
 
 const BookingHistoryDisplay = ({bookingInformation, isHistory}) => {
     const dataList = []
-    
     for(let index = bookingInformation.length - 1; index >= 0; index--)
         dataList.push({
             key: index,

@@ -1,11 +1,12 @@
 import { jsx } from '@emotion/react';
 import React, { useState, useEffect }from 'react'
-import {useLocation, useParams, Link} from 'react-router-dom';
+import {useLocation, useParams, Link, useNavigate} from 'react-router-dom';
 import Header from './Header';
-import { Button, Divider } from 'antd';
+import { Button, Divider, message } from 'antd';
 import './login&signup.css'
 
 export default function BookingPage() {
+    const navigate = useNavigate()
     const {booking_id} = useParams()
     console.log(booking_id)
     const GetCreditCard = () =>{
@@ -119,7 +120,9 @@ export default function BookingPage() {
               else 
               {
                 console.log(response.error)
-                alert('Thanks for your payment')
+                // alert('Thanks for your payment')
+                message.success("Thanks for your payment!")
+                navigate(`/booking-page/${booking_id}`)
               }
           })
       }

@@ -10,10 +10,13 @@ export default function BookingButton({listing}) {
     }
   return (
     <>
-       {localStorage.getItem("token") && <Link to={`/booking-page/${listing.parking_space_id}`}>
+       {/* {localStorage.getItem("token") && <Link to={`/booking-page/${listing.parking_space_id}`}>
         <Button size="small" type='primary'>Detail</Button>
       </Link>}
-      {!localStorage.getItem("token") && <Button size="small" type='primary' onClick={goToLogin}>Detail</Button>}
+      {!localStorage.getItem("token") && <Button size="small" type='primary' onClick={goToLogin}>Detail</Button>} */}
+      <Link to={`/booking-page/${listing.parking_space_id}`}>
+        <Button size="small" type='primary'>Detail</Button>
+      </Link>
     </>
   )
 }

@@ -1,4 +1,4 @@
-import { Button, Modal, Space } from 'antd';
+import { Button, Modal, Space, message } from 'antd';
 import React, { useState } from 'react';
 import './BookingPage.css'
 
@@ -62,6 +62,8 @@ const BookingRaing = ({record}) => {
           else 
           {
             console.log(response)
+            setIsModalVisible(false);
+            message.success("Thanks for your rating")
           }
       })
   }

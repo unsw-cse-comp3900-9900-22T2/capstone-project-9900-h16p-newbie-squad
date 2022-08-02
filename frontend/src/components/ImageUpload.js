@@ -53,8 +53,8 @@ const ImageUpload = ({getAllListings, space_id}) => {
             }
         })
         .then(data => {
-            console.log("image uploaded");
-            console.log(baseImage)
+            // console.log("image uploaded");
+            // console.log(baseImage)
             getAllListings()
         })
         .catch(error => {
