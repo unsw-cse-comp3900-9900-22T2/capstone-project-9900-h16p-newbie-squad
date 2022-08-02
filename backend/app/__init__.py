@@ -14,10 +14,6 @@ def create_app(name):
 
     db.init_app(app)
 
-    @app.route("/")
-    def index():
-        return "hello,world!"
-
     from .commons import before_request_check_token
     @app.before_request
     def check_token():
@@ -62,9 +58,8 @@ def create_app(name):
             while True:
                 for eachBooking in Booking.query.filter_by(status=Status.Accepted_Payment_Required).all():
                     interval=(datetime.now()-eachBooking.booking_time).total_seconds()
-                    #一分钟之内必须付款，否则被系统取消
+                    #must pay within one minute
                     if interval>=Status.Must_Pay_Within: cancelBooking(eachBooking.id)
-                    #print(interval)
                 sleep(5)
 
     test=Thread(target=scan_unpaid_booking,daemon=True)

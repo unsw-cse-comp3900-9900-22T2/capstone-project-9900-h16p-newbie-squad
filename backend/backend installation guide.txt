@@ -1,20 +1,28 @@
-后端library安装：
-pip install -r requirements.txt
+1. virtual environment installation:
+cd capstone-project-9900-h16p-newbie-squad/backend
 
-执行以下命令
+#Linux/macOS:
+python3 -m venv venv
 
-1.cd capstone-project-9900-h16p-newbie-squad/backend
+#windows:
+py -3 -m venv venv
 
-2.
+
+2. make sure you have virtual environment activated:
 //Windows
 venv\Scripts\activate
-$env:FLASK_APP = "project.py"
 
 //Linux, MacOS
 source venv/bin/activate
-export FLASK_APP="project.py"
 
-3.
+
+3. in the virtual enrironment, install Flask and other libraries:
+pip install -r requirements.txt
+
+
+4. start the application:
+$env:FLASK_DEBUG = 1
+$env:FLASK_APP = "project.py"
 flask run
-此后后端服务器运行在5000端口，前端测试请fetch到URL：http://127.0.0.1:5000
+
 

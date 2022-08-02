@@ -8,24 +8,20 @@ from ..models import Role, User
 
 @auth_bp.route('/register',methods=['POST'])
 def register():
-    #print('Postman request: ',end='')
-    #print(request)
     new_user_info=request.get_json()
-    #print(new_user_info)
 
-    #注册时必须提供username, email, password，别的可以暂时不提供
+    #must provide username, email, password
     if new_user_info.get('username')==None or new_user_info.get('email')==None \
     or new_user_info.get('password')==None:
         return {"error": "invalid input"},400
 
-    #username和email必须唯一
+    #username and email must be unique
     if User.query.filter_by(username=new_user_info['username']).first()!=None:
         return {"error": "username has been registered"},400
 
     if User.query.filter_by(email=new_user_info['email']).first()!=None:
         return {"error": "email has been registered"},400
 
-    #bio，头像等后面再提供
     customer=Role.query.filter_by(role_name='customer').first()
 
     new_user=User(username=new_user_info['username'],email=new_user_info['email'],\
@@ -37,16 +33,8 @@ def register():
     new_user=User.query.filter_by(username=new_user_info['username']).first()
 
     token=new_user.generate_auth_token()
-    new_user_id=new_user.id
-    print(token)
-    print(new_user_id)
 
-    # 若User中，没有username='Admin'，则在User中新建管理员账户
-    if User.query.filter_by(username='Admin').first()==None:
-        admin = Role.query.filter_by(role_name='admin').first()
-        new_admin=User(username='Admin', password="Admin123", role=admin)
-        db.session.add(new_admin)
-        db.session.commit()
+    #admin account is now built-in
 
     return {
         "token": token
@@ -55,17 +43,12 @@ def register():
 
 @auth_bp.route('/login',methods=["POST"])
 def login():
-    #print('Postman request: ',end='')
-    #print(request)
     user_info=request.get_json()
-    #print(user_info)
 
-    #登录时必须提供username和password
-    #这个东西应该是前端去验证，后端不管，但是为了代码健壮性……
     if user_info.get('username')==None or user_info.get('password')==None:
         return {"error": "invalid input"},400
 
-    #如果这个用户名没有被注册
+    #first check username exists, then password
     curr_user=User.query.filter_by(username=user_info['username']).first()
     if curr_user==None:
         return {"error": "invalid username"},400
@@ -81,6 +64,4 @@ def login():
 
 @auth_bp.route('/logout',methods=["POST"])
 def logout():
-    #这里仅仅只是占位
-    #删除token的操作应该由前端完成
     return {},200
