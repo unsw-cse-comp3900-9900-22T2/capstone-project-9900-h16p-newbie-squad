@@ -301,8 +301,8 @@ def getMyOffer(request_id):
         #     is_active=db.Column(db.Boolean,nullable=False)
         myoffers.append({
             'id': eachOfMyOffer.id,
-            'request_id': eachOfMyOffer.request.id,
-            'owner_id': eachOfMyOffer.owner.id,
+            'request_id': eachOfMyOffer.request_id,
+            'owner_id': eachOfMyOffer.owner_id,
             'street': eachOfMyOffer.street,
             'suburb': eachOfMyOffer.suburb,
             'state': eachOfMyOffer.state,
