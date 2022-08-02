@@ -1,9 +1,9 @@
-import { Button, Divider } from 'antd';
+import { Button, Divider, Popconfirm } from 'antd';
 import React, {useEffect} from 'react';
 import {useLocation, useParams, Link} from 'react-router-dom';
 import './BookingPage.css'
 
-const BookingRatingDisplay = ({BookingRating}) => {
+const BookingRatingDisplay = ({BookingRating, GetAllComment}) => {
     
     const token = localStorage.getItem("token")
     const username = localStorage.getItem("username")
@@ -29,6 +29,7 @@ const BookingRatingDisplay = ({BookingRating}) => {
           })
           .then(data => {
               console.log(data)
+              GetAllComment()
           })
           .catch(error => console.log(error))
     }
@@ -53,6 +54,9 @@ const BookingRatingDisplay = ({BookingRating}) => {
             review_stars: IntToStar(BookingRating[index].review_rating),
         })
     }
+    const onConfirm = (review) => {
+        DeleteReview(review.review_id)
+    }
     return (
         <div>
             {dataList.map((review, index) => (
@@ -63,8 +67,15 @@ const BookingRatingDisplay = ({BookingRating}) => {
                 <div>Posted at: {review.review_made_time}</div>
                 <div>Comment:</div>
                 <div>{review.review_text}</div>
-                {username == review.reviewer && 
-                <Button onClick={()=>DeleteReview(review.review_id)}>Delete</Button>
+                {username == review.reviewer &&
+                 <Popconfirm
+                 title="Are you sure?"
+                 onConfirm={() => onConfirm(review)}
+                 okText="Yes"
+                 cancelText="No"
+               >
+                 <Button>Delete</Button>
+               </Popconfirm> 
                 }
                 <Divider></Divider>
             </div>

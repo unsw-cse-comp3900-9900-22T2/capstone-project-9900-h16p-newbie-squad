@@ -359,6 +359,7 @@ export default function BookingPage() {
                 <Divider>Reviews</Divider>
                 <BookingRatingDisplay 
                   BookingRating={bookingRatingInformation}
+                  GetAllComment={GetAllComment}
                 />
               </div>
             </div>
