@@ -46,7 +46,7 @@
 
 .my-account {
   position: absolute;
-  right: 10px;
+  right: 50px;
   color: aliceblue;
   top: 13px;
 }
@@ -58,7 +58,7 @@
 
 .logout {
   position: absolute;
-  right: 100px;
+  right: 10px;
   color: aliceblue;
   top: 13px;
 }
@@ -70,9 +70,10 @@
 
 .welcome {
   position: absolute;
-  right: 200px;
+  right: 150px;
   color: aliceblue;
   top: 13px;
+  font-weight: bold;
 }
 
 .information-box {
@@ -160,7 +161,7 @@
 .go-back-home {
   position: absolute;
   left: 10px;
-  top: 13px;
+  top: 8px;
 }
 
 .carSpaceForm {

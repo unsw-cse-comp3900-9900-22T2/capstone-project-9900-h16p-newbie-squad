@@ -11,6 +11,7 @@ import MapAndListingPage from './components/MapAndListingPage';
 import BookingPage from './components/BookingPage';
 import PayPage from './components/PayPage';
 import BillingDetail  from './components/BillingDetail'
+import CarSpacePage from './components/CarSpacePage';
 import 'antd/dist/antd.css'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -19,7 +20,7 @@ root.render(
   <BrowserRouter>
     <Routes>
       <Route path="/" element={<App />}/>
-      <Route path="personal-info" element={<PersonalInfo />} />
+      <Route path="personal-info" element={<PersonalInfo />}/>
       <Route path="login-page" element={<LoginPage />} />
       <Route path="SignUp-page" element={<SignUpPage />} />
       <Route path="MapAndListing-page" element={<MapAndListingPage />}/>

@@ -1,6 +1,8 @@
 import React from 'react';
 import { Outlet, Link,useLocation,useNavigate } from "react-router-dom";
 import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
+import LogoutIcon from '@mui/icons-material/Logout';
+import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 export default function Header() {
     const navigate = useNavigate()
     let location = useLocation()
@@ -48,7 +50,7 @@ export default function Header() {
     return(
       <div className='header'>
         <div className='go-back-home'>
-          <Link to="/"> <button>home-page</button></Link>
+          <Link to="/"> <HomeOutlinedIcon fontSize='large'/></Link>
         </div>
         <div className='my-account'>
           <Link to="/login-page"> <button>Login</button></Link>
@@ -62,13 +64,14 @@ export default function Header() {
     return (
     <div className='header'>
       <div className='go-back-home'>
-        <Link to="/"> <button>home-page</button></Link>
+        <Link to="/"> <HomeOutlinedIcon fontSize='large'/></Link>
       </div>
       <div className='logout'>
-        <button onClick={() => Logout()}>Logout</button>
+        {/* <button onClick={() => Logout()}>Logout</button> */}
+        <LogoutIcon onClick={() => Logout()}/>
       </div>
       <div className='welcome'>
-        {'welcome,' + localStorage.getItem("username")}
+        {'Welcome, ' + localStorage.getItem("username")}
       </div>
       
       {localStorage.getItem("username") !== "Admin" &&

@@ -6,10 +6,7 @@ import ShowListings from './ShowListings';
 
 export default function MapAndListingPage() {
     const token = localStorage.getItem("token")
-    console.log(token);
     const [listings, setListings] = useState([])
-    // const location = useLocation()
-    // const address = location.state.address
     const address = localStorage.getItem("address")
     const [searchedAddress, setSearchedAddress] = useState(address)
     const [priceMode, setPriceMode] = useState('day')
@@ -33,7 +30,6 @@ export default function MapAndListingPage() {
             }
         })
         .then(data => {
-            console.log(data.available_parking_spaces)
             setListings(data.available_parking_spaces)
         })
         .catch(error => console.log(error))

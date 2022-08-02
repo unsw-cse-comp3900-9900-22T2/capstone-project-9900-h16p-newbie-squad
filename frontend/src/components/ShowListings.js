@@ -8,17 +8,9 @@ import DateRangePage from './DateRangePage'
 import PriceSort from './PriceSort';
 
 export default function ShowListings({ listings, searchedAddress, setPriceMode, priceMode, setPriceRange, priceRange, setDateRange, dateRange, setSelected, setListings, AllListings }) {
-    // const [newListings, setNewListings] = useState([])
     const currentSuburb = searchedAddress.split(",")[1]
-    // useEffect(() => {
-    //     setNewListings(listings.filter(listing => {
-    //         return currentSuburb?.toUpperCase().includes(listing.suburb.toUpperCase())
-    //             && (listing.price >= priceRange[0] && listing.price <= priceRange[1])
-    //             && (listing.availibility[0].start_date <= dateRange[0] && listing.availibility[0].end_date >= dateRange[1])
-    //     }))
-    // }, [listings])
 
-    //这里需要对每一个date range都检查
+    //for each listing period range, check if it is within the range that user picked
     const checkAvailability = (listing) => {
         for (const period of listing.availibility) {
             if (period.start_date <= dateRange[0] && period.end_date >= dateRange[1]) {
@@ -30,7 +22,6 @@ export default function ShowListings({ listings, searchedAddress, setPriceMode, 
     const newListings = listings.filter(listing => {
         return currentSuburb?.toUpperCase().includes(listing.suburb.toUpperCase())
             && (listing.price >= priceRange[0] && listing.price <= priceRange[1])
-            // && (listing.availibility[0].start_date <= dateRange[0] && listing.availibility[0].end_date >= dateRange[1])
             && checkAvailability(listing)
     })
 
@@ -47,7 +38,6 @@ export default function ShowListings({ listings, searchedAddress, setPriceMode, 
         setListings([...listings].sort((a,b) => {
             return a.price - b.price
         }))
-        // console.log(listings);
     }
     
   return (
@@ -83,11 +73,8 @@ export default function ShowListings({ listings, searchedAddress, setPriceMode, 
                 onClick={() => setShowDateRangePage(true)}
             >Availability
             </Button>
-            {/* <button>Availability</button> */}
             <PriceMode setPriceMode={setPriceMode} priceMode={priceMode}/>
-            {/* <button onClick={resetOnclick}>reset</button> */}
             <div className='reset' onClick={resetOnclick}>Reset</div>
-            {/* <div className='price-sort' onClick={PriceLowToHigh}>sort Price</div> */}
             <PriceSort listings={listings} setListings={setListings}/>
         </div>
         <Divider variant="middle"/>
