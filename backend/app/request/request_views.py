@@ -137,21 +137,11 @@ def updateRequest(request_id):
     if target_request.complete == True:
         return {'error': 'locked request'}, 400
     info_to_update = request.get_json()
-    #             "id": each_request.id,
-    #             "owner": each_request.owner.username,
-    #             "street": each_request.request.street,
-    #             "suburb": each_request.request.suburb,
-    #             "state": each_request.request.state,
-    #             "postcode": each_request.request.postcode,
-    #             "latitude": each_request.request.latitude,
-    #             "longitude": each_request.request.longitude,
-    #             "budget": each_request.budget,
-    #             "start_date": each_request.start_date,
-    #             "end_date": each_request.end_date,
-    #             "others": each_request.others,
 
     if info_to_update.get('street'):
         target_request.street = info_to_update['street']
+    if info_to_update.get('title'):
+        target_request.title = info_to_update['title']
     if info_to_update.get('suburb'):
         target_request.suburb = info_to_update['suburb']
     if info_to_update.get('state'):
