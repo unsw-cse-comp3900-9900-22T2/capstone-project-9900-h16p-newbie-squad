@@ -14,7 +14,7 @@ export default function CarSpacePage() {
   const [carSpaceInformation, setCarSpaceInformation] = useState([])
   const [publishFormSelected, setPublishFormSelected] = useState(false)
 
-  const API_KEY = "AIzaSyCBM5x-xql7TePUP3oHu73CQXJaMmB80fw"
+  const API_KEY = "AIzaSyAbfa2MxLDynGC2ugXgwbXKwaxVIEbEsHk"
   const [ libraries ] = useState(['places']);
   const {isLoaded, loadError} = useLoadScript({
       // googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,

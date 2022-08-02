@@ -3,6 +3,10 @@ import { Outlet, Link,useLocation,useNavigate } from "react-router-dom";
 import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 import LogoutIcon from '@mui/icons-material/Logout';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
+import LoginIcon from '@mui/icons-material/Login';
+import {LoginOutlined} from '@ant-design/icons';
+import {Button} from 'antd'
+
 export default function Header() {
     const navigate = useNavigate()
     let location = useLocation()
@@ -53,10 +57,10 @@ export default function Header() {
           <Link to="/"> <HomeOutlinedIcon fontSize='large'/></Link>
         </div>
         <div className='my-account'>
-          <Link to="/login-page"> <button>Login</button></Link>
+          <Link to="/login-page"> <LoginIcon/></Link>
         </div>
-        <div className='logout'>
-          <Link to="/SignUp-page"> <button>Sign up</button></Link>
+        <div className='sign-up'>
+          <Link to="/SignUp-page"> Sign up</Link>
         </div>
       </div>
     )

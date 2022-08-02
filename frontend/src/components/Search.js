@@ -14,7 +14,7 @@ import "./HomePage.css"
 import './MapAndListingPage.css'
 
 export default function Search({ panTo, setTempMarker, setDestination, address, setListings, listings, setSearchedAddress, AllListings }) {
-    const API_KEY = "AIzaSyCBM5x-xql7TePUP3oHu73CQXJaMmB80fw"
+    const API_KEY = "AIzaSyAbfa2MxLDynGC2ugXgwbXKwaxVIEbEsHk"
     const [ libraries ] = useState(['places']);
     const {isLoaded, loadError} = useLoadScript({
         // googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,

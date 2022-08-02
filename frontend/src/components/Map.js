@@ -9,7 +9,7 @@ import './MapAndListingPage.css'
 import './../App.css';
 
 const google = window.google
-const API_KEY = "AIzaSyCBM5x-xql7TePUP3oHu73CQXJaMmB80fw"
+const API_KEY = "AIzaSyAbfa2MxLDynGC2ugXgwbXKwaxVIEbEsHk"
 // const libraries = ["places"]
 
 const mapContainerStyle = {

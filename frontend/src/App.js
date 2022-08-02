@@ -9,7 +9,7 @@ import HomeSearch from './components/HomeSearch';
 // import 'antd/dist/antd.css'
 
 function App() {
-  const API_KEY = "AIzaSyCBM5x-xql7TePUP3oHu73CQXJaMmB80fw"
+  const API_KEY = "AIzaSyAbfa2MxLDynGC2ugXgwbXKwaxVIEbEsHk"
   // const libraries = ["places"]
   const [ libraries ] = useState(['places']);
   const {isLoaded, loadError} = useLoadScript({
