@@ -1,0 +1,34 @@
+1. virtual environment installation:
+cd capstone-project-9900-h16p-newbie-squad/backend
+
+#Linux/macOS:
+python3 -m venv venv
+
+#windows:
+py -3 -m venv venv
+
+
+2. make sure you have virtual environment activated:
+//Windows
+venv\Scripts\activate
+
+//Linux, MacOS
+source venv/bin/activate
+
+
+3. in the virtual enrironment, install Flask and other libraries:
+pip install -r requirements.txt
+
+
+4. start the application:
+//Windows
+$env:FLASK_DEBUG=1
+$env:FLASK_APP="project.py"
+
+//Linux, MacOS
+export FLASK_DEBUG=1
+export FLASK_APP="project.py"
+
+flask run
+
+
