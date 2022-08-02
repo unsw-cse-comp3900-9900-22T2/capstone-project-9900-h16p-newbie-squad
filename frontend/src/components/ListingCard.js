@@ -4,10 +4,12 @@ import Button from '@mui/material/Button';
 import BookingButton from './BookingButton';
 import {Image} from "antd"
 import base_64 from "./ba64_sample"
+import AvailableDate from './AvailableDate';
 // import {Link, useNavigate} from 'react-router-dom';
 
 
 export default function ListingCard({listing, priceMode, setSelected}) {
+    console.log(listing);
     const priceMonthly = (price) => {
         return price * 28
     }
@@ -24,8 +26,9 @@ export default function ListingCard({listing, priceMode, setSelected}) {
         <div className='listing-info' onClick={() => setSelected(listing)}>
             {listing.street}, {listing.suburb} {listing.state}, {listing.postcode}
             <div className='date-style'>
-                <div>From: {listing.availibility[0].start_date}</div>
-                <div>To: {listing.availibility[0].end_date}</div>
+                {/* <div>From: {listing.availibility[0].start_date}</div>
+                <div>To: {listing.availibility[0].end_date}</div> */}
+                <AvailableDate record={listing}/>
             </div>
         </div>
         <div className='price-book'>

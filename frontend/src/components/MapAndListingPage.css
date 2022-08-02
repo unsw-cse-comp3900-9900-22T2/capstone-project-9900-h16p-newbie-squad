@@ -196,6 +196,11 @@
     font-weight: 400;
 }
 
+.date-style:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
 .date-range-page {
     width: 200px;
     height: 150px;

@@ -5,6 +5,7 @@ import EditParkingPopup from './EditParkingPopup';
 import ParkingSpaceDetail from "./ParkingSpaceDetail"
 import ImageUpload from './ImageUpload';
 import base_64 from "./ba64_sample"
+import AvailableDate from './AvailableDate';
 
 
 const ParkingSpaceDisplay = ({carSpaceInformation, setPublishFormSelected, getAllListings}) => {
@@ -24,7 +25,7 @@ const ParkingSpaceDisplay = ({carSpaceInformation, setPublishFormSelected, getAl
             price: space.price,
             length: space.length,
             width: space.width,
-            availability: space.available_periods,
+            availibility: space.available_periods,
             avatar: space.avatar
             
         })
@@ -102,6 +103,13 @@ const ParkingSpaceDisplay = ({carSpaceInformation, setPublishFormSelected, getAl
             ),
         },
         {
+            title: 'Availability',
+            key: 'availibility',
+            render: (_, record) => (
+                record.availibility.length > 0 ? <AvailableDate record={record}/> : "Not published yet"
+            ),
+        },
+        {
             title: 'Price',
             key: 'price',
             render: (_, record) => (
@@ -115,7 +123,7 @@ const ParkingSpaceDisplay = ({carSpaceInformation, setPublishFormSelected, getAl
             key: 'action',
             render: (_, record) => (
                 <Space size="small">
-                {record.availability.length !== 0 && 
+                {record.availibility.length !== 0 && 
                 <Popconfirm 
                     title="Are you sure？" 
                     okText="Yes" 
@@ -125,7 +133,7 @@ const ParkingSpaceDisplay = ({carSpaceInformation, setPublishFormSelected, getAl
                     <Button >Unpublish</Button>
                 </Popconfirm>
                 }
-                {record.availability.length === 0 && <PublishButton 
+                {record.availibility.length === 0 && <PublishButton 
                     setPublishFormSelected={setPublishFormSelected}
                     carSpaceId={record.id}
                     getAllListings={getAllListings}
