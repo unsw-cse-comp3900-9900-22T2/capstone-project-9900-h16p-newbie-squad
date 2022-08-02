@@ -2,6 +2,7 @@ import React from 'react'
 import {Link, useNavigate } from "react-router-dom";
 import Header from './Header'
 import './login&signup.css'
+import LoginForm from './LoginForm';
 
 var password_visible = false
 export default function LoginPage() {
@@ -48,7 +49,7 @@ export default function LoginPage() {
         <Header/>
         <div className='information-box'>
             <div className='container-noborder'>
-                <div className='all_center'>
+                {/* <div className='all_center'>
                     <div>
                         <div className='all_center'>User name</div>
                         <input className="inputBlock" type="text" id="User_name"/>
@@ -61,7 +62,8 @@ export default function LoginPage() {
                             <button onClick={()=>Login()}>Login</button>
                         </div>
                     </div>
-                </div>
+                </div> */}
+                <LoginForm/>
             </div>
         </div>
     </div>

@@ -1,4 +1,7 @@
-1. virtual environment installation:
+####This guide is used for a brand new clone of the GitHub Repo####
+####Please follow the step-by-step guide####
+
+1. switch to the backend directory, then install the virtual enrironment:
 cd capstone-project-9900-h16p-newbie-squad/backend
 
 #Linux/macOS:
@@ -16,11 +19,11 @@ venv\Scripts\activate
 source venv/bin/activate
 
 
-3. in the virtual enrironment, install Flask and other libraries:
+3. in the virtual enrironment, run the command to install Flask and other libraries:
 pip install -r requirements.txt
 
 
-4. start the application:
+4. set up enrironment variables:
 //Windows
 $env:FLASK_DEBUG=1
 $env:FLASK_APP="project.py"
@@ -29,6 +32,11 @@ $env:FLASK_APP="project.py"
 export FLASK_DEBUG=1
 export FLASK_APP="project.py"
 
+
+5. run the application
 flask run
 
 
+There is a built-in Administrator account ready for use:
+username: Admin
+password: Admin123

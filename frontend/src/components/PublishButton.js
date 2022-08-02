@@ -60,21 +60,30 @@ const PublishButton = ({ setPublishFormSelected, carSpaceId, getAllListings }) =
     setIsModalVisible(false);
   };
 
+  const disabledDateStart = (current) => {
+    const dateFormat = current._d.toISOString().split('T')[0]
+    const today = new Date().toISOString().split('T')[0]
+    return dateFormat < today
+  }
+
+  const disabledDateEnd = (current) => {
+    const dateFormat = current._d.toISOString().split('T')[0]
+    const today = new Date().toISOString().split('T')[0]
+    return dateFormat <= today
+  }
+
   return (
     <>
       <Button type="primary" onClick={showModal}>
         Publish
       </Button>
       <Modal title="Publish this parking space" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
-        {/* Start  <input type="date" onChange={updateStartDate}/> */}
         <Space direction="vertical">
-          From <DatePicker onChange={updateStartDate} />
+          From <DatePicker onChange={updateStartDate} disabledDate={disabledDateStart}/>
         </Space>
-        {/* <br></br> */}
         <Space direction="vertical">
-          To <DatePicker onChange={updateEndtDate} />
+          To <DatePicker onChange={updateEndtDate} disabledDate={disabledDateEnd}/>
         </Space>
-        {/* End  <input type="date" onChange={updateEndtDate}/> */}
       </Modal>
     </>
   );
