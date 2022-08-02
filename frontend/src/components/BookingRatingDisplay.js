@@ -21,7 +21,7 @@ const BookingRatingDisplay = ({BookingRating}) => {
           fetch(`http://127.0.0.1:5000/reviews/my_reviews/${review_id}`, requestOption)
           .then(res => {
               if (res.status === 200) {
-                location.reload(true)
+                // location.reload()
                   return
               } else {
                   throw(res)

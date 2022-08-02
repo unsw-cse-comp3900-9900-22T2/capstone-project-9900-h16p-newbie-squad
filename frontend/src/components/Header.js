@@ -57,7 +57,10 @@ export default function Header() {
           <Link to="/"> <HomeOutlinedIcon fontSize='large'/></Link>
         </div>
         <div className='my-account'>
-          <Link to="/login-page"> <LoginIcon/></Link>
+          <Link to="/login-page"> 
+            {/* <LoginIcon/> */}
+            Login
+          </Link>
         </div>
         <div className='sign-up'>
           <Link to="/SignUp-page"> Sign up</Link>

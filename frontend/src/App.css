@@ -50,6 +50,7 @@
   right: 50px;
   color: aliceblue;
   top: 13px;
+  font-weight: 700;
 }
 
 .my-account:hover {
@@ -70,6 +71,10 @@
   color: aliceblue;
   top: 13px;
   font-weight:700;
+}
+.sign-up:hover {
+  text-decoration: underline;
+  cursor: pointer;
 }
 
 .logout:hover {

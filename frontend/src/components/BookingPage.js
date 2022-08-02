@@ -79,7 +79,7 @@ export default function BookingPage() {
         setTimeRemain(timerSec)
         if (timerSec < 0) {
           clearInterval(auth_timer)
-          location.reload(true)
+          // location.reload()
         }
       }, 1000)
     }
@@ -168,7 +168,7 @@ export default function BookingPage() {
             {
               console.log(response)
               setBookDisplay(true)
-              location.reload(true)
+              // location.reload()
             }
         })
     }
