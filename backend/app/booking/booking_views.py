@@ -7,10 +7,10 @@ from datetime import datetime, timedelta
 
 
 def parseStatusCode(status_code):
-    match status_code:
-        case Status.Accepted_Payment_Required: return 'Accepted_Payment_Required'
-        case Status.Successful: return 'Successful'
-        case Status.Cancelled: return 'Cancelled'
+    #match status_code:
+    if status_code==Status.Accepted_Payment_Required: return 'Accepted_Payment_Required'
+    elif status_code==Status.Successful: return 'Successful'
+    elif status_code==Status.Cancelled: return 'Cancelled'
 
 
 @booking_bp.route("/bookings/mybookings",methods=['GET'])
@@ -20,14 +20,10 @@ def getMyBookings():
     mybookings=[]
     for eachOfMyBooking in Booking.query.filter_by(customer=curr_user).all():
         target_parking_space=eachOfMyBooking.parking_space
-
+        
         address = 'Address: %s %s %s %s.' % (target_parking_space.street, target_parking_space.suburb,
                                             target_parking_space.state, target_parking_space.postcode)
-        price=target_parking_space.price
-        start_date=eachOfMyBooking.start_date.strftime('%Y-%m-%d')
-        end_date=eachOfMyBooking.end_date.strftime('%Y-%m-%d')
-        print(eachOfMyBooking.parking_space)
-
+        
         mybookings.append({
             'booking_id':eachOfMyBooking.id,
             'parking_space_id':eachOfMyBooking.parking_space_id,
@@ -37,6 +33,8 @@ def getMyBookings():
             'status':parseStatusCode(eachOfMyBooking.status),
             'address': address,
             'price':target_parking_space.price,
+            #send the time_remaining field back to the customer, in seconds
+            #such that frontend can show user a timer, indicating time remaining
             "time_remaining":None if eachOfMyBooking.status!=Status.Accepted_Payment_Required \
                 else Status.Must_Pay_Within-(datetime.now()-eachOfMyBooking.booking_time).total_seconds()
         })
@@ -44,27 +42,29 @@ def getMyBookings():
     return {'mybookings':mybookings},200
         
 
-
-#2022.7.25修改：接收的参数现在是parkingspace_id
 @booking_bp.route("/bookings/new/<int:parkingspace_id>",methods=['PUT'])
 def makeBookingRequest(parkingspace_id):
     curr_user=g.curr_user
 
     request_data = request.get_json()
 
+    #check time format is viable
     try:
         start_date = datetime.strptime(request_data.get('start_date'), '%Y-%m-%d').date()
         end_date = datetime.strptime(request_data.get('end_date'), '%Y-%m-%d').date()
     except:
         return {'error': 'invalid time format'}, 400
 
+    #fetch parking space from database
     target_parking_space=Parking_space.query.filter_by(id=parkingspace_id).first()
 
     if target_parking_space==None: return {'error':'cannot find this parking space'},400
 
     available_slot=None
     for each_available_period in target_parking_space.available_periods:
-        #找到一个可用时间段
+        #loop all the available slots, each slot is represented by a start_date and end_date pair
+        #determine if there is a slot available for the current booking request
+        #this thing should be checked at the frontend, here is for robustness
         if each_available_period.start_date<=start_date and each_available_period.end_date>=end_date:
             available_slot=each_available_period
             break
@@ -72,7 +72,7 @@ def makeBookingRequest(parkingspace_id):
     if available_slot==None:
         return {'error':'period is not available'},400
     
-    #切割之后的新时间段
+    #slice the time slots
     new_slot_1=Available_Period(start_date=available_slot.start_date,end_date=start_date-timedelta(1),\
         parking_space=target_parking_space) if available_slot.start_date<start_date else None
     new_slot_2=Available_Period(start_date=end_date+timedelta(1),end_date=available_slot.end_date,\
@@ -101,8 +101,6 @@ def makeBookingRequest(parkingspace_id):
 
 @booking_bp.route("/bookings/cancel/<int:booking_id>",methods=['POST'])
 def cancelBooking(booking_id):
-    #curr_user=g.curr_user
-
     target_booking=Booking.query.filter_by(id=booking_id).first()
     if target_booking==None:
         return {'error':'cannot find this booking'},400
@@ -138,8 +136,7 @@ def cancelBooking(booking_id):
     return {},200
 
 
-
-#返回所有我旗下所有parking_space的所有booking
+#all the bookings for any of my owning parking spaces
 @booking_bp.route("/bookings/my_received_bookings",methods=['GET'])
 def myReceivedBookings():
     curr_user=g.curr_user
@@ -199,28 +196,20 @@ def payForBooking(booking_id):
     total_price=unit_price*((end_date-start_date).total_seconds()/86400)
 
     this_billing=Billing(
-        #永久保存订单成功当时的provider和customer的id，便于后面搜索历史订单
         provider_id=provider.id,
         customer_id=customer.id,
-        #永久保存订单成功当时的provider和customer的username
         provider_name=provider.username,
         customer_name=customer.username,
-        #这张表只是存储历史记录，因此address不再分开了，生成历史记录的时候把street，suburb等合成一个字符串
         address=address,
         start_date=start_date,
         end_date=end_date,
         unit_price=unit_price,
         total_price=total_price,
-        #永久保存customer付款时用的银行卡号
         customer_card_number=customer_card_number,
-        #永久保存provider收款时用的账户号
         provider_bank_account=provider_bank_account
     )
 
-    #向数据库中添加订单历史记录
     db.session.add(this_billing)
-
-    #更新成功支付的这个booking的状态为Successful
     target_booking.status=Status.Successful
     db.session.add(target_booking)
 

@@ -62,7 +62,6 @@ from app.models import Vehicle,Role,User,Parking_space,Listing
 Parking_space.query.all()
 
 
-
 第四部分，测试listing和booking（需修改）
 from app import db
 from app.models import Listing, Booking
@@ -111,6 +110,9 @@ jiaxin=User(username='jiaxin',email='456@email.com',password='123456',role=custo
 bowen=User(username='bowen',email='789@email.com',password='123456',role=provider_role,bio='niubi3')
 db.session.add_all([yindi,jiaxin,bowen])
 db.session.commit()
+new_admin=User(username='Admin', password="Admin123", role=admin_role)
+db.session.add(new_admin)
+db.session.commit()
 User.query.all()
 from app import db
 from app.models import Vehicle,Role,User
@@ -121,3 +123,20 @@ db.session.add(car_a)
 db.session.add(car_b)
 db.session.commit()
 Vehicle.query.all()
+
+
+
+最终测试：
+from app import db
+from app.models import Role,User
+db.drop_all()
+db.create_all()
+admin_role=Role(role_name='admin')
+customer_role=Role(role_name='customer')
+provider_role=Role(role_name='provider')
+db.session.add_all([admin_role,customer_role,provider_role])
+db.session.commit()
+new_admin=User(username='Admin', password="Admin123", role=admin_role)
+db.session.add(new_admin)
+db.session.commit()
+User.query.all()
