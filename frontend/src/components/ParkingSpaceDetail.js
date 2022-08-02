@@ -4,7 +4,7 @@ import base_64 from "./ba64_sample"
 
 const ParkingSpaceDetail = ({record}) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
-    
+
   const showModal = () => {
     setIsModalVisible(true);
   };
@@ -27,12 +27,12 @@ const ParkingSpaceDetail = ({record}) => {
         <p>Price: {record.price} AUD/per day</p>
         <p>Length: {record.length}m</p>
         <p>Width: {record.width}m</p>
-        {record.availability.length === 0 && <p>Availability: Not published yet</p>}
+        {/* {record.availability.length === 0 && <p>Availability: Not published yet</p>}
         {record.availability.length > 0 && 
             <Space size="small">
                 Availability: {record.availability[0].start_date} to {record.availability[0].end_date}
             </Space>
-        }
+        } */}
         
       </Modal>
     </>
