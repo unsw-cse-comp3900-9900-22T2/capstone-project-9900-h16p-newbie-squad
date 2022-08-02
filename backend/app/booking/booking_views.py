@@ -101,7 +101,7 @@ def makeBookingRequest(parkingspace_id):
 
 @booking_bp.route("/bookings/cancel/<int:booking_id>",methods=['POST'])
 def cancelBooking(booking_id):
-    curr_user=g.curr_user
+    #curr_user=g.curr_user
 
     target_booking=Booking.query.filter_by(id=booking_id).first()
     if target_booking==None:
