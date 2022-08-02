@@ -1,4 +1,4 @@
-import { Button, Modal, Space, DatePicker } from 'antd';
+import { Button, Modal, Space, DatePicker, message } from 'antd';
 import React, { useState } from 'react';
 // import PublishForm from './PublishForm';
 
@@ -39,6 +39,7 @@ const PublishButton = ({ setPublishFormSelected, carSpaceId, getAllListings }) =
     })
     .then(data => {
         console.log(data)
+        message.success("Published successfully!")
         getAllListings()
     })
     .catch(error => console.log(error))

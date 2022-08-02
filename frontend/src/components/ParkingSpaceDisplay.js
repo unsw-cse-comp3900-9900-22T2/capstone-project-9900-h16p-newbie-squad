@@ -1,4 +1,4 @@
-import { Space, Table, Tag, Button, Popconfirm } from 'antd';
+import { Space, Table, Tag, Button, Popconfirm, Image } from 'antd';
 import React, {useEffect} from 'react';
 import PublishButton from './PublishButton';
 import EditParkingPopup from './EditParkingPopup';
@@ -76,14 +76,17 @@ const ParkingSpaceDisplay = ({carSpaceInformation, setPublishFormSelected, getAl
         .catch(error => console.log(error))
     }
 
+    const getLargePicture = () => {
+        console.log("yes");
+    }
+
     const columns = [
         {
             title: 'Avatar',
             key: 'avatar',
             render: (_, record) => (
-                <>
-                    {/* <img src={record.avatar} height="150px"/> */}
-                    <img src={base_64+record.avatar} height="150px"/>
+                <>  
+                    {record.avatar && <Image src={base_64+record.avatar} height="150px"/>}
                     <ImageUpload getAllListings={getAllListings} space_id={record.id}/>
                 </>
             ),
@@ -95,7 +98,6 @@ const ParkingSpaceDisplay = ({carSpaceInformation, setPublishFormSelected, getAl
             <Space size="small">
                 {record.address}
                 <ParkingSpaceDetail record={record}/>
-                {/* <ImageUpload/> */}
             </Space>
             ),
         },
@@ -108,18 +110,6 @@ const ParkingSpaceDisplay = ({carSpaceInformation, setPublishFormSelected, getAl
             </Space>
             ),
         },
-        // {
-        //     title: 'Availability',
-        //     key: "availability",
-        //     render: (_, record) => (
-        //         record.availability.length === 0 ? 
-        //         "Not published yet"
-        //         :
-        //         <Space size="small">
-        //             From {record.availability[0].start_date} to {record.availability[0].end_date}
-        //         </Space>
-        //     ),
-        // },
         {
             title: 'Action',
             key: 'action',

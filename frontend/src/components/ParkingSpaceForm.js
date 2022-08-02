@@ -45,7 +45,7 @@ export default function ParkingSpaceForm({setIsModalVisible, getAllListings}) {
         "width": values.width,
         "price": values.price,
         "latitude": lat,
-        "longitude": lng
+        "longitude": lng,
     }
     const requestOption = {
         method: "POST",

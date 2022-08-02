@@ -53,7 +53,7 @@
 
 .listing-card {
     height: 65px;
-    width: 97%;
+    width: 98%;
     padding: 5px;
     position: relative;
 }
@@ -67,7 +67,7 @@
 .listing-img {
     height: 55px;
     width: 55px;
-    background-color: #c8d7d4;
+    background-color: #f6f6f6;
     display: inline-block;
     padding-right: 5px;
 }
@@ -170,25 +170,25 @@
 .price-slider-save {
     position: absolute;
     bottom: 10px;
-    left: 110px;
-    background-color: #27b688;
+    left: 105px;
+    /* background-color: #27b688;
     border: #c8d7d4;
     border-radius: 4px;
     color: #ffffff;
     font-size: 12px;
-    font-weight: bold;
+    font-weight: bold; */
 }
 
 .price-slider-close {
     position: absolute;
     bottom: 10px;
-    left: 40px;
-    background-color: #27b688;
+    left: 30px;
+    /* background-color: #27b688;
     border: #c8d7d4;
     border-radius: 4px;
     color: #ffffff;
     font-size: 12px;
-    font-weight: bold;
+    font-weight: bold; */
 }
 
 .date-style {

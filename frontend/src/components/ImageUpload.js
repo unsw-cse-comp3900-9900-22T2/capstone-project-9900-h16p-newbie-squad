@@ -27,14 +27,14 @@ const ImageUpload = ({getAllListings, space_id}) => {
     const upLoadImage = async(e) => {
         const file = e.target.files[0]
         const base64 = await convertBase64(file)
-        console.log(base_64_header, base64.substr(base_64_header.length))
-        setBaseImage(base64)
+        // console.log(base_64_header, base64.substr(base_64_header.length))
+        setBaseImage(base64.substr(base_64_header.length))
     }
 
     const updateImage = () => {
         // console.log(baseImage);
         const data = {
-            "picture_1": baseImage.substr(base_64_header.length)
+            "picture_1": baseImage
         }
         const requestOption = {
             method: "PUT",
@@ -71,7 +71,7 @@ const ImageUpload = ({getAllListings, space_id}) => {
       </Button>
       <Modal title="Upload image for your parking space" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
         <input type="file" accept="image/jpeg" onChange={upLoadImage}></input>
-        <img src={baseImage} height="150px"/>
+        {baseImage && <img src={base_64_header+baseImage} height="150px"/>}
       </Modal>
     </>
   )

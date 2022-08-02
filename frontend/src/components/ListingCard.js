@@ -2,6 +2,8 @@ import React from 'react'
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import BookingButton from './BookingButton';
+import {Image} from "antd"
+import base_64 from "./ba64_sample"
 // import {Link, useNavigate} from 'react-router-dom';
 
 
@@ -15,7 +17,10 @@ export default function ListingCard({listing, priceMode, setSelected}) {
     // }
   return (
     <Paper className='listing-card'>
-        <div className='listing-img'></div>
+        <div className='listing-img'>
+            {listing.avatar && <Image width={55} height={55} src={base_64+listing.avatar}/>}
+        </div>
+
         <div className='listing-info' onClick={() => setSelected(listing)}>
             {listing.street}, {listing.suburb} {listing.state}, {listing.postcode}
             <div className='date-style'>
@@ -35,9 +40,6 @@ export default function ListingCard({listing, priceMode, setSelected}) {
                     <div className='per-day'>per month</div>
                 </div>
             }
-            
-            {/* <Button variant="contained" size="medium" className='book-button'>Book</Button> */}
-            {/* <button className='book-button' onClick={bookOnclick}>Book</button> */}
             <BookingButton listing={listing}/>
         </div>
     </Paper>
