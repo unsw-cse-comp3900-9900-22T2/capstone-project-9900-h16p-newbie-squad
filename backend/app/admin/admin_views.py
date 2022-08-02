@@ -2,6 +2,7 @@ from . import admin_bp
 from flask import Blueprint, request, session,url_for,jsonify
 from .. import db
 from ..models import Role, User, Parking_space
+import base64
 
 
 @admin_bp.route("/admin/parkingspaces", methods=['GET'])
@@ -24,9 +25,9 @@ def adminGetParkingSpaces():
                 "price": parking_space.price,
                 "is_active": parking_space.is_active,
                 "average_rating": parking_space.average_rating,
-                "picture_1": parking_space.picture_1,
-                "picture_2": parking_space.picture_2,
-                "picture_3": parking_space.picture_3
+                "picture_1": (base64.b64encode(parking_space.picture_1)).decode() if parking_space.picture_1 else None,
+                "picture_2": (base64.b64encode(parking_space.picture_2)).decode() if parking_space.picture_2 else None,
+                "picture_3": (base64.b64encode(parking_space.picture_3)).decode() if parking_space.picture_3 else None,
         })
 
     return {'admin_all_parking_spaces': all_parking_spaces}, 200
@@ -50,9 +51,9 @@ def adminGetParkingSpaceDetail(parkingspace_id):
                     "price": parkingspace.price,
                     "is_active": parkingspace.is_active,
                     "average_rating": parkingspace.average_rating,
-                    "picture_1": parkingspace.picture_1,
-                    "picture_2": parkingspace.picture_2,
-                    "picture_3": parkingspace.picture_3
+                    "picture_1": (base64.b64encode(parkingspace.picture_1)).decode() if parkingspace.picture_1 else None,
+                    "picture_2": (base64.b64encode(parkingspace.picture_2)).decode() if parkingspace.picture_2 else None,
+                    "picture_3": (base64.b64encode(parkingspace.picture_3)).decode() if parkingspace.picture_3 else None,
     }
     return return_dict, 200
 
@@ -97,6 +98,13 @@ def adminUpdateParkingSpace(parkingspace_id):
         target_parking_space.latitude = info_to_update['latitude']
     if info_to_update.get('longitude'):
         target_parking_space.longitude = info_to_update['longitude']
+    if info_to_update.get('picture_1'):
+        target_parking_space.picture_1 = base64.b64decode(info_to_update['picture_1'])
+    if info_to_update.get('picture_2'):
+        target_parking_space.picture_2 = base64.b64decode(info_to_update['picture_2'])
+    if info_to_update.get('picture_3'):
+        target_parking_space.picture_3 = base64.b64decode(info_to_update['picture_3'])
+
 
     db.session.add(target_parking_space)
     db.session.commit()
