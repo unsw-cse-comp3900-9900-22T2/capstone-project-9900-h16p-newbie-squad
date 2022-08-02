@@ -1,16 +1,10 @@
 from flask import request,g
-from .models import User
+from .models import User, Role
+from . import db
+from flask_sqlalchemy import SQLAlchemy, inspect
 
 
 def before_request_check_token():
-    '''if request.blueprint=='profile' or request.blueprint=='car' \
-        or request.blueprint=='parkingspace' or request.blueprint=='booking' \
-        or request.blueprint=='billing' or request.blueprint=='admin' \
-        or request.endpoint=='review.create_new_review'\
-        or request.endpoint=='review.get_my_review_of_a_booking'\
-        or request.endpoint=='review.get_my_reviews'\
-        or request.endpoint=='delete_my_review':'''
-
     try:
         request_token=request.headers.get('token')
         print('Verifying token: ',request_token)
@@ -32,7 +26,4 @@ def before_request_check_token():
     except:
         g.curr_user=None
         return False
-            
-    '''else:
-        g.curr_user=None
-        return True'''
+

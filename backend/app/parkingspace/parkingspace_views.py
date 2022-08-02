@@ -12,7 +12,8 @@ def myparkingspaces():
 
     all_parking_spaces=[]
 
-    #2022.7.25修改：只返回状态为active的parking_space
+    #only return parking spaces for which is_active==True
+    #if is_active==False, this parking space has been deleted by the owner
     for each_parking_space in Parking_space.query.filter_by(owner=curr_user,is_active=True).all():
         result={
             "id":each_parking_space.id,
@@ -26,12 +27,9 @@ def myparkingspaces():
             "price":each_parking_space.price,
             "latitude":each_parking_space.latitude,
             "longitude":each_parking_space.longitude,
-
-            #2022.7.29新增：返回值中增加average_rating和avatar
             "average_rating":each_parking_space.average_rating,
             "avatar":base64.b64encode(each_parking_space.picture_1).decode() if each_parking_space.picture_1 else None
         }
-        #result["avatar"]=base64.b64encode(each_parking_space.picture_1).decode() if each_parking_space.picture_1 else None
 
         available_periods=[]
         for each_available_period in each_parking_space.available_periods:
@@ -41,7 +39,6 @@ def myparkingspaces():
             })
 
         result["available_periods"]=available_periods
-        #print(result)
 
         all_parking_spaces.append(result)
 
@@ -105,11 +102,6 @@ def getParkingSpace(parkingspace_id):
             "picture_2":base64.b64encode(target_parking_space.picture_2).decode() if target_parking_space.picture_2 else None,
             "picture_3":base64.b64encode(target_parking_space.picture_3).decode() if target_parking_space.picture_3 else None,
             "available_periods":[]}
-
-    #detail["picture_1"]=base64.b64encode(target_parking_space.picture_1).decode() if target_parking_space.picture_1 else None,
-    #detail["picture_2"]=base64.b64encode(target_parking_space.picture_2).decode() if target_parking_space.picture_2 else None,
-    #detail["picture_3"]=base64.b64encode(target_parking_space.picture_3).decode() if target_parking_space.picture_3 else None,
-
    
     for each_available_period in target_parking_space.available_periods:
         available_period={
@@ -118,8 +110,6 @@ def getParkingSpace(parkingspace_id):
         }
         detail["available_periods"].append(available_period)        
         
-    #reviews由另外的API执行
-    
     return detail,200
 
 
@@ -176,8 +166,6 @@ def updateParkingSpace(parkingspace_id):
         target_parking_space.latitude = info_to_update['latitude']
     if info_to_update.get('longitude'):
         target_parking_space.longitude = info_to_update['longitude']
-
-    #2022.7.29修改：车位可以添加三张图片
     if info_to_update.get('picture_1'):
         target_parking_space.picture_1 = base64.b64decode(info_to_update['picture_1'])
     if info_to_update.get('picture_2'):

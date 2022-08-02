@@ -4,8 +4,6 @@ from .. import db
 from ..models import Booking, Status, Review, Parking_space
 
 
-
-
 @review_bp.route("/reviews/parking_space_review/<int:parking_space_id>",methods=['GET'])
 def get_reviews_of_a_parking_space(parking_space_id):
     target_parking_space=Parking_space.query.filter_by(id=parking_space_id).first()
@@ -21,7 +19,6 @@ def get_reviews_of_a_parking_space(parking_space_id):
         })
 
     return {'reviews':result},200
-
 
 
 @review_bp.route("/reviews/my_reviews/new/<int:booking_id>",methods=['POST'])
@@ -66,7 +63,6 @@ def create_new_review(booking_id):
     return {'new_review_id':new_review_id},200
 
 
-
 @review_bp.route("/reviews/my_reviews/<int:booking_id>",methods=['GET'])
 def get_my_review_of_a_booking(booking_id):
     curr_user=g.curr_user
@@ -81,7 +77,6 @@ def get_my_review_of_a_booking(booking_id):
     }
 
     return {'my_review':result},200
-
 
 
 @review_bp.route("/reviews/my_reviews",methods=['GET'])
@@ -100,7 +95,6 @@ def get_my_reviews():
             'parking_space_id':each_review.parking_space_id
         })
     return {'my_reviews':result},200
-
 
 
 @review_bp.route("/reviews/my_reviews/<int:review_id>",methods=['DELETE'])
