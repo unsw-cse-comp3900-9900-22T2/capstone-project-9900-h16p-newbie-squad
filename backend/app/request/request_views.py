@@ -417,7 +417,7 @@ def acceptOffer(offer_id):
     target_offer = Offer.query.filter_by(id=offer_id, is_active=True).first()
     if target_offer == None:
         return {'error': 'offer not found'}, 400
-    target_request = Request.query.filter_by(owner=curr_user, id=target_offer.request_id, is_active=True).first()
+    target_request = Request.query.filter_by(id=target_offer.request_id, is_active=True).first()
     if target_request == None:
         return {'error': 'request not found'}, 400
     if target_request.complete == True:
