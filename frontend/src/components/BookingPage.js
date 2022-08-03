@@ -218,13 +218,14 @@ export default function BookingPage() {
               console.log(response)
               setBookDisplay(true)
               
-              clearInterval(intervalRef.current)
-              navigate(`/booking-page/${carspace_id}`)
-              //location.reload()
-              GetCarSpace(carspace_id)
-              CheckMyBooking()
-              GetAllComment()
+              
             }
+            clearInterval(intervalRef.current)
+            navigate(`/booking-page/${carspace_id}`)
+            //location.reload()
+            GetCarSpace(carspace_id)
+            CheckMyBooking()
+            GetAllComment()
         })
     }
     
