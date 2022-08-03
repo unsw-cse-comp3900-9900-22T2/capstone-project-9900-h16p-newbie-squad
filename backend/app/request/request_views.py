@@ -16,7 +16,7 @@ def myRequests():
     # 返回所有的request
     # for each_request in Request.query.filter_by(owner=curr_user).all():
 
-    for each_request in Request.query.filter_by(owner=curr_user).all():
+    for each_request in Request.query.filter_by(owner=curr_user, is_active=True).all():
         result = {
             "id": each_request.id,
             "owner": each_request.owner.username,
