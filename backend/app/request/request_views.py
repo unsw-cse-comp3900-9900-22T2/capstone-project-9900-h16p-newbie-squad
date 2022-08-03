@@ -420,6 +420,8 @@ def acceptOffer(offer_id):
     target_request = Request.query.filter_by(owner=curr_user, id=target_offer.request_id, is_active=True).first()
     if target_request == None:
         return {'error': 'request not found'}, 400
+    if target_request.complete == True:
+        return {'error': 'request already completed'}, 400
     try:
         target_offer.accept = True
         db.session.add(target_offer)
