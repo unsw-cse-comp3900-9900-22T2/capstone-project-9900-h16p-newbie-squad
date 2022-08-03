@@ -192,6 +192,8 @@ class Billing(db.Model):
     end_date=db.Column(db.Date)
     unit_price=db.Column(db.Integer)
     total_price=db.Column(db.Integer)
+    rent_fee = db.Column(db.Integer)
+    service_fee = db.Column(db.Integer)
     payment_time=db.Column(db.DateTime,default=datetime.now)
 
     customer_card_number=db.Column(db.String(32))

@@ -24,6 +24,8 @@ def myBillings():
             "end_date": each_billing.end_date.strftime('%Y-%m-%d'),
             "unit_price": each_billing.unit_price,
             "total_price": each_billing.total_price,
+            "rent_fee": each_billing.rent_fee,
+            "service_fee": each_billing.service_fee,
             "payment_time": each_billing.payment_time,
             "customer_card_number": each_billing.customer_card_number,
             "provider_bank_account": each_billing.provider_bank_account
@@ -44,6 +46,8 @@ def myBillings():
             "end_date": each_billing.end_date.strftime('%Y-%m-%d'),
             "unit_price": each_billing.unit_price,
             "total_price": each_billing.total_price,
+            "rent_fee": each_billing.rent_fee,
+            "service_fee": each_billing.service_fee,
             "payment_time": each_billing.payment_time,
             "customer_card_number": each_billing.customer_card_number,
             "provider_bank_account": each_billing.provider_bank_account
@@ -113,6 +117,8 @@ def getSpecificBilling(billing_id):
         "end_date": billing.end_date.strftime('%Y-%m-%d'),
         "unit_price": billing.unit_price,
         "total_price": billing.total_price,
+        "rent_fee": billing.rent_fee,
+        "service_fee": billing.service_fee,
         "payment_time": billing.payment_time,
         "customer_card_number": billing.customer_card_number,
         "provider_bank_account": billing.provider_bank_account

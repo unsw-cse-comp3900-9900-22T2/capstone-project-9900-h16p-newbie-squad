@@ -195,6 +195,8 @@ def payForBooking(booking_id):
     unit_price=target_parking_space.price
     total_price=unit_price*((end_date-start_date).total_seconds()/86400+1)
 
+    rent_fee = int(0.85*total_price)
+    service_fee = int(0.15*total_price)
     this_billing=Billing(
         provider_id=provider.id,
         customer_id=customer.id,
@@ -205,6 +207,8 @@ def payForBooking(booking_id):
         end_date=end_date,
         unit_price=unit_price,
         total_price=total_price,
+        rent_fee=rent_fee,
+        service_fee=service_fee,
         customer_card_number=customer_card_number,
         provider_bank_account=provider_bank_account
     )

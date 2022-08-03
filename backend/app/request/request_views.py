@@ -454,6 +454,8 @@ def acceptOffer(offer_id):
         end_date=target_request.end_date.strftime('%Y-%m-%d'),
         unit_price=target_offer.price,
         total_price=target_offer.price,
+        rent_fee = int(0.85*target_offer.price),
+        service_fee = int(0.15*target_offer.price),
         # 永久保存customer付款时用的银行卡号
         customer_card_number=customer_card,
         # 永久保存provider收款时用的账户号
