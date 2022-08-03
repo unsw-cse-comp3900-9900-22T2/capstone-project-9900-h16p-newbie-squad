@@ -421,7 +421,7 @@ def acceptOffer(offer_id):
     if target_request == None:
         return {'error': 'request not found'}, 400
     if target_request.complete == True:
-        return {'error': 'request already completed'}, 400
+        return {'message': 'request already completed'}, 200
     try:
         target_offer.accept = True
         db.session.add(target_offer)
