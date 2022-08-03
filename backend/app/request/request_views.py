@@ -387,10 +387,12 @@ def getOffers(request_id):
     if target_request == None:
         return {'error': 'request not found'}, 400
     for eachOfMyOffer in Offer.query.filter_by(request= target_request, is_active=True).all():
+        owner_name = User.query.filter_by(eachOfMyOffer.owner_id).first().username
         myoffers.append({
             'id': eachOfMyOffer.id,
             'request_id': eachOfMyOffer.request_id,
             'owner_id': eachOfMyOffer.owner_id,
+            'owner_name': owner_name,
             'street': eachOfMyOffer.street,
             'suburb': eachOfMyOffer.suburb,
             'state': eachOfMyOffer.state,
