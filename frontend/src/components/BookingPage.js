@@ -118,6 +118,7 @@ export default function BookingPage() {
               console.log(response)
               setBookingRatingInformation(response.reviews)
                 //console.log(ratingSUM)
+                console.log(bookingRatingInformation);
             }
         })
     }
@@ -301,7 +302,9 @@ export default function BookingPage() {
             <div className='scrollable-container'>
               <div>
                 <div className='address-title'>Address: {street}, {suburb} {state}, {postcode}</div>
-                <div>Total rating: {totalRating} {starString}</div>
+                {bookingRatingInformation.length > 0 ? <div>Total rating: {totalRating} {starString}</div>
+                  : <div>Total rating: N/A</div>
+                }
                 <div>Price: {price} AUD/day</div>
                 <div>Width: {width}m</div>
                 <div>Length: {length}m</div>
