@@ -221,7 +221,7 @@ def publishedRequests():
 
     all_requests = []
 
-    for each_request in Request.query.filter_by(is_active=True, publish=True).all():
+    for each_request in Request.query.filter_by(is_active=True, publish=True, complete=False).all():
         result = {
             "id": each_request.id,
             "owner": each_request.owner_id,
