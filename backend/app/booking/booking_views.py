@@ -193,7 +193,7 @@ def payForBooking(booking_id):
     end_date=target_booking.end_date
 
     unit_price=target_parking_space.price
-    total_price=unit_price*((end_date-start_date).total_seconds()/86400)
+    total_price=unit_price*((end_date-start_date).total_seconds()/86400+1)
 
     this_billing=Billing(
         provider_id=provider.id,
