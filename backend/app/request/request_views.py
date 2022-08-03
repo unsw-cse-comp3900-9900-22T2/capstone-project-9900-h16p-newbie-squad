@@ -436,9 +436,11 @@ def acceptOffer(offer_id):
     customer = User.query.filter_by(id=target_request.owner_id).first().username
     address = 'Address: %s %s %s %s.' % (target_offer.street, target_offer.suburb, \
                                          target_offer.state, target_offer.postcode)
-
-    customer_card = Credit_card.query.filter_by(owner_id=target_request.owner_id).first().id
-    provider_bank = Bank_account.query.filter_by(owner_id=target_offer.owner_id).first().id
+    try:
+        customer_card = Credit_card.query.filter_by(owner_id=target_request.owner_id).first().id
+        provider_bank = Bank_account.query.filter_by(owner_id=target_offer.owner_id).first().id
+    except:
+        return {'error': 'no customer_card or provider_bank'}, 400
     this_billing = Billing(
         # 永久保存订单成功当时的provider和customer的id，便于后面搜索历史订单
         provider_id=target_offer.owner_id,
