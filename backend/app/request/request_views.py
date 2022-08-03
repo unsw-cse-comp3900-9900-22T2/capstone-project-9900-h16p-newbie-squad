@@ -38,7 +38,7 @@ def myRequests():
 
         all_requests.append(result)
 
-    return {"all_requests": [all_requests]}, 200
+    return {"all_requests": all_requests}, 200
 
 
 # 创建新的request
