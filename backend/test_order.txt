@@ -3,19 +3,34 @@ venv\Scripts\activate
 $env:FLASK_DEBUG = 1
 $env:FLASK_APP = "project.py"
 
-
-解决本地数据库文件和远程的冲突
 git checkout --ours backend/data-dev.sqlite
 
-flask shell命令：
-数据库初始化，重置：
+flask shell：
+#reset database
 from app import db
 db.drop_all()
 db.create_all()
 
 
-快速测试：
-建立三种角色，建立三个用户，在jiaxin下建立三辆车
+#Final test flask shell commands：
+from app import db
+from app.models import Role,User
+db.drop_all()
+db.create_all()
+admin_role=Role(role_name='admin')
+customer_role=Role(role_name='customer')
+provider_role=Role(role_name='provider')
+db.session.add_all([admin_role,customer_role,provider_role])
+db.session.commit()
+new_admin=User(username='Admin', password="Admin123", role=admin_role)
+db.session.add(new_admin)
+db.session.commit()
+User.query.all()
+
+
+
+
+#Fast Test:
 from app import db
 db.drop_all()
 db.create_all()
@@ -51,18 +66,3 @@ db.session.commit()
 Vehicle.query.all()
 
 
-
-最终测试：
-from app import db
-from app.models import Role,User
-db.drop_all()
-db.create_all()
-admin_role=Role(role_name='admin')
-customer_role=Role(role_name='customer')
-provider_role=Role(role_name='provider')
-db.session.add_all([admin_role,customer_role,provider_role])
-db.session.commit()
-new_admin=User(username='Admin', password="Admin123", role=admin_role)
-db.session.add(new_admin)
-db.session.commit()
-User.query.all()
