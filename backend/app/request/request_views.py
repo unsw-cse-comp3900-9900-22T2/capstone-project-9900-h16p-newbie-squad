@@ -437,8 +437,8 @@ def acceptOffer(offer_id):
     address = 'Address: %s %s %s %s.' % (target_offer.street, target_offer.suburb, \
                                          target_offer.state, target_offer.postcode)
     try:
-        customer_card = Credit_card.query.filter_by(owner_id=target_request.owner_id).first().id
-        provider_bank = Bank_account.query.filter_by(owner_id=target_offer.owner_id).first().id
+        customer_card = Credit_card.query.filter_by(owner_id=target_request.owner_id).first().card_number
+        provider_bank = Bank_account.query.filter_by(owner_id=target_offer.owner_id).first().account_id
     except:
         return {'error': 'no customer_card or provider_bank'}, 400
     this_billing = Billing(
