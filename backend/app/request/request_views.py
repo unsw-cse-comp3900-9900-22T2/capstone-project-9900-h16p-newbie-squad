@@ -19,7 +19,7 @@ def myRequests():
     for each_request in Request.query.filter_by(owner=curr_user, is_active=True).all():
         result = {
             "id": each_request.id,
-            "owner": each_request.owner.username,
+            "owner": each_request.owner_id,
             "title": each_request.title,
             "street": each_request.street,
             "suburb": each_request.suburb,
@@ -38,7 +38,7 @@ def myRequests():
 
         all_requests.append(result)
 
-    return {"all_requests": all_requests}, 200
+    return {"all_requests": [all_requests]}, 200
 
 
 # 创建新的request
@@ -90,7 +90,7 @@ def getRequest(request_id):
 
     detail = {
         "id": target_request.id,
-        "owner": curr_user.username,
+        "owner": target_request.owner_id,
         "title": target_request.title,
         "street": target_request.street,
         "suburb": target_request.suburb,
@@ -218,12 +218,13 @@ def unpublishRequest(request_id):
 # 返回所有is_active == True, publish == True 的 request，
 @request_bp.route('/myrequest/published_requests', methods=['GET'])
 def publishedRequests():
+
     all_requests = []
 
     for each_request in Request.query.filter_by(is_active=True, publish=True).all():
         result = {
             "id": each_request.id,
-            "owner": each_request.owner.username,
+            "owner": each_request.owner_id,
             "title": each_request.title,
             "street": each_request.street,
             "suburb": each_request.suburb,
@@ -255,7 +256,7 @@ def getPublishedRequest(request_id):
 
     detail = {
         "id": target_request.id,
-        "owner": curr_user.username,
+        "owner": target_request.owner_id,
         "title": target_request.title,
         "street": target_request.street,
         "suburb": target_request.suburb,
@@ -388,8 +389,8 @@ def getOffers(request_id):
     for eachOfMyOffer in Offer.query.filter_by(request= target_request, is_active=True).all():
         myoffers.append({
             'id': eachOfMyOffer.id,
-            'request_id': eachOfMyOffer.request.id,
-            'owner_id': eachOfMyOffer.owner.id,
+            'request_id': eachOfMyOffer.request_id,
+            'owner_id': eachOfMyOffer.owner_id,
             'street': eachOfMyOffer.street,
             'suburb': eachOfMyOffer.suburb,
             'state': eachOfMyOffer.state,
@@ -423,8 +424,8 @@ def acceptOffer(offer_id):
     except:
         return {'error': 'db internal error'}, 400
     # target_parking_space = ParkingSpace.query.filter_by(id=target_request.parking_space_id, is_active=True).first()
-    provider = User.queryy.filter_by(id=target_offer.owner_id).first().username
-    customer = User.queryy.filter_by(id=target_request.owner_id).first().username
+    provider = User.query.filter_by(id=target_offer.owner_id).first().username
+    customer = User.query.filter_by(id=target_request.owner_id).first().username
     address = 'Address: %s %s %s %s.' % (target_offer.street, target_offer.suburb, \
                                          target_offer.state, target_offer.postcode)
 
@@ -432,8 +433,8 @@ def acceptOffer(offer_id):
     provider_bank = Bank_account.query.filter_by(owner=target_offer.owner_id).first().id
     this_billing = Billing(
         # 永久保存订单成功当时的provider和customer的id，便于后面搜索历史订单
-        provider_id=target_offer.owner.id,
-        customer_id=target_request.owner.id,
+        provider_id=target_offer.owner_id,
+        customer_id=target_request.owner_id,
         # 永久保存订单成功当时的provider和customer的username
         provider_name=provider,
         customer_name=customer,
