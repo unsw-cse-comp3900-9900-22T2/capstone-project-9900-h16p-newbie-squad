@@ -80,12 +80,12 @@ def myRequestNew():
     return {'new_request_id': new_request_id}, 200
 
 
-# 根据request id 返回确定的一条request（包括被删除的）
+# 根据request id 返回确定的一条request
 @request_bp.route('/myrequest/<int:request_id>', methods=['GET'])
 def getRequest(request_id):
     curr_user = g.curr_user
     target_request = Request.query.filter_by(id=request_id).first()
-    if target_request == None:
+    if target_request == None or target_request.is_active == False:
         return {'error': 'invalid request'}, 400
 
     detail = {
@@ -301,8 +301,8 @@ def getMyOffer(request_id):
         #     is_active=db.Column(db.Boolean,nullable=False)
         myoffers.append({
             'id': eachOfMyOffer.id,
-            'request_id': eachOfMyOffer.request.id,
-            'owner_id': eachOfMyOffer.owner.id,
+            'request_id': eachOfMyOffer.request_id,
+            'owner_id': eachOfMyOffer.owner_id,
             'street': eachOfMyOffer.street,
             'suburb': eachOfMyOffer.suburb,
             'state': eachOfMyOffer.state,
