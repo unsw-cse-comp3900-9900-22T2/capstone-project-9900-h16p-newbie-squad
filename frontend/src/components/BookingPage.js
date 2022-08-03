@@ -1,5 +1,5 @@
 import { jsx } from '@emotion/react';
-import React, { useState, useEffect }from 'react'
+import React, { useState, useEffect, useRef }from 'react'
 import {useLocation, useParams, Link, useNavigate} from 'react-router-dom';
 import { Button, Divider, message } from 'antd';
 import Header from './Header';
@@ -12,7 +12,7 @@ export default function BookingPage() {
     // console.log(listing);
     // 此处的listing是object，里面有所有关于该车位的信息的信息
     let timerSec = 0
-    let auth_timer = null
+    const intervalRef = useRef()
     const navigate = useNavigate()
     
     const {carspace_id} = useParams()
@@ -41,7 +41,56 @@ export default function BookingPage() {
     const [totalRating,setTotalRating]=useState(3)
     const [starString,setStarSting] = useState("★")
     const [bookingRatingInformation, setBookingRatingInformation] = useState([])
+    const CheckMyBooking = () =>{
+      if(localStorage.getItem("token")==='')
+      {
+        setBookDisplay(true)
+        return
+      }
+      const headers = new Headers({
+        'Content-Type': 'application/json',
+        'token': localStorage.getItem("token")
+        });
 
+        fetch('http://localhost:5000/bookings/mybookings',
+        {
+            method: 'GET',
+            headers: headers,
+        })
+        .then(res => res.json())
+        .catch(error => {
+            console.error('Error:', error)
+        })
+        .then(response => {
+            if(response.error !== undefined)
+            {
+                alert(response.error)
+                console.log(response.error)
+            }
+            else 
+            {
+              console.log(response.mybookings)
+              
+              for(var i in response.mybookings)
+                //console.log(response.mybookings[i])
+              
+                if(response.mybookings[i].parking_space_id===parseInt(carspace_id) && response.mybookings[i].status==='Accepted_Payment_Required')
+                {  
+                  console.log(response.mybookings[i])
+                  setBookDisplay(false)
+                  setBookedStartTime(response.mybookings[i].start_date)
+                  setBookedEndTime(response.mybookings[i].end_date)
+                  setbooking_id(response.mybookings[i].booking_id.toString())
+                  ResetTimer(parseInt(response.mybookings[i].time_remaining))
+                  console.log(booking_id)
+                  return
+                }
+              setBookDisplay(true)
+              //bookDisplay(false)
+              
+            }
+        })
+    }
     const GetAllComment = () =>{
 
       const headers = new Headers({
@@ -75,13 +124,10 @@ export default function BookingPage() {
     const ResetTimer = (e) =>{
       timerSec = e
       setTimeRemain(e)
-      auth_timer = setInterval(() => {
-        timerSec= timerSec - 1 
+      
+      intervalRef.current = setInterval(() => {
+        timerSec = timerSec - 1 
         setTimeRemain(timerSec)
-        if (timerSec < 0) {
-          clearInterval(auth_timer)
-          // location.reload()
-        }
       }, 1000)
     }
     const SetIndex = (e) =>{
@@ -164,67 +210,24 @@ export default function BookingPage() {
         .then(response => {
             if(response.error !== undefined)
             {
-                alert(response.error)
+                //alert(response.error)
                 console.log(response.error)
             }
             else 
             {
               console.log(response)
               setBookDisplay(true)
-              // location.reload()
+              
+              clearInterval(intervalRef.current)
+              navigate(`/booking-page/${carspace_id}`)
+              //location.reload()
+              GetCarSpace(carspace_id)
+              CheckMyBooking()
+              GetAllComment()
             }
         })
     }
-    const CheckMyBooking = () =>{
-      if(localStorage.getItem("token")==='')
-      {
-        setBookDisplay(true)
-        return
-      }
-      const headers = new Headers({
-        'Content-Type': 'application/json',
-        'token': localStorage.getItem("token")
-        });
-
-        fetch('http://localhost:5000/bookings/mybookings',
-        {
-            method: 'GET',
-            headers: headers,
-        })
-        .then(res => res.json())
-        .catch(error => {
-            console.error('Error:', error)
-        })
-        .then(response => {
-            if(response.error !== undefined)
-            {
-                alert(response.error)
-                console.log(response.error)
-            }
-            else 
-            {
-              console.log(response.mybookings)
-              
-              for(var i in response.mybookings)
-                //console.log(response.mybookings[i])
-              
-                if(response.mybookings[i].parking_space_id===parseInt(carspace_id) && response.mybookings[i].status==='Accepted_Payment_Required')
-                {  
-                  console.log(response.mybookings[i])
-                  setBookDisplay(false)
-                  setBookedStartTime(response.mybookings[i].start_date)
-                  setBookedEndTime(response.mybookings[i].end_date)
-                  setbooking_id(response.mybookings[i].booking_id.toString())
-                  ResetTimer(parseInt(response.mybookings[i].time_remaining))
-                  console.log(booking_id)
-                  return
-                }
-              setBookDisplay(true)
-              //bookDisplay(false)
-              
-            }
-        })
-    }
+    
     const GetCarSpace = (carspace_id) =>{
       const headers = new Headers({
         'Content-Type': 'application/json',
@@ -282,6 +285,13 @@ export default function BookingPage() {
       CheckMyBooking()
       GetAllComment()
     },[])
+    
+    console.log(booking_id,timeRemain)
+    if(timeRemain < 0)
+    {
+        setTimeRemain(0)
+        UnBook()
+    }
     return (
       <div>
         <Header/>
@@ -337,7 +347,7 @@ export default function BookingPage() {
                     <button onClick={()=>UnBook()} className='book-button' id='book_button'>
                       unbook
                     </button>
-                    <Link to={`/pay-page/${carspace_id}/${booking_id}`}>
+                    <Link to={`/pay-page/${booking_id}/${carspace_id}/${bookedStartTime}/${bookedEndTime}`}>
                     <button className='pay-button' id='book_button'>
                       pay
                     </button>

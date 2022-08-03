@@ -7,8 +7,74 @@ import './login&signup.css'
 
 export default function BookingPage() {
     const navigate = useNavigate()
-    const {parking_id, booking_id} = useParams()
+    const {booking_id} = useParams()
+    const {carspace_id} = useParams()
+    const {start_Date} = useParams()
+    const {end_Date} = useParams()
     console.log(booking_id)
+    console.log(carspace_id)
+    console.log(start_Date)
+    console.log(end_Date)
+
+    const [street,setstreet]=useState(null)
+    const [suburb,setsuburb]=useState(null)
+    const [state,setstate]=useState(null)
+    const [postcode,setpostcode]=useState(null)
+    const [price,setprice]=useState(null)
+    const [width,setwidth]=useState(null)
+    const [length,setlength]=useState(null)
+    const [totalCost,setTotalCost]=useState(null)
+    const GetCarSpace = (carspace_id) =>{
+        const headers = new Headers({
+          'Content-Type': 'application/json',
+          });
+          fetch('http://localhost:5000/available_parking_spaces/'+carspace_id,
+          {
+              method: 'GET',
+              headers: headers,
+          })
+          .then(res => res.json())
+          .catch(error => {
+              console.error('Error:', error)
+          })
+          .then(response => {
+              if(response.error !== undefined)
+              {
+                  alert(response.error)
+                  console.log(response.error)
+              }
+              else 
+              {
+                console.log(response)
+                
+                var listingData=response
+                
+                setstreet(listingData.street)
+                setsuburb(listingData.suburb)
+                setstate(listingData.state)
+                setpostcode(listingData.postcode)
+                
+                setprice(listingData.price)
+                setwidth(listingData.width)
+                setlength(listingData.length)
+                
+                var startDate = new Date(start_Date)
+                var endDate = new Date(end_Date)
+
+                console.log(startDate,endDate)
+                //console.log("days",(endDate-startDate)/(24*1000*3600))
+                setTotalCost(listingData.price * (1 + (endDate-startDate)/(24*1000*3600)))
+                /*
+                setAvailability(listingData.availibility)
+                setpicture_1(listingData.picture_1)
+                setpicture_2(listingData.picture_2)
+                setpicture_3(listingData.picture_3)
+  
+                
+                    */
+              }
+          })
+    }
     const GetCreditCard = () =>{
         if(localStorage.getItem("token")==='')
         {
@@ -122,31 +188,47 @@ export default function BookingPage() {
                 console.log(response.error)
                 // alert('Thanks for your payment')
                 message.success("Thanks for your payment!")
-                navigate(`/booking-page/${parking_id}`)
+                navigate(`/booking-page/${carspace_id}`)
               }
           })
       }
 
     useEffect(() => {
         GetCreditCard()
+        GetCarSpace(carspace_id)
     },[])
     return(
         <div>
             <Header/>
             <div className='information-box'>
                 <div className='container-noborder'>
+                    
                     <div className='all_center'>
                         <div>
-                            <div id='fill_in_card'>
-                                <div className='all_center'>Card number</div>
-                                <input className="inputBlock" type="text" id="Card_number"/>
-                                <div className='all_center'>Card name</div>
-                                <input className="inputBlock" type="text" id="Card_name"/>
-                                <div className='all_center'>CVV</div>
-                                <input className="inputBlock" type="text" id="cvv"/>
-                                <div className='all_center'>Expire date</div>
-                                <input className="inputBlock" type="text" id="Expire_date"/>
-                                <div className='all_center'>
+                            <div>
+                                <div>Address: {street}, {suburb} {state}, {postcode}</div>
+                                <div>
+                                    Date: {start_Date} - {end_Date}
+                                </div>
+                                <div>Price: {price} AUD/day</div>
+                                <div>Width: {width}m</div>
+                                <div>Length: {length}m</div>
+                                <div>Total cost: {totalCost} AUD</div>
+                                
+                
+                            </div>
+                            <div className='all_center'>
+                                <div id='fill_in_card'>
+                                    <div className='all_center'>Card number</div>
+                                    <input className="inputBlock" type="text" id="Card_number"/>
+                                    <div className='all_center'>Card name</div>
+                                    <input className="inputBlock" type="text" id="Card_name"/>
+                                    <div className='all_center'>CVV</div>
+                                    <input className="inputBlock" type="text" id="cvv"/>
+                                    <div className='all_center'>Expire date</div>
+                                    <input className="inputBlock" type="text" id="Expire_date"/>
+                                    <div className='all_center'>
+                                    </div>
                                 </div>
                             </div>
                             <br/>

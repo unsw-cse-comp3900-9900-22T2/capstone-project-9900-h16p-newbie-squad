@@ -6,6 +6,12 @@ import BookingRaing from './BookingRating';
 const BookingHistoryDisplay = ({bookingInformation, isHistory}) => {
     const dataList = []
     for(let index = bookingInformation.length - 1; index >= 0; index--)
+    {
+        var startDate = new Date(bookingInformation[index].start_date)
+        var endDate = new Date(bookingInformation[index].end_date)
+
+        var totalCost = bookingInformation[index].price * (1 + (endDate-startDate)/(24*1000*3600))
+        
         dataList.push({
             key: index,
             booking_id: bookingInformation[index].booking_id,
@@ -13,9 +19,10 @@ const BookingHistoryDisplay = ({bookingInformation, isHistory}) => {
             address: bookingInformation[index].address,
             start_date: bookingInformation[index].start_date,
             end_date: bookingInformation[index].end_date,
-            price: bookingInformation[index].price,
+            price: totalCost,
             status: bookingInformation[index].status
         })
+    }
     console.log("data:  ",dataList);
 
     const columns = [
@@ -28,7 +35,7 @@ const BookingHistoryDisplay = ({bookingInformation, isHistory}) => {
                 <Link to={`/booking-page/${record.parking_space_id}`}>
                     <Button>Detail</Button>
                 </Link>
-                {isHistory && <BookingRaing record={record.booking_id}/>}
+                {(isHistory && record.status == "Successful")&& <BookingRaing record={record.booking_id}/>}
                
                 </Space>
             ),
@@ -43,8 +50,8 @@ const BookingHistoryDisplay = ({bookingInformation, isHistory}) => {
             ),
         },
         {
-            title: 'Price',
-            key: 'price',
+            title: 'Cost(AUD)',
+            key: 'cost',
             render: (_, record) => (
                 <Space size="small">
                 {record.price}
