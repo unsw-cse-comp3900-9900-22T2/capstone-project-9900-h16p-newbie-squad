@@ -285,7 +285,7 @@ def getMyOffer(request_id):
     if target_request == None or target_request.is_active == False:
         return {'error': 'request not found'}, 400
 
-    for eachOfMyOffer in Offer.query.filter_by(owner=curr_user, request=request_id).all():
+    for eachOfMyOffer in Offer.query.filter_by(owner=curr_user, request=target_request).all():
         #     id = db.Column(db.Integer, primary_key=True)
         #     # 一对多，多的那一侧
         #     request_id = db.Column(db.Integer, db.ForeignKey('requests.id'))
@@ -333,9 +333,12 @@ def myOfferNew(request_id):
     #     #如果is_active为假，则代表此offer已经被用户删除
     #     is_active=db.Column(db.Boolean,nullable=False)
     #     accept = db.Column(db.Boolean, nullable=False)
+    target_request = Request.query.filter_by(id=request_id, is_active=True, publish=True).first()
+    if target_request == None or target_request.is_active == False:
+        return {'error': 'request not found'}, 400
     try:
         new_offer = Offer(
-            request=request_id,
+            request=target_request,
             owner=curr_user,
             street=offer_data.get('street'),
             suburb=offer_data.get('suburb'),
@@ -382,7 +385,7 @@ def getOffers(request_id):
     target_request = Request.query.filter_by(id=request_id, is_active=True).first()
     if target_request == None:
         return {'error': 'request not found'}, 400
-    for eachOfMyOffer in Offer.query.filter_by(request=request_id, is_active=True).all():
+    for eachOfMyOffer in Offer.query.filter_by(request= target_request, is_active=True).all():
         myoffers.append({
             'id': eachOfMyOffer.id,
             'request_id': eachOfMyOffer.request.id,

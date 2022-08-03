@@ -59,7 +59,7 @@ def create_app(name):
                 for eachBooking in Booking.query.filter_by(status=Status.Accepted_Payment_Required).all():
                     interval=(datetime.now()-eachBooking.booking_time).total_seconds()
                     #must pay within one minute
-                    if interval>=Status.Must_Pay_Within: cancelBooking(eachBooking.id)
+                    if interval>=Status.Must_Pay_Within+5: cancelBooking(eachBooking.id)
                 sleep(5)
 
     test=Thread(target=scan_unpaid_booking,daemon=True)
