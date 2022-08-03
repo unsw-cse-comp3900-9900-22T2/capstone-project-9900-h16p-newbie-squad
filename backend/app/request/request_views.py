@@ -383,11 +383,14 @@ def deleteOffer(offer_id):
 def getOffers(request_id):
     curr_user = g.curr_user
     myoffers = []
+    accepted_offer_id = []
     target_request = Request.query.filter_by(id=request_id, is_active=True).first()
     if target_request == None:
         return {'error': 'request not found'}, 400
     for eachOfMyOffer in Offer.query.filter_by(request= target_request, is_active=True).all():
         owner_name = User.query.filter_by(id=eachOfMyOffer.owner_id).first().username
+        if eachOfMyOffer.accept == True:
+            accepted_offer_id.append(eachOfMyOffer.id)
         myoffers.append({
             'id': eachOfMyOffer.id,
             'request_id': eachOfMyOffer.request_id,
@@ -403,7 +406,8 @@ def getOffers(request_id):
             'accept': eachOfMyOffer.accept
         })
 
-    return {'received offers': myoffers}, 200
+    return{'received offers': myoffers,"accepted offers": accepted_offer_id},200
+    # return {'received offers': myoffers}, 200
 
 
 # request发起人，接受offer， 并且自己的request关闭， 生成billing
