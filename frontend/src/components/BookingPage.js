@@ -337,7 +337,7 @@ export default function BookingPage() {
                     <button onClick={()=>UnBook()} className='book-button' id='book_button'>
                       unbook
                     </button>
-                    <Link to={`/pay-page/${booking_id}`}>
+                    <Link to={`/pay-page/${carspace_id}/${booking_id}`}>
                     <button className='pay-button' id='book_button'>
                       pay
                     </button>

@@ -7,7 +7,7 @@ import './login&signup.css'
 
 export default function BookingPage() {
     const navigate = useNavigate()
-    const {booking_id} = useParams()
+    const {parking_id, booking_id} = useParams()
     console.log(booking_id)
     const GetCreditCard = () =>{
         if(localStorage.getItem("token")==='')
@@ -122,7 +122,7 @@ export default function BookingPage() {
                 console.log(response.error)
                 // alert('Thanks for your payment')
                 message.success("Thanks for your payment!")
-                navigate(`/booking-page/${booking_id}`)
+                navigate(`/booking-page/${parking_id}`)
               }
           })
       }
