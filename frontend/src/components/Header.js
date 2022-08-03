@@ -15,8 +15,7 @@ export default function Header() {
         localStorage.setItem("token", location.state.token)
         localStorage.setItem("username", location.state.username)
     }
-    //console.log(localStorage)
-    //console.log(token,username)
+    console.log(!null);
     const Logout = () =>{
       const data = {
         token: localStorage.getItem("token"),
@@ -49,29 +48,29 @@ export default function Header() {
             })
     } 
 
-    if(localStorage.getItem("token")==='')
+    if(!localStorage.getItem("token"))
     {
     return(
       <div className='header'>
         <div className='go-back-home'>
-          <Link to="/"> <HomeOutlinedIcon fontSize='large'/></Link>
+          <Link to="/"> <HomeOutlinedIcon fontSize='large' sx={{ color: '#f6f6f6' }}/></Link>
         </div>
         <div className='my-account'>
-          <Link to="/login-page"> 
+          <Link to="/login-page" style={{color: "#f6f6f6"}}> 
             {/* <LoginIcon/> */}
             Login
           </Link>
         </div>
-        <div className='sign-up'>
-          <Link to="/SignUp-page"> Sign up</Link>
+        <div className='sign-up' >
+          <Link to="/SignUp-page" style={{color: "#f6f6f6"}}> Sign up</Link>
         </div>
       </div>
     )
     }
-    return (
+    else return (
     <div className='header'>
       <div className='go-back-home'>
-        <Link to="/"> <HomeOutlinedIcon fontSize='large'/></Link>
+        <Link to="/"> <HomeOutlinedIcon fontSize='large' sx={{ color: '#f6f6f6' }}/></Link>
       </div>
       <div className='logout'>
         {/* <button onClick={() => Logout()}>Logout</button> */}
@@ -83,7 +82,7 @@ export default function Header() {
       
       {localStorage.getItem("username") !== "Admin" &&
         <div className='my-account'>
-          <Link to="/personal-info"> <AccountCircleRoundedIcon sx={{ color: 'white' }}/> </Link>
+          <Link to="/personal-info"> <AccountCircleRoundedIcon sx={{ color: '#f6f6f6' }}/> </Link>
           <Outlet />
         </div>
       }
