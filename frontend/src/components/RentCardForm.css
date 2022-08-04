@@ -1,0 +1,38 @@
+.RentFormAll {
+    /* border: 1px solid #000; */
+    padding: 5px;
+}
+.TopContents {
+    display: flex;
+    justify-content: space-between;
+    font-size: 18px;
+    align-items: center;
+}
+.TopContentRight {
+    margin-right: 20px;
+    border: 1px solid #000;
+    padding: 5px;
+}
+.BottomContents {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    font-size: 18px;
+}
+.BottomContents div {
+    margin: 3px 0;
+}
+.TopContentLeft div {
+    margin: 3px 0;
+}
+
+.otherContents {
+    display: flex;
+}
+.otherContents .otherLeft {
+    flex: 0 0 155px;
+}
+.RequestDetail {
+    font-weight: 700;
+    text-decoration: underline;
+}

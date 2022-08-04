@@ -39,13 +39,14 @@
     width: 100%;
 }
 .billingLeftButton {
-    background-color: #22b686;
+    background-color: #1890ff;
     color: #fff;
     border: 0;
     padding: 10px 5px;
     margin: 0 auto;
     display: block;
     margin-top: 10px;
+    font-weight: 700;
 }
 
 

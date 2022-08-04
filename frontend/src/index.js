@@ -8,9 +8,10 @@ import PersonalInfo from './components/PersonalInfo';
 import LoginPage from './components/LoginPage';
 import SignUpPage from './components/SignUpPage';
 import MapAndListingPage from './components/MapAndListingPage';
+import MapAndRenting from './components/MapAndRenting';
 import BookingPage from './components/BookingPage';
 import PayPage from './components/PayPage';
-import BillingDetail  from './components/BillingDetail'
+import BillingDetail  from './components/BillingDetail';
 import CarSpacePage from './components/CarSpacePage';
 import 'antd/dist/antd.css'
 
@@ -20,10 +21,11 @@ root.render(
   <BrowserRouter>
     <Routes>
       <Route path="/" element={<App />}/>
-      <Route path="personal-info" element={<PersonalInfo />}/>
+      <Route path="personal-info" element={<PersonalInfo />} />
       <Route path="login-page" element={<LoginPage />} />
       <Route path="SignUp-page" element={<SignUpPage />} />
       <Route path="MapAndListing-page" element={<MapAndListingPage />}/>
+      <Route path="MapAndRenting" element={<MapAndRenting />}/>
       <Route path="booking-page/:carspace_id" element={<BookingPage />}/>
       <Route path="pay-page/:booking_id/:carspace_id/:start_Date/:end_Date" element={<PayPage />}/>
       <Route path="billing-page/:bill_id" element={<BillingDetail />}/>
