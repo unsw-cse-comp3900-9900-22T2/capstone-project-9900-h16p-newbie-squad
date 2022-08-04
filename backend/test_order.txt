@@ -1,3 +1,5 @@
+#This file contains some handy commands during development
+
 cd capstone-project-9900-h16p-newbie-squad/backend
 venv\Scripts\activate
 $env:FLASK_DEBUG = 1
@@ -5,8 +7,10 @@ $env:FLASK_APP = "project.py"
 
 git checkout --ours backend/data-dev.sqlite
 
-flask shell：
-#reset database
+
+Executing belowing commands in a flask shell context:
+
+#Reset database
 from app import db
 db.drop_all()
 db.create_all()
@@ -26,43 +30,4 @@ new_admin=User(username='Admin', password="Admin123", role=admin_role)
 db.session.add(new_admin)
 db.session.commit()
 User.query.all()
-
-
-
-
-#Fast Test:
-from app import db
-db.drop_all()
-db.create_all()
-from app import db
-from app.models import Role,User
-admin_role=Role(role_name='admin')
-customer_role=Role(role_name='customer')
-provider_role=Role(role_name='provider')
-db.session.add_all([admin_role,customer_role,provider_role])
-db.session.commit()
-Role.query.first()
-Role.query.all()
-admin_role=Role.query.filter_by(role_name='admin').first()
-customer_role=Role.query.filter_by(role_name='customer').first()
-provider_role=Role.query.filter_by(role_name='provider').first()
-yindi=User(username='yindi',email='123@email.com',password='123456',role=customer_role,bio='niubi1')
-jiaxin=User(username='jiaxin',email='456@email.com',password='123456',role=customer_role,bio='niubi2')
-bowen=User(username='bowen',email='789@email.com',password='123456',role=provider_role,bio='niubi3')
-db.session.add_all([yindi,jiaxin,bowen])
-db.session.commit()
-new_admin=User(username='Admin', password="Admin123", role=admin_role)
-db.session.add(new_admin)
-db.session.commit()
-User.query.all()
-from app import db
-from app.models import Vehicle,Role,User
-jiaxin=User.query.filter_by(username='jiaxin').first()
-car_a=Vehicle(owner=jiaxin, plate_number='ABC123', brand='Ford',width='4500',length='2200')
-car_b=Vehicle(owner=jiaxin, plate_number='DEF456', brand='Honda',width='4300',length='2000')
-db.session.add(car_a)
-db.session.add(car_b)
-db.session.commit()
-Vehicle.query.all()
-
 
