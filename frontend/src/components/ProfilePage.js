@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useEffect } from 'react'
+import {message} from 'antd'
 
 export default function ProfilePage() {
   const [digemail, setDigemail] = useState('')
@@ -73,6 +74,7 @@ export default function ProfilePage() {
       })
       .then(response => {
           console.log(response)
+          message.success("Email updated successfully")
           closeEmail()
           initUser()
       })
@@ -111,6 +113,7 @@ export default function ProfilePage() {
       })
       .then(response => {
           console.log(response)
+          message.success("Password updated successfully")
           closePassword()
           initUser()
       })
@@ -130,7 +133,7 @@ export default function ProfilePage() {
 
   const updateBackUser = () => {
     const data = {
-      "username": username,
+      // "username": username,
       "phone_num": phone
     }
     const headers = new Headers({
@@ -150,7 +153,8 @@ export default function ProfilePage() {
       .then(response => {
           console.log(response)
           initUser()
-          alert('Update Success')
+          // alert('Update Success')
+          message.success("Update success")
       })
   }
 
@@ -185,14 +189,15 @@ export default function ProfilePage() {
           console.log(response)
           setUsername(response.username)
           setEmail(response.email)
-          if(response.phone_num)
-          {
-            setPhone(response.phone_num)
-          }
-          else
-          {
-            setPhone('')
-          }
+          setPhone(response.phone_num)
+          // if(response.phone_num)
+          // {
+          //   setPhone(response.phone_num)
+          // }
+          // else
+          // {
+          //   setPhone('')
+          // }
           
       })
   }
@@ -265,7 +270,7 @@ export default function ProfilePage() {
          </div>
          <div className='profileitems'>
            <h5 className='profileH5'>PhoneNumber</h5>
-           <input onChange={updatePhone} value={phone}/>
+           <input onChange={updatePhone} value={phone ? phone : ''}/>
          </div>
          <button className='profileButton' onClick={verifyUser}>Save</button>
        </div>
