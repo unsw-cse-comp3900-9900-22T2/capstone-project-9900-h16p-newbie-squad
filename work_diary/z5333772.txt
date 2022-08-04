@@ -41,8 +41,12 @@ week 8:
 Keep on developing backend.
 
 week 9:
+Finished most of the backend developing work. Continuely debugging with frontend teammates.
 
-
-
+week 10:
+Help debugging with frontend team members. Doing some small bug fixes and modifications in
+the backend code that I am responsible for.
+Prepared for the final demo. Tested the deployment of the project into vlab environment.
+Wrote the final report with my team members.
 
 
