@@ -221,7 +221,7 @@ def publishedRequests():
 
     all_requests = []
 
-    for each_request in Request.query.filter_by(is_active=True, publish=True).all():
+    for each_request in Request.query.filter_by(is_active=True, publish=True, complete = False).all():
         result = {
             "id": each_request.id,
             "owner": each_request.owner_id,
@@ -414,6 +414,10 @@ def getOffers(request_id):
 @request_bp.route('/myrequest/myoffer/accept_offer/<int:offer_id>', methods=['POST'])
 def acceptOffer(offer_id):
     curr_user = g.curr_user
+    if curr_user == None:
+        check_current_user = False
+    else:
+        check_current_user = True
     target_offer = Offer.query.filter_by(id=offer_id, is_active=True).first()
     if target_offer == None:
         return {'error': 'offer not found'}, 400
@@ -429,39 +433,49 @@ def acceptOffer(offer_id):
         target_request.complete = True
         db.session.add(target_request)
         db.session.commit()
+        return {'message': 'ok'}, 200
     except:
         return {'error': 'db internal error'}, 400
-    # target_parking_space = ParkingSpace.query.filter_by(id=target_request.parking_space_id, is_active=True).first()
-    provider = User.query.filter_by(id=target_offer.owner_id).first().username
-    customer = User.query.filter_by(id=target_request.owner_id).first().username
-    address = 'Address: %s %s %s %s.' % (target_offer.street, target_offer.suburb, \
-                                         target_offer.state, target_offer.postcode)
-    try:
-        customer_card = Credit_card.query.filter_by(owner_id=target_request.owner_id).first().card_number
-        provider_bank = Bank_account.query.filter_by(owner_id=target_offer.owner_id).first().account_id
-    except:
-        return {'error': 'no customer_card or provider_bank'}, 400
-    this_billing = Billing(
-        # 永久保存订单成功当时的provider和customer的id，便于后面搜索历史订单
-        provider_id=target_offer.owner_id,
-        customer_id=target_request.owner_id,
-        # 永久保存订单成功当时的provider和customer的username
-        provider_name=provider,
-        customer_name=customer,
-        # 这张表只是存储历史记录，因此address不再分开了，生成历史记录的时候把street，suburb等合成一个字符串
-        address=address,
-        start_date=target_request.start_date.strftime('%Y-%m-%d'),
-        end_date=target_request.end_date.strftime('%Y-%m-%d'),
-        unit_price=target_offer.price,
-        total_price=target_offer.price,
-        rent_fee = int(0.85*target_offer.price),
-        service_fee = int(0.15*target_offer.price),
-        # 永久保存customer付款时用的银行卡号
-        customer_card_number=customer_card,
-        # 永久保存provider收款时用的账户号
-        provider_bank_account=provider_bank
-    )
-
-    # 向数据库中添加订单历史记录
-    db.session.add(this_billing)
-    return {}, 200
+    # # target_parking_space = ParkingSpace.query.filter_by(id=target_request.parking_space_id, is_active=True).first()
+    # provider = User.query.filter_by(id=target_offer.owner_id).first().username
+    # customer = User.query.filter_by(id=target_request.owner_id).first().username
+    # address = 'Address: %s %s %s %s.' % (target_offer.street, target_offer.suburb, \
+    #                                      target_offer.state, target_offer.postcode)
+    # try:
+    #     customer_card = Credit_card.query.filter_by(owner_id=target_request.owner_id).first().card_number
+    #     provider_bank = Bank_account.query.filter_by(owner_id=target_offer.owner_id).first().account_id
+    # except:
+    #     customer_card = "111222333"
+    #     provider_bank = "444555666"
+    #     # return {'error': 'no customer_card or provider_bank'}, 400
+    # owner_ids = [target_request.owner_id, target_offer.owner_id]
+    # try:
+    #     this_billing = Billing(
+    #         # 永久保存订单成功当时的provider和customer的id，便于后面搜索历史订单
+    #         provider_id=target_offer.owner_id,
+    #         customer_id=target_request.owner_id,
+    #         # 永久保存订单成功当时的provider和customer的username
+    #         provider_name=provider,
+    #         customer_name=customer,
+    #         # 这张表只是存储历史记录，因此address不再分开了，生成历史记录的时候把street，suburb等合成一个字符串
+    #         address=address,
+    #         start_date=target_request.start_date.strftime('%Y-%m-%d'),
+    #         end_date=target_request.end_date.strftime('%Y-%m-%d'),
+    #         unit_price=target_offer.price,
+    #         total_price=target_offer.price,
+    #         rent_fee = int(0.85*target_offer.price),
+    #         service_fee = int(0.15*target_offer.price),
+    #         # 永久保存customer付款时用的银行卡号
+    #         customer_card_number=customer_card,
+    #         # 永久保存provider收款时用的账户号
+    #         provider_bank_account=provider_bank
+    #     )
+    #     # 向数据库中添加订单历史记录
+    #     db.session.add(this_billing)
+    # except:
+    #     return {'error': 'data error', 'ownerid':owner_ids}, 400
+    # try:
+    #     db.session.commit()
+    #     return {}, 200
+    # except:
+    #     return {'error': 'db internal error', 'ownerid':owner_ids}, 400
