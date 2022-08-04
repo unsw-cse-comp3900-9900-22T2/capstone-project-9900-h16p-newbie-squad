@@ -55,7 +55,7 @@ export default function RentRightForm({setIsopen,id}) {
             
             return res.json()
         } else {
-            throw(error)
+            throw(res)
         }
     })
     .then(data => {
