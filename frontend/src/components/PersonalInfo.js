@@ -6,6 +6,7 @@ import BookingHistoryPage from './BookingHistoryPage'
 // import ListingPage from './ListingPage'
 import ProfilePage from './ProfilePage'
 import BillingHistoryPage from './BillingHistoryPage'
+import RentRequest from './RentRequest'
 
 export default function PersonalInfo() {
     const [carSpaceSelected, setCarSpaceSelected] = useState(false)
@@ -13,12 +14,14 @@ export default function PersonalInfo() {
     const [profileSelected, setProfileSelected] = useState(false)
     const [bookingSelected, setBookingSelected] = useState(false)
     const [billingSelected, setBillingSelected] = useState(false)
+    const [rentingSelected, setRentingSelected] = useState(false)
     const carSpaceClick = () => {
         setCarSpaceSelected(true)
         setCarManagementSelected(false)
         setProfileSelected(false)
         setBookingSelected(false)
         setBillingSelected(false)
+        setRentingSelected(false)
     }
     const carManagementClick = () => {
         setCarManagementSelected(true)
@@ -26,6 +29,7 @@ export default function PersonalInfo() {
         setProfileSelected(false)
         setBookingSelected(false)
         setBillingSelected(false)
+        setRentingSelected(false)
     }
     const profileClick = () => {
         setProfileSelected(true)
@@ -33,6 +37,7 @@ export default function PersonalInfo() {
         setCarSpaceSelected(false)
         setBookingSelected(false)
         setBillingSelected(false)
+        setRentingSelected(false)
     }
     const bookingClick = () => {
         setBookingSelected(true)
@@ -40,6 +45,7 @@ export default function PersonalInfo() {
         setCarManagementSelected(false)
         setCarSpaceSelected(false)
         setBillingSelected(false)
+        setRentingSelected(false)
     }
     const billingClick = () => {
         setBillingSelected(true)
@@ -47,6 +53,15 @@ export default function PersonalInfo() {
         setProfileSelected(false)
         setCarManagementSelected(false)
         setCarSpaceSelected(false)
+        setRentingSelected(false)
+    }
+    const rentingClick = () => {
+        setBillingSelected(false)
+        setBookingSelected(false)
+        setProfileSelected(false)
+        setCarManagementSelected(false)
+        setCarSpaceSelected(false)
+        setRentingSelected(true)
     }
   return (
     <div>
@@ -55,6 +70,7 @@ export default function PersonalInfo() {
             <div className='container'>
                 <div className='flex-item left-nav'>
                     <div className='flex-item pernal-item' onClick={carSpaceClick}>Listing</div>
+                    <div className='flex-item pernal-item' onClick={rentingClick}>Rent Request</div>
                     <div className='flex-item pernal-item' onClick={carManagementClick}>Car Management</div>
                     <div className='flex-item pernal-item' onClick={profileClick}>Profile</div>
                     <div className='flex-item pernal-item' onClick={bookingClick}>Booking</div>
@@ -67,6 +83,7 @@ export default function PersonalInfo() {
                     {profileSelected && <ProfilePage/>}
                     {bookingSelected && <BookingHistoryPage/>}
                     {billingSelected && <BillingHistoryPage/>}
+                    {rentingSelected && <RentRequest/>}
                 </div>
             </div>
         </div>

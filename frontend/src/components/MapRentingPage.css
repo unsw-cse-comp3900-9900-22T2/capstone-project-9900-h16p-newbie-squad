@@ -1,0 +1,24 @@
+.RentLeftCards {
+    display: flex;
+    padding: 5px;
+    border: 1px solid #000;
+    margin: 5px 0;
+}
+.RentLeftContent {
+    flex: 8;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+.RentRightContent {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.rent-detail {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

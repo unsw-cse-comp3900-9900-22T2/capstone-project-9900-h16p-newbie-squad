@@ -81,7 +81,11 @@ export default function BookingPage() {
                   setBookedStartTime(response.mybookings[i].start_date)
                   setBookedEndTime(response.mybookings[i].end_date)
                   setbooking_id(response.mybookings[i].booking_id.toString())
-                  ResetTimer(parseInt(response.mybookings[i].time_remaining))
+                  console.log("booking id", response.mybookings[i].booking_id.toString())
+                  if(response.mybookings[i].time_remaining > 0)
+                    ResetTimer(parseInt(response.mybookings[i].time_remaining))
+                  else
+                    (UnBook(response.mybookings[i].booking_id.toString()))
                   console.log(booking_id)
                   return
                 }
@@ -118,7 +122,6 @@ export default function BookingPage() {
               console.log(response)
               setBookingRatingInformation(response.reviews)
                 //console.log(ratingSUM)
-                console.log(bookingRatingInformation);
             }
         })
     }
@@ -133,10 +136,15 @@ export default function BookingPage() {
     }
     const SetIndex = (e) =>{
       setSelectDateIndex(e)
+      console.log(availability[e])
       setAvailableStartTime(availability[e].start_date)
       setAvailableEndTime(availability[e].end_date)
-      document.getElementById('booking_start_date').value = availability[e].start_date
-      document.getElementById('booking_end_date').value = availability[e].end_date
+      try
+      {
+      document.getElementById('booking_start_date').value = null
+      document.getElementById('booking_end_date').value = null
+      }
+      catch{}
     }
     const MakeBooking = () =>{
       if(localStorage.getItem("token")==='')
@@ -194,12 +202,12 @@ export default function BookingPage() {
             }
         })
     }
-    const UnBook = () =>{
+    const UnBook = (booking_id_in) =>{
       const headers = new Headers({
         'Content-Type': 'application/json',
         'token': localStorage.getItem("token")
         });
-        fetch('http://localhost:5000/bookings/cancel/'+booking_id,
+        fetch('http://localhost:5000/bookings/cancel/'+booking_id_in,
         {
             method: 'POST',
             headers: headers,
@@ -219,14 +227,14 @@ export default function BookingPage() {
               console.log(response)
               setBookDisplay(true)
               
-              
+              clearInterval(intervalRef.current)
+                //location.reload()
+              CheckMyBooking()
+              GetCarSpace(carspace_id)
+              //SetIndex(0)
+              //GetAllComment()
+              //navigate(`/booking-page/${carspace_id}`)
             }
-            clearInterval(intervalRef.current)
-            navigate(`/booking-page/${carspace_id}`)
-            //location.reload()
-            GetCarSpace(carspace_id)
-            CheckMyBooking()
-            GetAllComment()
         })
     }
     
@@ -292,7 +300,14 @@ export default function BookingPage() {
     if(timeRemain < 0)
     {
         setTimeRemain(0)
-        UnBook()
+        //setBookDisplay(true)
+        clearInterval(intervalRef.current)
+          //location.reload()
+        CheckMyBooking()
+        GetCarSpace(carspace_id)
+        SetIndex(0)
+        //GetAllComment()
+        //navigate(`/booking-page/${carspace_id}`)
     }
     return (
       <div>
@@ -302,6 +317,7 @@ export default function BookingPage() {
             <div className='scrollable-container'>
               <div>
                 <div className='address-title'>Address: {street}, {suburb} {state}, {postcode}</div>
+                
                 {bookingRatingInformation.length > 0 ? <div>Total rating: {totalRating} {starString}</div>
                   : <div>Total rating: N/A</div>
                 }
@@ -348,7 +364,7 @@ export default function BookingPage() {
                     <div>
                       Time remain: {timeRemain} s
                     </div>
-                    <button onClick={()=>UnBook()} className='book-button' id='book_button'>
+                    <button onClick={()=>UnBook(booking_id)} className='book-button' id='book_button'>
                       unbook
                     </button>
                     <Link to={`/pay-page/${booking_id}/${carspace_id}/${bookedStartTime}/${bookedEndTime}`}>

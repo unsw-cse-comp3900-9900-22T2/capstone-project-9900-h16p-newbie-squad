@@ -256,7 +256,7 @@ export default function BillingHistoryPage() {
             </div>
         </div>
         <div className='billingRight'>
-            <h3>List</h3>
+            <h3>Transaction History</h3>
             <div className='billingRightListing'>
                 {customerbillings.map((billing, index) => (
                         <Link to={`/billing-page/${billing.id}`}  key={index}>

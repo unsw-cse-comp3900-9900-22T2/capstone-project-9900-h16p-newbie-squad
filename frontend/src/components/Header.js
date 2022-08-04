@@ -54,6 +54,9 @@ export default function Header() {
       <div className='header'>
         <div className='go-back-home'>
           <Link to="/"> <HomeOutlinedIcon fontSize='large' sx={{ color: '#f6f6f6' }}/></Link>
+          <Link to="/MapAndRenting">
+                <Button size="small">Car Space Request</Button>
+            </Link>
         </div>
         <div className='my-account'>
           <Link to="/login-page" style={{color: "#f6f6f6"}}> 
@@ -71,6 +74,9 @@ export default function Header() {
     <div className='header'>
       <div className='go-back-home'>
         <Link to="/"> <HomeOutlinedIcon fontSize='large' sx={{ color: '#f6f6f6' }}/></Link>
+        <Link to="/MapAndRenting">
+                <Button size="small">Car Space Request</Button>
+            </Link>
       </div>
       <div className='logout'>
         {/* <button onClick={() => Logout()}>Logout</button> */}

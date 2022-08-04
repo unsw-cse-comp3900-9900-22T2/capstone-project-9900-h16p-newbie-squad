@@ -21,6 +21,8 @@ export default function BillingDetail() {
     const [unitprice,setUnitprice]=useState(null)
     const [totalprice,setTotalprice]=useState(null)
     const [paymenttime,setPaymenttime]=useState(null)
+    const [rentfee,setRentfee]=useState(null)
+    const [servicefee,setServicefee]=useState(null)
     const [customercardnumber,setCustomercardnumber]=useState(null)
     const [providercardnumber,setProvidercardnumber]=useState(null)
 
@@ -48,6 +50,8 @@ export default function BillingDetail() {
               {
                 console.log('dakshbdjasbdjkhsabd')
                 var listingData=response
+                setRentfee(listingData.rent_fee)
+                setServicefee(listingData.service_fee)
                 setProviderid(listingData.provider_id)
                 setCustomerid(listingData.customer_id)
                 setProvidername(listingData.provider_name)
@@ -73,18 +77,15 @@ export default function BillingDetail() {
         <div className='billingDetailMain'>
             <div className='billingDetailContent'>
                 <div className='billingDetailAll'>
-                    <h6>provider_id: {providerid}</h6>
-                    <h6>customer_id: {customerid}</h6>
                     <h6>provider_name: {providername}</h6>
                     <h6>customer_name: {customername}</h6>
                     <h6>{address}</h6>
                     <h6>start_date: {startdate}</h6>
                     <h6>end_date: {enddate}</h6>
-                    <h6>unit_price: {unitprice}</h6>
-                    <h6>total_price: {totalprice}</h6>
+                    <h6>rent_fee: ${rentfee}</h6>
+                    <h6>service_fee: ${servicefee}</h6>
+                    <h6>total_price: ${totalprice}</h6>
                     <h6>payment_time: {paymenttime}</h6>
-                    <h6>customer_card_number: {customercardnumber}</h6>
-                    <h6>provider_card_number: {providercardnumber}</h6>
                 </div>
             </div>
         </div>

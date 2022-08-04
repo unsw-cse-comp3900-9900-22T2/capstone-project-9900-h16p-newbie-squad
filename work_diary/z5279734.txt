@@ -40,3 +40,8 @@ So I have enough time to do the integration and test the system to see any bugs 
 team mates to debug or improve the modules. We did well in Demo B and we had our retrospective B meeting immediately after the demo.
 
 Week 9
+Working on sprint 3 with novel functionalities, we are facing so many difficulities and big challenge. Everyone is working hard, and we had serveral mmeting to
+sit together to solve the problems.
+
+Week 10
+Finalize out project and everyone is testing the system. We did our final demo and wroking on the final report.

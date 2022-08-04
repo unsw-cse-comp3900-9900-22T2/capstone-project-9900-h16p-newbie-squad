@@ -175,7 +175,9 @@
 .go-back-home {
   position: absolute;
   left: 10px;
-  top: 8px;
+  display: flex;
+  height: 100%;
+  align-items: center;
 }
 
 .carSpaceForm {
@@ -216,7 +218,7 @@
 }
 
 .profileChange {
-  color: #0baf79;
+  color: #1890ff;
   font-size: 10px !important;
   text-align: right;
   cursor: pointer;
@@ -225,6 +227,10 @@
 .profileButton {
   margin: 0 5px;
   margin-top: 10px;
+  background-color: #1890ff;
+  border: 0;
+  color: #fff;
+  font-size: 14px;
 }
 
 .locate {

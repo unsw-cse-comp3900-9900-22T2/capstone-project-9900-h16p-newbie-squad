@@ -1,0 +1,40 @@
+car space request:
+	1. Get all my car space request
+	2. Create a new car space request 这里是请求发布者需要的字段
+		{
+{
+    "street":"15 eden street",
+    "suburb":"north sydney",
+    "state":"NSW",
+    "postcode":2060,
+    "latitude":"hello123",
+    "longitude":"world456",
+    "budget":350,
+    "start_date":"2022-11-7",
+    "end_date":"2022-11-29"
+    "others": "long text"(这里为文本可以储存一段话）
+}
+	2. get detail for a car space 
+	3. delete
+	4. update
+	5. publish and unpublish
+	6. 增加一个close状态如果是close状态则不可改删，别人也看不到
+	7. retrieve all current published car space request
+	8. retrieve information about a specific published car space request
+
+car space offer(offer的提供user)
+	1. get all your offer under a specific a specific published car space request
+	2. create a new offer under a specific car space request 这里是offer 提供者提供的车位地址
+	{
+    "street":"15 eden street",
+    "suburb":"north sydney",
+    "state":"NSW",
+    "postcode":2060,,
+    "price":350,
+    "comments": "long text"(这里为文本可以储存一段话）
+}
+	3.  delete your offer under a specific car space request
+car space offer(request的发布user)
+	1. get all offers info under your car space request
+	2. offer 分为accept和unaccept两个状态
+	
