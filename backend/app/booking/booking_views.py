@@ -115,6 +115,10 @@ def cancelBooking(booking_id):
         new_slot=Available_Period(parking_space=target_booking.parking_space,
                                 start_date=old_slot_1.start_date,
                                 end_date=old_slot_2.end_date)
+    elif old_slot_1==None and old_slot_2==None:
+        new_slot=Available_Period(parking_space=target_booking.parking_space,
+                                start_date=target_booking.start_date,
+                                end_date=target_booking.end_date)
     elif old_slot_2==None:
         new_slot=Available_Period(parking_space=target_booking.parking_space,
                                 start_date=old_slot_1.start_date,
