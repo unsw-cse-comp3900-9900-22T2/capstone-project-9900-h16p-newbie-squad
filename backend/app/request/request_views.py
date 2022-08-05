@@ -6,14 +6,13 @@ from datetime import datetime
 import base64
 
 
-# 返回所有我的request，无论is_active, complete, publish 的状态
+# return my reqeust is_active=True
 @request_bp.route('/myrequest', methods=['GET'])
 def myRequests():
     curr_user = g.curr_user
 
     all_requests = []
 
-    # 返回所有的request
     # for each_request in Request.query.filter_by(owner=curr_user).all():
 
     for each_request in Request.query.filter_by(owner=curr_user, is_active=True).all():
@@ -41,7 +40,7 @@ def myRequests():
     return {"all_requests": all_requests}, 200
 
 
-# 创建新的request
+# create reqeust
 @request_bp.route('/myrequest/new', methods=['POST'])
 def myRequestNew():
     curr_user = g.curr_user
@@ -80,7 +79,7 @@ def myRequestNew():
     return {'new_request_id': new_request_id}, 200
 
 
-# 根据request id 返回确定的一条request
+# return reqeust
 @request_bp.route('/myrequest/<int:request_id>', methods=['GET'])
 def getRequest(request_id):
     curr_user = g.curr_user
@@ -110,7 +109,7 @@ def getRequest(request_id):
     return detail, 200
 
 
-# 根据request id 删除一条request
+# delete request
 @request_bp.route('/myrequest/delete/<int:request_id>', methods=['DELETE'])
 def deleteRequest(request_id):
     target_request = Request.query.filter_by(id=request_id).first()
@@ -128,7 +127,7 @@ def deleteRequest(request_id):
     return {}, 200
 
 
-# 根据request id 更新一条request
+# update reqeust
 @request_bp.route('/myrequest/update/<int:request_id>', methods=['PUT'])
 def updateRequest(request_id):
     target_request = Request.query.filter_by(id=request_id).first()
@@ -176,8 +175,7 @@ def updateRequest(request_id):
 
     return {}, 200
 
-
-# 根据 request id 把一个request 的状态设置为publish == True
+# set a request publish == True
 @request_bp.route('/myrequest/publish/<int:request_id>', methods=['POST'])
 def publishRequest(request_id):
     # request_data = request.get_json()
@@ -195,7 +193,7 @@ def publishRequest(request_id):
     return {}, 200
 
 
-# 根据 request id 把一个request 的状态设置为publish == False
+# set a request to be not published
 @request_bp.route('/myrequest/unpublish/<int:request_id>', methods=['POST'])
 def unpublishRequest(request_id):
     # request_data = request.get_json()
@@ -215,7 +213,8 @@ def unpublishRequest(request_id):
     return {}, 200
 
 
-# 返回所有is_active == True, publish == True 的 request，
+
+# return request is_active == True, publish == True
 @request_bp.route('/myrequest/published_requests', methods=['GET'])
 def publishedRequests():
 
@@ -246,7 +245,7 @@ def publishedRequests():
     return {"all_published_requests": all_requests}, 200
 
 
-# 根据request id 返回确定的一条publish == True, is_active == True 的request,
+# return request publish == True, is_active == True
 @request_bp.route('/myrequest/published_requests/<int:request_id>', methods=['GET'])
 def getPublishedRequest(request_id):
     curr_user = g.curr_user
@@ -277,7 +276,8 @@ def getPublishedRequest(request_id):
 
 
 # offer part ---------------------------------------------------------------
-# 返回所有当前用户发布的关于某个request_id 的offer
+
+# return all offers for a request
 @request_bp.route('/myrequest/myoffer/<int:request_id>', methods=['GET'])
 def getMyOffer(request_id):
     curr_user = g.curr_user
@@ -287,19 +287,7 @@ def getMyOffer(request_id):
         return {'error': 'request not found'}, 400
 
     for eachOfMyOffer in Offer.query.filter_by(owner=curr_user, request=target_request).all():
-        #     id = db.Column(db.Integer, primary_key=True)
-        #     # 一对多，多的那一侧
-        #     request_id = db.Column(db.Integer, db.ForeignKey('requests.id'))
-        #     # 一对多，多的那一侧
-        #     owner_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-        #     street = db.Column(db.String(32), nullable=False)
-        #     suburb = db.Column(db.String(32), nullable=False)
-        #     state = db.Column(db.String(32), nullable=False)
-        #     postcode = db.Column(db.Integer, nullable=False)
-        #     price = db.Column(db.Float, nullable=True)
-        #     comments = db.Column(db.Text)
-        #     #如果is_active为假，则代表此offer已经被用户删除
-        #     is_active=db.Column(db.Boolean,nullable=False)
+
         myoffers.append({
             'id': eachOfMyOffer.id,
             'request_id': eachOfMyOffer.request_id,
@@ -317,23 +305,12 @@ def getMyOffer(request_id):
     return {'myoffers': myoffers}, 200
 
 
-# 新建关于某个request_id 的offer，并返回offer的id
+# create offer under specific request
 @request_bp.route("/myrequest/myoffer/new/<int:request_id>", methods=['PUT'])
 def myOfferNew(request_id):
     curr_user = g.curr_user
     offer_data = request.get_json()
-    #     request_id = db.Column(db.Integer, db.ForeignKey('requests.id'))
-    #     # 一对多，多的那一侧
-    #     owner_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    #     street = db.Column(db.String(32), nullable=False)
-    #     suburb = db.Column(db.String(32), nullable=False)
-    #     state = db.Column(db.String(32), nullable=False)
-    #     postcode = db.Column(db.Integer, nullable=False)
-    #     price = db.Column(db.Float, nullable=True)
-    #     comments = db.Column(db.Text)
-    #     #如果is_active为假，则代表此offer已经被用户删除
-    #     is_active=db.Column(db.Boolean,nullable=False)
-    #     accept = db.Column(db.Boolean, nullable=False)
+
     target_request = Request.query.filter_by(id=request_id, is_active=True, publish=True).first()
     if target_request == None or target_request.is_active == False:
         return {'error': 'request not found'}, 400
@@ -360,7 +337,7 @@ def myOfferNew(request_id):
     return {'new_offer_id': new_offer_id}, 200
 
 
-# 根据offer id 删除offer
+# delete offer
 @request_bp.route('/myrequest/myoffer/delete/<int:offer_id>', methods=['DELETE'])
 def deleteOffer(offer_id):
     curr_user = g.curr_user
@@ -378,7 +355,7 @@ def deleteOffer(offer_id):
     return {}, 200
 
 
-# request发起人，返回某个request下面的所有offer
+# return offer under specific request
 @request_bp.route('/myrequest/myoffer/my_reveived_offers/<int:request_id>', methods=['GET'])
 def getOffers(request_id):
     curr_user = g.curr_user
@@ -410,7 +387,7 @@ def getOffers(request_id):
     # return {'received offers': myoffers}, 200
 
 
-# request发起人，接受offer， 并且自己的request关闭， 生成billing
+# accept offer, close request
 @request_bp.route('/myrequest/myoffer/accept_offer/<int:offer_id>', methods=['POST'])
 def acceptOffer(offer_id):
     curr_user = g.curr_user
@@ -436,46 +413,4 @@ def acceptOffer(offer_id):
         return {'message': 'ok'}, 200
     except:
         return {'error': 'db internal error'}, 400
-    # # target_parking_space = ParkingSpace.query.filter_by(id=target_request.parking_space_id, is_active=True).first()
-    # provider = User.query.filter_by(id=target_offer.owner_id).first().username
-    # customer = User.query.filter_by(id=target_request.owner_id).first().username
-    # address = 'Address: %s %s %s %s.' % (target_offer.street, target_offer.suburb, \
-    #                                      target_offer.state, target_offer.postcode)
-    # try:
-    #     customer_card = Credit_card.query.filter_by(owner_id=target_request.owner_id).first().card_number
-    #     provider_bank = Bank_account.query.filter_by(owner_id=target_offer.owner_id).first().account_id
-    # except:
-    #     customer_card = "111222333"
-    #     provider_bank = "444555666"
-    #     # return {'error': 'no customer_card or provider_bank'}, 400
-    # owner_ids = [target_request.owner_id, target_offer.owner_id]
-    # try:
-    #     this_billing = Billing(
-    #         # 永久保存订单成功当时的provider和customer的id，便于后面搜索历史订单
-    #         provider_id=target_offer.owner_id,
-    #         customer_id=target_request.owner_id,
-    #         # 永久保存订单成功当时的provider和customer的username
-    #         provider_name=provider,
-    #         customer_name=customer,
-    #         # 这张表只是存储历史记录，因此address不再分开了，生成历史记录的时候把street，suburb等合成一个字符串
-    #         address=address,
-    #         start_date=target_request.start_date.strftime('%Y-%m-%d'),
-    #         end_date=target_request.end_date.strftime('%Y-%m-%d'),
-    #         unit_price=target_offer.price,
-    #         total_price=target_offer.price,
-    #         rent_fee = int(0.85*target_offer.price),
-    #         service_fee = int(0.15*target_offer.price),
-    #         # 永久保存customer付款时用的银行卡号
-    #         customer_card_number=customer_card,
-    #         # 永久保存provider收款时用的账户号
-    #         provider_bank_account=provider_bank
-    #     )
-    #     # 向数据库中添加订单历史记录
-    #     db.session.add(this_billing)
-    # except:
-    #     return {'error': 'data error', 'ownerid':owner_ids}, 400
-    # try:
-    #     db.session.commit()
-    #     return {}, 200
-    # except:
-    #     return {'error': 'db internal error', 'ownerid':owner_ids}, 400
+
