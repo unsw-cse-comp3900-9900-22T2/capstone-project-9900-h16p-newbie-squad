@@ -38,11 +38,6 @@ export default function HomeSearch() {
         </div>}
         {localStorage.getItem("username") === "Admin" &&
             <div className='admin-home-page'>
-                {/* <div className='sample'>hello</div>
-                <div className='sample'>hello</div>
-                <div className='sample'>hello</div>
-                <div className='sample'>hello</div>
-                <div className='sample'>hello</div> */}
                 <AdminDisplay />
             </div>
         }

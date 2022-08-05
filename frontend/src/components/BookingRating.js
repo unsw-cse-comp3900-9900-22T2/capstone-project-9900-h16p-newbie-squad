@@ -31,8 +31,6 @@ const BookingRaing = ({record}) => {
       alert('You should login first')
       return
     }
-    //console.log(myRating)
-    //console.log(document.getElementById('comment_box').value)
     const data = {
       review_text: document.getElementById(idtext).value,
       review_rating: myRating

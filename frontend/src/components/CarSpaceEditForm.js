@@ -112,21 +112,6 @@ export default function CarSpaceEditForm({ carSpaceInformation, carSpaceId, setE
         State <input type="text"  value={state} onChange={updateState}/>
         <br></br>
         Postcode <input type="text"  value={postcode} onChange={updatePostcode}/>
-        {/* <div>what type of space are you listing?</div>
-        <select onChange={updateSpaceType}>
-            <option>indoor</option>
-            <option>outside</option>
-            <option>undercover</option>
-            <option>driveway</option>
-        </select> */}
-        {/* <div>what is the maximum height</div>
-        <select onChange={updateClearance}>
-            <option>2</option>
-            <option>2.5</option>
-            <option>3</option>
-            <option>3.5</option>
-            <option>4</option>
-        </select> */}
         <div>what is the size of your car space?</div>
         Length  <input type="number" min="1.5" placeholder='please enter Length' value={length} onChange={updateLength}/>
         <br></br>

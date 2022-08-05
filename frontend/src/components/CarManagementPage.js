@@ -5,7 +5,6 @@ import './CarManagementPage.css'
 import CarPopup from './CarPopup';
 import CarDisplay from './CarDisplay';
 
-// const token = "4.UJsETXTotkCToYT7_SdxwOMYBMo"
 
 export default function CarManagementPage() {
   const token = localStorage.getItem("token")

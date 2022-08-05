@@ -12,12 +12,7 @@ export default function EditRentingForm({setIsModalVisible, getAllListings, reco
   
   const token = localStorage.getItem("token")
 
-  // const upLoadImage = async(e) => {
-  //   const file = e.target.files[0]
-  //   const base64 = await convertBase64(file)
-  //   console.log(base64);
-  //   setBaseImage(base64)
-  // }
+  
   const props = {
     onChange: (info) => {
       console.log(info.fileList);

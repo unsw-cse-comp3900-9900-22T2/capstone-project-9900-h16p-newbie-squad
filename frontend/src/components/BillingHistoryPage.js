@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import {useLocation, useParams, Link} from 'react-router-dom';
 import './BillingPage.css'
 
-// const token = "4.UJsETXTotkCToYT7_SdxwOMYBMo"
 
 export default function BillingHistoryPage() {
     const [nameoncard, setNameoncard] = useState('')
@@ -204,12 +203,12 @@ export default function BillingHistoryPage() {
           })
       }
 
-    useEffect(() => {     //  模拟componentDidMount  首次渲染
+    useEffect(() => {     
         console.log('use effect')
         initList()
         BankMain()
         CardMain()
-    },[])    // 空数组必须写
+    },[])    
   
   return (
     <div className='billingMain'>

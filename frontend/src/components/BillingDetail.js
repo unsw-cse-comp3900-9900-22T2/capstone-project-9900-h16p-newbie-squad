@@ -6,9 +6,7 @@ import './BillingDetail.css'
 
 var booking_id=''
 export default function BillingDetail() {
-    // const listing = JSON.parse(localStorage.getItem("listing-book"))
-    // console.log(listing);
-    // 此处的listing是object，里面有所有关于该车位的信息的信息
+    
     const {bill_id} = useParams()
     console.log(bill_id);
     const [providerid,setProviderid]=useState(null)

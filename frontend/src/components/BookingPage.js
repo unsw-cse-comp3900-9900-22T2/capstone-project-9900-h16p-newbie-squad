@@ -8,9 +8,6 @@ import base_64_header from "./ba64_sample"
 import BookingRatingDisplay from './BookingRatingDisplay';
 
 export default function BookingPage() {
-    // const listing = JSON.parse(localStorage.getItem("listing-book"))
-    // console.log(listing);
-    // 此处的listing是object，里面有所有关于该车位的信息的信息
     let timerSec = 0
     const intervalRef = useRef()
     const navigate = useNavigate()

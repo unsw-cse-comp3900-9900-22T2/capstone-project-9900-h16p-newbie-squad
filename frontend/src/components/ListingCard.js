@@ -13,10 +13,7 @@ export default function ListingCard({listing, priceMode, setSelected}) {
     const priceMonthly = (price) => {
         return price * 28
     }
-    // const navigate = useNavigate();
-    // const bookOnclick = () => {
-    //     navigate('/test',{state:{listing: listing}});
-    // }
+    
   return (
     <Paper className='listing-card'>
         <div className='listing-img'>
@@ -26,8 +23,7 @@ export default function ListingCard({listing, priceMode, setSelected}) {
         <div className='listing-info' onClick={() => setSelected(listing)}>
             {listing.street}, {listing.suburb} {listing.state}, {listing.postcode}
             <div className='date-style'>
-                {/* <div>From: {listing.availibility[0].start_date}</div>
-                <div>To: {listing.availibility[0].end_date}</div> */}
+                
                 <AvailableDate record={listing}/>
             </div>
         </div>

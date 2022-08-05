@@ -49,20 +49,6 @@ export default function LoginPage() {
         <Header/>
         <div className='information-box'>
             <div className='container-noborder'>
-                {/* <div className='all_center'>
-                    <div>
-                        <div className='all_center'>User name</div>
-                        <input className="inputBlock" type="text" id="User_name"/>
-                        <div className='all_center'>Password</div>
-                        <div>
-                            <input className="inputBlock" type="password" id="password"/>
-                            <button onClick={()=>ChangePasswordVisible()} id="password_visible">visible</button>
-                        </div>
-                        <div className='all_center'>
-                            <button onClick={()=>Login()}>Login</button>
-                        </div>
-                    </div>
-                </div> */}
                 <LoginForm/>
             </div>
         </div>
@@ -85,29 +71,3 @@ function ChangePasswordVisible(){
     }
     //ShowPassword()
 }
-/*
-function PasswordVisible(){
-    var password_input = document.getElementById('password').value
-    if(password_input.length>password.length)
-        password+=password_input.substring(password.length)
-    else
-        password=password.substring(0,password_input.length)
-    //console.log(password)
-    //ShowPassword()
-    //console.log('password')
-}
-*/
-/*
-function ShowPassword(){
-    if(password_visible)
-        document.getElementById('password').value = password
-    else 
-    {
-        var password_show=''
-        for(var i=0;i<password.length;i++)
-            password_show+='*'
-        document.getElementById('password').value = password_show
-    }
-    console.log(password)
-}
-*/

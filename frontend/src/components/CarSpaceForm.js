@@ -122,22 +122,6 @@ export default function CarSpaceForm({ setCarSpaceSelected, setCarSpaceInformati
   return (
     <div className='carSpaceForm'>
         <br></br>
-        {/* <input type="text" placeholder='please enter address' onChange={updateAddress}/> */}
-        {/* <div>what type of space are you listing?</div>
-        <select onChange={updateSpaceType}>
-            <option>indoor</option>
-            <option>outside</option>
-            <option>undercover</option>
-            <option>driveway</option>
-        </select> */}
-        {/* <div>what is the maximum height</div>
-        <select onChange={updateClearance}>
-            <option>2</option>
-            <option>2.5</option>
-            <option>3</option>
-            <option>3.5</option>
-            <option>4</option>
-        </select> */}
         Street <input type="text" onChange={updateStreet}/>
         <br></br>
         Suburb <input type="text" onChange={updateSuburb}/>

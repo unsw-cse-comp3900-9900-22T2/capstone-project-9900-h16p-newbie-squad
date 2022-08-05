@@ -73,29 +73,6 @@ export default function LoginPage() {
         <Header/>
         <div className='information-box'>
             <div className='container-noborder'>
-                {/* <div className='all_center'>
-                    <div>
-                    <div>
-                        <div id='username_check' className='inputCheck'>User name</div>
-                        <input onChange={()=>CheckUsername()} className="inputBlock" type="text" id="user_name"/>
-                        </div>
-                    <div>
-                        <div id='email_check' className='inputCheck'>Email address</div>
-                        <input onChange={()=>CheckEmail()} className="inputBlock" type="text" id="email_addr"/>
-                        </div>
-                    <div>
-                        <div id='password_check1' className='inputCheck'>Password</div>
-                        <input onChange={()=>CheckPassword1()} className="inputBlock" type="password" id="password1"/>
-                        <button onClick={()=>ChangePasswordVisible1()} id="password_visible1">visible</button>
-                    </div>
-                    <div>
-                        <div id='password_check2' className='inputCheck'>Password check</div>
-                        <input onChange={()=>CheckPassword2()} className="inputBlock" type="password" id="password2"/>
-                        <button onClick={()=>ChangePasswordVisible2()} id="password_visible2">visible</button>
-                    </div>
-                    <button onClick={() => SignUp()}>Sign up</button>
-                    </div>
-                </div> */}
                 <RegisterForm/>
             </div>
         </div>
