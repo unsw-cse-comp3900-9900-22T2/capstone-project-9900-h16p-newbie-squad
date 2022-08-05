@@ -24,6 +24,12 @@ export default function BookingPage() {
     const [width,setwidth]=useState(null)
     const [length,setlength]=useState(null)
     const [totalCost,setTotalCost]=useState(null)
+
+    const [creditCardNumber,setCreditCardNumber]=useState("")
+    const [creditCardName,setCreditCardName]=useState("")
+    const [creditCardCVV,setCreditCardCVV]=useState("")
+    const [creditCardExpiredDate,setCreditCardExpiredDate]=useState("")
+
     const GetCarSpace = (carspace_id) =>{
         const headers = new Headers({
           'Content-Type': 'application/json',
@@ -104,9 +110,14 @@ export default function BookingPage() {
                 else 
                 {
                     console.log(response)
-                    if(response.card_number.length>0)
+                    setCreditCardNumber(response.card_number)
+                    setCreditCardName(response.card_name)
+                    setCreditCardCVV(response.cvv)
+                    setCreditCardExpiredDate(response.expiry_date)
+                    //console.log("123",creditCardNumber,creditCardName,creditCardCVV,creditCardExpiredDate)
+                    if(response.card_number !== undefined)
                         document.getElementById('Card_number').value = response.card_number
-                    if(response.card_name>0)
+                    if(response.card_name !== undefined)
                         document.getElementById('Card_name').value = response.card_name
                 }
             })
@@ -122,8 +133,8 @@ export default function BookingPage() {
             card_number: document.getElementById('Card_number').value,
             card_name: document.getElementById('Card_name').value,
             cvv: document.getElementById('cvv').value,
-            expiry_date: document.getElementById('Expire_date').value,
-          }
+            expiry_date: document.getElementById('Expiry_date').value,
+        }
         const headers = new Headers({
           'Content-Type': 'application/json',
           'token': localStorage.getItem("token")
@@ -157,12 +168,22 @@ export default function BookingPage() {
           alert('You should login first')
           return
         }
-        UpdateCreditCard()
         const data = {
             card_number: document.getElementById('Card_number').value,
             cvv: document.getElementById('cvv').value,
-            expire_date: document.getElementById('Expire_date').value,
-          }
+            Expiry_date: document.getElementById('Expiry_date').value,
+        }
+        if(creditCardNumber === undefined || data.card_number != creditCardNumber)
+            UpdateCreditCard()
+        else
+        {
+            var card_name = document.getElementById('Card_name').value
+            if(data.cvv !== creditCardCVV || data.Expiry_date !== creditCardExpiredDate || card_name !== creditCardName)
+            {
+                alert("Invalid card name, CVV or expiry date")
+                return
+            }
+        }
         const headers = new Headers({
           'Content-Type': 'application/json',
           'token': localStorage.getItem("token")
@@ -197,6 +218,7 @@ export default function BookingPage() {
         GetCreditCard()
         GetCarSpace(carspace_id)
     },[])
+    console.log(creditCardNumber,creditCardName,creditCardCVV,creditCardExpiredDate)
     return(
         <div>
             <Header/>
@@ -226,7 +248,7 @@ export default function BookingPage() {
                                     <div className='all_center'>CVV</div>
                                     <input className="inputBlock" type="text" id="cvv"/>
                                     <div className='all_center'>Expire date</div>
-                                    <input className="inputBlock" type="text" id="Expire_date"/>
+                                    <input className="inputBlock" type="text" id="Expiry_date"/>
                                     <div className='all_center'>
                                     </div>
                                 </div>
