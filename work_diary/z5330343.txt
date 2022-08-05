@@ -33,3 +33,6 @@ Implemented functionalities assigned to me in sprint 2
 
 week 9:
 Implementd some of the functionalities assigned to me in sprint 3
+
+week 10:
+Did tests for the projects, making sure that this is no bug left. Preparing for the final demo at week 10
